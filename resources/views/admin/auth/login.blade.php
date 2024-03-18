@@ -1,22 +1,18 @@
                         <style>
-                            body {
-                                background: url( '{{ asset( 'admin/images/login_bg.jpg' ) }}' );
-                                background-position: center;
-                            }
                             .login .title {
-                                color: #fff;
+                                color: #000000;
                             }
                             .login .lead {
-                                color: #fff;
+                                color: #000000;
                             }
                             .login-language-switcher > label {
-                                color: #fff;
+                                color: #000000;
                             }
                         </style>
 
                         <div class="text-center mt-4 login">
                             <!-- admin/img/icons/default.png -->
-                            <img style="width: 50%;"src="{{ asset( 'admin/images/jdg_logo_white.svg' ) }}" />
+                            <img style="width: 50%;"src="" />
                             <h1 class="mt-5 h2 title">{{ __( 'auth.welcome' ) }}</h1>
                             <p class="lead">
                                 {!! __( 'auth.sign_in_continue', [ 'type' => __( 'auth.admin' ) ] ) !!}

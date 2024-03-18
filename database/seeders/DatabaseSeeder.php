@@ -18,11 +18,6 @@ class DatabaseSeeder extends Seeder
             AdministratorSeeder::class,
             CountrySeeder::class,
             BankSeeder::class,
-            PackageSeeder::class,
-            RankingSeeder::class,
-            PackageBonusSeeder::class,
-            RankingBonusSeeder::class,
-            MissionSeeder::class,
         ] );
     }
 }

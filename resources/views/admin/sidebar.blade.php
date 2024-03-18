@@ -3,7 +3,7 @@
                 <div class="sidebar-header">
                     <div>
                         <!-- admin/img/icons/default.png -->
-                        <img src="{{ asset( 'admin/images/jdg_logo.png' ) }}" class="logo-icon" alt="logo icon" />
+                        <img src="{{ asset( 'admin/images/logo.png' ) }}" class="logo-icon" alt="logo icon" />
                     </div>
                     
                     <div class="toggle-icon ms-auto"><i class="bi bi-list"></i></div>
@@ -83,62 +83,6 @@
                         <a href="{{ route( 'admin.module_parent.wallet_transaction.index' ) }}">
                             <div class="parent-icon"><i class="align-middle feather" icon-name="arrow-left-right"></i></div>
                             <div class="menu-title">{{ __( 'template.wallet_transactions' ) }}</div>
-                        </a>
-                    </li>
-                    @endcan
-                    @can( 'view deposits' )
-                    <li class="{{ $controller == 'App\Http\Controllers\Admin\DepositController' ? 'mm-active' : '' }}">
-                        <a href="{{ route( 'admin.module_parent.deposit.index' ) }}">
-                            <div class="parent-icon"><i class="align-middle feather" icon-name="book-down"></i></div>
-                            <div class="menu-title">{{ __( 'template.deposits' ) }}</div>
-                        </a>
-                    </li>
-                    @endcan
-                    @can( 'view withdrawals' )
-                    <li class="{{ $controller == 'App\Http\Controllers\Admin\WithdrawalController' ? 'mm-active' : '' }}">
-                        <a href="{{ route( 'admin.module_parent.withdrawal.index' ) }}">
-                            <div class="parent-icon"><i class="align-middle feather" icon-name="book-up"></i></div>
-                            <div class="menu-title">{{ __( 'template.withdrawals' ) }}</div>
-                        </a>
-                    </li>
-                    @endcan
-                    @can( 'view package_orders' )
-                    <li class="{{ $controller == 'App\Http\Controllers\Admin\PackageOrderController' ? 'mm-active' : '' }}">
-                        <a href="{{ route( 'admin.module_parent.package_order.index' ) }}">
-                            <div class="parent-icon"><i class="align-middle feather" icon-name="scroll-text"></i></div>
-                            <div class="menu-title">{{ __( 'template.package_orders' ) }}</div>
-                        </a>
-                    </li>
-                    @endcan
-                    @can( 'view missions' )
-                    <li class="{{ $controller == 'App\Http\Controllers\Admin\MissionController' ? 'mm-active' : '' }}">
-                        <a href="{{ route( 'admin.module_parent.mission.index' ) }}">
-                            <div class="parent-icon"><i class="align-middle feather" icon-name="list-ordered"></i></div>
-                            <div class="menu-title">{{ __( 'template.missions' ) }}</div>
-                        </a>
-                    </li>
-                    @endcan
-                    @can( 'view mission_histories' )
-                    <li class="{{ $controller == 'App\Http\Controllers\Admin\MissionHistoryController' ? 'mm-active' : '' }}">
-                        <a href="{{ route( 'admin.module_parent.mission_history.index' ) }}">
-                            <div class="parent-icon"><i class="align-middle feather" icon-name="list-todo"></i></div>
-                            <div class="menu-title">{{ __( 'template.mission_histories' ) }}</div>
-                        </a>
-                    </li>
-                    @endcan
-                    @can( 'view announcements' )
-                    <li class="{{ $controller == 'App\Http\Controllers\Admin\AnnouncementController' ? 'mm-active' : '' }}">
-                        <a href="{{ route( 'admin.module_parent.announcement.index' ) }}">
-                            <div class="parent-icon"><i class="align-middle feather" icon-name="megaphone"></i></div>
-                            <div class="menu-title">{{ __( 'template.announcements' ) }}</div>
-                        </a>
-                    </li>
-                    @endcan
-                    @can( 'view supports' )
-                    <li class="{{ $controller == 'App\Http\Controllers\Admin\SupportController' ? 'mm-active' : '' }}">
-                        <a href="{{ route( 'admin.module_parent.support.index' ) }}">
-                            <div class="parent-icon"><i class="align-middle feather" icon-name="mail"></i></div>
-                            <div class="menu-title">{{ __( 'template.support' ) }}</div>
                         </a>
                     </li>
                     @endcan

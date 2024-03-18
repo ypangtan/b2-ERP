@@ -15,7 +15,6 @@ use App\Http\Controllers\Admin\{
     MissionController,
     MissionHistoryController,
     ModuleController,
-    PackageOrderController,
     ProfileController,
     RoleController,
     SettingController,
@@ -24,7 +23,6 @@ use App\Http\Controllers\Admin\{
     UserKycController,
     WalletController,
     WalletTransactionController,
-    WithdrawalController,
 };
 
 Route::prefix( 'backoffice' )->group( function() {
@@ -138,7 +136,8 @@ Route::prefix( 'backoffice' )->group( function() {
             Route::prefix( 'users/kycs' )->group( function() {
 
                 Route::group( [ 'middleware' => [ 'permission:view user_kycs' ] ], function() {
-                    Route::get( '/', [ UserKycController::class, 'index' ] )->name( 'admin.module_parent.user_kyc.index' );
+                    Route::get( '/', [ UserKycController::class, 'i
+                    dex' ] )->name( 'admin.module_parent.user_kyc.index' );
                 } );
 
                 Route::group( [ 'middleware' => [ 'permission:add user_kycs' ] ], function() {
@@ -192,60 +191,6 @@ Route::prefix( 'backoffice' )->group( function() {
                 } );
 
                 Route::post( 'all-wallet-transactions', [ WalletTransactionController::class, 'allWalletTransactions' ] )->name( 'admin.wallet_transaction.allWalletTransactions' );
-            } );
-
-            Route::prefix( 'deposits' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view deposits' ] ], function() {
-                    Route::get( '/', [ DepositController::class, 'index' ] )->name( 'admin.module_parent.deposit.index' );
-                } );
-
-                Route::post( 'all-deposits', [ DepositController::class, 'allDeposits' ] )->name( 'admin.deposit.allDeposits' );
-                Route::post( 'one-deposit', [ DepositController::class, 'oneDeposit' ] )->name( 'admin.deposit.oneDeposit' );                
-                Route::post( 'update-deposit', [ DepositController::class, 'updateDeposit' ] )->name( 'admin.deposit.updateDeposit' );
-            } );
-
-            Route::prefix( 'withdrawals' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view withdrawals' ] ], function() {
-                    Route::get( '/', [ WithdrawalController::class, 'index' ] )->name( 'admin.module_parent.withdrawal.index' );
-                } );
-
-                Route::post( 'all-withdrawals', [ WithdrawalController::class, 'allWithdrawals' ] )->name( 'admin.withdrawal.allWithdrawals' );
-                Route::post( 'one-withdrawal', [ WithdrawalController::class, 'oneWithdrawal' ] )->name( 'admin.withdrawal.oneWithdrawal' );                
-                Route::post( 'update-withdrawal', [ WithdrawalController::class, 'updateWithdrawal' ] )->name( 'admin.withdrawal.updateWithdrawal' );
-            } );
-
-            Route::prefix( 'package-orders' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view package_orders' ] ], function() {
-                    Route::get( '/', [ PackageOrderController::class, 'index' ] )->name( 'admin.module_parent.package_order.index' );
-                } );
-
-                Route::post( 'all-package-orders', [ PackageOrderController::class, 'allPackageOrders' ] )->name( 'admin.package_order.allPackageOrders' );
-            } );
-
-            Route::prefix( 'missions' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view missions' ] ], function() {
-                    Route::get( '/', [ MissionController::class, 'index' ] )->name( 'admin.module_parent.mission.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add missions' ] ], function() {
-                    Route::get( 'add', [ MissionController::class, 'add' ] )->name( 'admin.mission.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit missions' ] ], function() {
-                    Route::get( 'edit', [ MissionController::class, 'edit' ] )->name( 'admin.mission.edit' );
-                } );
-
-                Route::post( 'all-missions', [ MissionController::class, 'allMissions' ] )->name( 'admin.mission.allMissions' );
-                Route::post( 'one-mission', [ MissionController::class, 'oneMission' ] )->name( 'admin.mission.oneMission' );
-                Route::post( 'create-mission', [ MissionController::class, 'createMission' ] )->name( 'admin.mission.createMission' );
-                Route::post( 'update-mission', [ MissionController::class, 'updateMission' ] )->name( 'admin.mission.updateMission' );
-                Route::post( 'update-mission-status', [ MissionController::class, 'updateMissionStatus' ] )->name( 'admin.mission.updateMissionStatus' );
-            } );
-
-            Route::prefix( 'missions/histories' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view mission_histories' ] ], function() {
-                    Route::get( '/', [ MissionHistoryController::class, 'index' ] )->name( 'admin.module_parent.mission_history.index' );
-                } );
-
-                Route::post( 'all-mission-histories', [ MissionHistoryController::class, 'allMissionHistories' ] )->name( 'admin.mission_history.allMissionHistories' );
             } );
 
             Route::prefix( 'announcements' )->group( function() {
