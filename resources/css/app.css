@@ -1,0 +1,14 @@
+/** Inputs */
+.primary_btn{
+    border-radius: 6px;
+    border:1px solid #1A1D56;
+    background-color: #1A1D56 !important;
+    color:#fff;
+    text-align: center;
+    padding: 5px 20px;
+}
+
+.primary_btn:hover, .primary_btn:focus{
+    background-color: #fff;
+    color:#1A1D56;
+}
