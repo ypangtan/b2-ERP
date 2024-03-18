@@ -1306,8 +1306,6 @@ class UserService {
     // Share
     private static function create( $data ) {
 
-        $data['user']['uniq'] = self::generateUniq();
-
         $createUser = User::create( $data['user'] );
 
         $data['user_detail']['user_id'] = $createUser->id;
@@ -1838,21 +1836,5 @@ class UserService {
         }
         
         return $invitationCode;
-    }
-
-    public static function generateUniq() {
-
-        $uniq = '';
-
-        while( empty( $uniq) ) {
-
-            $checkExist = 'JDG-' . strtoupper( Str::random( 8 ) );
-
-            if ( !User::where( 'uniq', $checkExist )->first() ) {
-                $uniq = $checkExist;
-            }
-        }
-        
-        return $uniq;
     }
 }
