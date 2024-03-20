@@ -52,7 +52,7 @@ $rider_edit = 'rider_edit';
                 <div class="mb-3 row">
                     <label for="{{ $rider_edit }}_password" class="col-sm-4 col-form-label">{{ __( 'rider.password' ) }}</label>
                     <div class="col-sm-8">
-                        <input type="password" class="form-control form-control-sm" id="{{ $rider_edit }}_password" autocomplete="new-password">
+                        <input type="password" class="form-control form-control-sm" id="{{ $rider_edit }}_password" autocomplete="new-password" placeHolder=" {{ __( 'template.leave_blank' ) }} ">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
@@ -101,7 +101,7 @@ $rider_edit = 'rider_edit';
         } );
 
         $( re + '_cancel' ).click( function() {
-            window.location.href = '{{ route( 'admin.rider.index' ) }}';
+            window.location.href = '{{ route( 'admin.module_parent.rider.index' ) }}';
         } );
 
         $( re + '_submit' ).click( function() {
@@ -132,7 +132,7 @@ $rider_edit = 'rider_edit';
                     modalSuccess.toggle();
 
                     document.getElementById( 'modal_success' ).addEventListener( 'hidden.bs.modal', function (event) {
-                        window.location.href = '{{ route( 'admin.rider.index' ) }}';
+                        window.location.href = '{{ route( 'admin.module_parent.rider.index' ) }}';
                     } );
                 },
                 error: function( error ) {

@@ -237,9 +237,15 @@ Route::prefix( 'backoffice' )->group( function() {
 
             Route::prefix( 'location' )->group( function() {
 
-                Route::get( '/', [ LocationController::class, 'index' ] )->name( 'admin.location.index' );
-                Route::get( '/add-location', [ LocationController::class, 'add' ] )->name( 'admin.location.add' );
-                Route::get( '/edit-location', [ LocationController::class, 'edit' ] )->name( 'admin.location.edit' );
+                Route::group( [ 'middleware' => [ 'permission:view locations' ] ], function() {
+                    Route::get( '/', [ LocationController::class, 'index' ] )->name( 'admin.module_parent.location.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add locations' ] ], function() {
+                    Route::get( '/add', [ LocationController::class, 'add' ] )->name( 'admin.location.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit locations' ] ], function() {
+                    Route::get( '/edit/{id?}', [ LocationController::class, 'edit' ] )->name( 'admin.location.edit' );
+                } );
 
                 Route::post( '/all-location', [ LocationController::class, 'allLocations' ] )->name( 'admin.location.allLocations' );
                 Route::post( '/one-location', [ LocationController::class, 'oneLocation' ] )->name( 'admin.location.oneLocation' );
@@ -250,9 +256,15 @@ Route::prefix( 'backoffice' )->group( function() {
 
             Route::prefix( 'rider' )->group( function() {
 
-                Route::get( '/', [ RiderController::class, 'index' ] )->name( 'admin.rider.index' );
-                Route::get( '/add-rider', [ RiderController::class, 'add' ] )->name( 'admin.rider.add' );
-                Route::get( '/edit-rider', [ RiderController::class, 'edit' ] )->name( 'admin.rider.edit' );
+                Route::group( [ 'middleware' => [ 'permission:view riders' ] ], function() {
+                    Route::get( '/', [ RiderController::class, 'index' ] )->name( 'admin.module_parent.rider.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add riders' ] ], function() {
+                    Route::get( '/add', [ RiderController::class, 'add' ] )->name( 'admin.rider.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit riders' ] ], function() {
+                    Route::get( '/edit/{id?}', [ RiderController::class, 'edit' ] )->name( 'admin.rider.edit' );
+                } );
 
                 Route::post( '/all-rider', [ RiderController::class, 'allRiders' ] )->name( 'admin.rider.allRiders' );
                 Route::post( '/one-rider', [ RiderController::class, 'oneRider' ] )->name( 'admin.rider.oneRider' );

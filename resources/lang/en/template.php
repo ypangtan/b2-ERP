@@ -36,6 +36,8 @@ return [
     'support_tickets' => 'Support Tickets',
     'support' => 'Support',
     'ticket_responses' => 'Ticket Responses',
+    'riders' => 'Riders',
+    'locations' => 'Locations',
 
     // Title
     'add_x' => 'Add :title',

@@ -36,6 +36,8 @@ return [
     'support_tickets' => 'Support Tickets',
     'support' => 'Support',
     'ticket_responses' => 'Ticket Responses',
+    'riders' => '骑手',
+    'locations' => '位置',
 
     // Title
     'add_x' => '新增:title',

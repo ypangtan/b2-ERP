@@ -55,7 +55,7 @@ $location_edit = 'location_edit';
         }, 'start' );
         
         $.ajax( {
-            url: '{{ route( 'admin.location.oneLocation' ) }}',
+            url: '{{ route( 'admin.module_parent.location.oneLocation' ) }}',
             type: 'POST',
             data: { id, '_token': '{{ csrf_token() }}', },
             success: function( response ) {
@@ -96,7 +96,7 @@ $location_edit = 'location_edit';
                     modalSuccess.toggle();
 
                     document.getElementById( 'modal_success' ).addEventListener( 'hidden.bs.modal', function (event) {
-                        window.location.href = '{{ route( 'admin.location.index' ) }}';
+                        window.location.href = '{{ route( 'admin.module_parent.location.index' ) }}';
                     } );
                 },
                 error: function( error ) {

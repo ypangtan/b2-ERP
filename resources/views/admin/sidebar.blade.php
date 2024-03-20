@@ -94,6 +94,22 @@
                         </a>
                     </li>
                     @endcan
+                    @can( 'view riders' )
+                    <li class="{{ $controller == 'App\Http\Controllers\Admin\RiderController' ? 'mm-active' : '' }}">
+                        <a href="{{ route( 'admin.module_parent.rider.index' ) }}">
+                            <div class="parent-icon"><i class="align-middle feather" icon-name="truck"></i></div>
+                            <div class="menu-title">{{ __( 'template.riders' ) }}</div>
+                        </a>
+                    </li>
+                    @endcan
+                    @can( 'view locations' )
+                    <li class="{{ $controller == 'App\Http\Controllers\Admin\LocationController' ? 'mm-active' : '' }}">
+                        <a href="{{ route( 'admin.module_parent.location.index' ) }}">
+                            <div class="parent-icon"><i class="align-middle feather" icon-name="map-pin"></i></div>
+                            <div class="menu-title">{{ __( 'template.locations' ) }}</div>
+                        </a>
+                    </li>
+                    @endcan
                 </ul>
                 <!--end navigation-->
             </aside>

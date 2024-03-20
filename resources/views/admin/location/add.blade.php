@@ -49,7 +49,7 @@ $location_create = 'location_create';
             lc = '#{{ $location_create }}';
 
         $( lc + '_cancel' ).click( function() {
-            window.location.href = '{{ route( 'admin.location.index' ) }}';
+            window.location.href = '{{ route( 'admin.module_parent.location.index' ) }}';
         } );
 
         $( lc + '_submit' ).click( function() {
@@ -75,7 +75,7 @@ $location_create = 'location_create';
                     modalSuccess.toggle();
 
                     document.getElementById( 'modal_success' ).addEventListener( 'hidden.bs.modal', function (event) {
-                        window.location.href = '{{ route( 'admin.location.index' ) }}';
+                        window.location.href = '{{ route( 'admin.module_parent.location.index' ) }}';
                     } );
                 },
                 error: function( error ) {

@@ -85,7 +85,7 @@ class RiderController extends Controller
     }
 
     public function getBroadcast(){
-        return view( 'admin.rider.getLiveLocation' );
+        return view( 'admin.rider.calRoute' );
     }
 
 }
