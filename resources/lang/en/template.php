@@ -46,6 +46,7 @@ return [
     'edit_x' => 'Edit :title',
     'update_x' => 'Update :title',
     'new_x_created' => 'New :title Created.',
+    'x_deleted' => ':title Deleted.',
     'x_updated' => ':title Updated.',
     'x_y' => ':action :title',
     'title_x_action_y' => ':title :action',

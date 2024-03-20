@@ -866,4 +866,20 @@ class Helper {
             'otp_code' => '#DEBUG - ' . $createOtp->otp_code,
         ];
     }
+    
+    public static function subscribeMsg( $socket_id, $channel ){
+        // if is private ( private-{channel-name} )
+        // $hashAuth = {socketId}:{channel-name}  (need to HMAC-SHA256 $data with PUSHER_APP_SECRET(at .env) )
+        // if have {channel_data}
+        // auth need to add :{channel_data} into hash
+        // auth = ":$hashAuth"
+
+        $data = $socket_id . ':' . $channel;
+        return $data;
+        
+    }
+
+    private static function HMACAuth( $data ){
+        return hash_hmac('sha256', $data, config( 'app.pusher_app_secret' ) );
+    }
 }

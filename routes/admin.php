@@ -23,6 +23,8 @@ use App\Http\Controllers\Admin\{
     UserKycController,
     WalletController,
     WalletTransactionController,
+    LocationController,
+    RiderController,
 };
 
 Route::prefix( 'backoffice' )->group( function() {
@@ -233,6 +235,38 @@ Route::prefix( 'backoffice' )->group( function() {
                 Route::post( 'update', [ ProfileController::class, 'update' ] )->name( 'admin.profile.update' );
             } );
 
+            Route::prefix( 'location' )->group( function() {
+
+                Route::get( '/', [ LocationController::class, 'index' ] )->name( 'admin.location.index' );
+                Route::get( '/add-location', [ LocationController::class, 'add' ] )->name( 'admin.location.add' );
+                Route::get( '/edit-location', [ LocationController::class, 'edit' ] )->name( 'admin.location.edit' );
+
+                Route::post( '/all-location', [ LocationController::class, 'allLocations' ] )->name( 'admin.location.allLocations' );
+                Route::post( '/one-location', [ LocationController::class, 'oneLocation' ] )->name( 'admin.location.oneLocation' );
+                Route::post( '/create-location', [ LocationController::class, 'createLocationAdmin' ] )->name( 'admin.location.createLocationAdmin' );
+                Route::post( '/update-location', [ LocationController::class, 'updateLocationAdmin' ] )->name( 'admin.location.updateLocationAdmin' );
+                Route::post( '/delete-location', [ LocationController::class, 'deleteLocationAdmin' ] )->name( 'admin.location.deleteLocationAdmin' );
+            } );
+
+            Route::prefix( 'rider' )->group( function() {
+
+                Route::get( '/', [ RiderController::class, 'index' ] )->name( 'admin.rider.index' );
+                Route::get( '/add-rider', [ RiderController::class, 'add' ] )->name( 'admin.rider.add' );
+                Route::get( '/edit-rider', [ RiderController::class, 'edit' ] )->name( 'admin.rider.edit' );
+
+                Route::post( '/all-rider', [ RiderController::class, 'allRiders' ] )->name( 'admin.rider.allRiders' );
+                Route::post( '/one-rider', [ RiderController::class, 'oneRider' ] )->name( 'admin.rider.oneRider' );
+                Route::post( '/create-rider', [ RiderController::class, 'createRiderAdmin' ] )->name( 'admin.rider.createRiderAdmin' );
+                Route::post( '/update-rider', [ RiderController::class, 'updateRiderAdmin' ] )->name( 'admin.rider.updateRiderAdmin' );
+                Route::post( '/update-rider-status', [ RiderController::class, 'updateRiderStatus' ] )->name( 'admin.rider.updateRiderStatus' );
+                Route::post( '/delete-rider', [ RiderController::class, 'deleteRiderAdmin' ] )->name( 'admin.rider.deleteRiderAdmin' );
+            } );
+            
+            //broadcasting testing
+            Route::get( '/get-location-rider', [ RiderController::class, 'getBroadcast' ] )->name( 'admin.getBroadcast' );
+            Route::get( '/send-location-rider', [ RiderController::class, 'sendBroadcast' ] )->name( 'admin.sendBroadcast' );
+
+            //end broadcast
         } );
 
     } );
@@ -261,4 +295,3 @@ Route::prefix( 'backoffice' )->group( function() {
 
     Route::post( '/logout', [ AuthenticatedSessionController::class, 'destroy' ] )->middleware( 'auth:admin' )->name( 'admin.logout' );
 } );
-

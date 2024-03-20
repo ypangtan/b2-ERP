@@ -12,11 +12,12 @@ use App\Http\Controllers\Client\{
     MissionController,
     PackageOrderController,
     ProfileController,
+    RiderController,
     UserKycController,
     WalletController,
     WithdrawalController,
+    LocationController,
 };
-
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 /*
@@ -44,7 +45,7 @@ Route::middleware( 'checkMaintenance' )->group( function() {
     Route::middleware( 'auth:web' )->group( function() {
 
         Route::get( '/', [ ClientController::class, 'index' ] )->name( 'web.home' );
-        
+
         Route::prefix( 'kyc' )->group( function() {
             Route::get( '/', [ UserKycController::class, 'kyc' ] )->name( 'web.kyc.index' );
             Route::post( 'get-user-kyc', [ UserKycController::class, 'getMemberKyc' ] )->name( 'web.kyc.getMemberKyc' );

@@ -133,6 +133,8 @@ return [
 
     'key' => env('APP_KEY'),
 
+    'pusher_app_secret' => env('PUSHER_APP_SECRET'),
+
     'cipher' => 'AES-256-CBC',
 
     /*
@@ -185,7 +187,7 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
+        App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 

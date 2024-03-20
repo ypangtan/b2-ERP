@@ -46,6 +46,7 @@ return [
     'edit_x' => '编辑:title',
     'update_x' => '更新:title',
     'new_x_created' => '已创建新:title。',
+    'x_deleted' => '已删除:title。',
     'x_updated' => '已更新:title。',
     'x_y' => ':action:title',
     'title_x_action_y' => ':title:action',

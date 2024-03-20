@@ -61,6 +61,7 @@ return [
 
     'view' => '查看',
     'edit' => '编辑',
+    'delete' => '删除',
     
     'sub_total' => '小计',
     'grand_total' => '累计',
