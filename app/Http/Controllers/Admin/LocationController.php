@@ -12,26 +12,26 @@ use App\Services\{
 class LocationController extends Controller
 {
     public function index() {
-        $this->data['header']['title'] = 'Location';
+        $this->data['header']['title'] = __( 'template.locations' );
         $this->data['content'] = 'admin.location.index';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
-            'main_title' => 'Location',
-            'title' => 'View Location',
-            'mobile_title' => 'View Location',
+            'main_title' => __( 'template.locations' ),
+            'title' => __( 'template.locations' ),
+            'mobile_title' => __( 'template.locations' ),
         ];
 
         return view( 'admin.main' )->with( $this->data );
     }
 
     public function add() {
-        $this->data['header']['title'] = 'Location';
+        $this->data['header']['title'] = __( 'template.locations' );
         $this->data['content'] = 'admin.location.add';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
-            'main_title' => 'Location',
-            'title' => 'Create Location',
-            'mobile_title' => 'Create Location',
+            'main_title' => __( 'template.locations' ),
+            'title' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.locations' ) ) ] ),
+            'mobile_title' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.locations' ) ) ] ),
         ];
 
         $this->data['data']['riders'] = LocationService::riders();
@@ -40,13 +40,13 @@ class LocationController extends Controller
     }
 
     public function edit() {
-        $this->data['header']['title'] = 'Location';
+        $this->data['header']['title'] = __( 'template.locations' );
         $this->data['content'] = 'admin.location.edit';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
-            'main_title' => 'Location',
-            'title' => 'Edit Location',
-            'mobile_title' => 'Edit Location',
+            'main_title' => __( 'template.locations' ),
+            'title' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.locations' ) ) ] ),
+            'mobile_title' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.locations' ) ) ] ),
         ];
         $this->data['data']['riders'] = LocationService::riders();
 

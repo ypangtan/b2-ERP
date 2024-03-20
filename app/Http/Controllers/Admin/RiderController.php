@@ -12,39 +12,39 @@ use App\Services\{
 class RiderController extends Controller
 {
     public function index() {
-        $this->data['header']['title'] = 'Rider';
+        $this->data['header']['title'] = __( 'template.riders' );
         $this->data['content'] = 'admin.rider.index';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
-            'main_title' => 'Rider',
-            'title' => 'View Rider',
-            'mobile_title' => 'View Rider',
+            'main_title' => __( 'template.riders' ),
+            'title' => __( 'template.riders' ),
+            'mobile_title' => __( 'template.riders' ),
         ];
 
         return view( 'admin.main' )->with( $this->data );
     }
 
     public function add() {
-        $this->data['header']['title'] = 'Rider';
+        $this->data['header']['title'] = __( 'template.riders' );
         $this->data['content'] = 'admin.rider.add';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
-            'main_title' => 'Rider',
-            'title' => 'View Rider',
-            'mobile_title' => 'View Rider',
+            'main_title' => __( 'template.riders' ),
+            'title' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.riders' ) ) ] ),
+            'mobile_title' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.riders' ) ) ] ),
         ];
 
         return view( 'admin.main' )->with( $this->data );
     }
 
     public function edit() {
-        $this->data['header']['title'] = 'Rider';
+        $this->data['header']['title'] = __( 'template.riders' );
         $this->data['content'] = 'admin.rider.edit';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
-            'main_title' => 'Rider',
-            'title' => 'View Rider',
-            'mobile_title' => 'View Rider',
+            'main_title' => __( 'template.riders' ),
+            'title' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.riders' ) ) ] ),
+            'mobile_title' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.riders' ) ) ] ),
         ];
 
         return view( 'admin.main' )->with( $this->data );
