@@ -16,68 +16,9 @@
                         <div class="position-absolute top-50 translate-middle-y search-close-icon"><i class="bi bi-x-lg"></i></div>
                     </form>
                     @endif
-                    <?php
-                    $notification = Helper::administratorNotifications();
-                    $totalUnread = $notification['total_unread'];
-                    $notifications = $notification['notifications'];
-                    ?>
+                    
                     <div class="top-navbar-right ms-auto">
-                        <ul class="navbar-nav align-items-center">
-                            <li class="nav-item dropdown dropdown-large">
-                                <a class="nav-link dropdown-toggle dropdown-toggle-nocaret notification-dropdown" href="#" data-bs-toggle="dropdown">
-                                    <div class="notifications">
-                                        @if ( $totalUnread > 0 )
-                                        <span class="notify-badge">{{ $totalUnread }}</span>
-                                        @endif
-                                        <i class="bi bi-bell-fill"></i>
-                                    </div>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end p-0">
-                                    <div class="p-2 border-bottom m-2">
-                                        <h5 class="h5 mb-2">Notifications</h5>
-                                    </div>
-                                    @if ( count( $notifications ) == 0 )
-                                    <div class="text-center mb-2 header-notifications-list">No notifications found.</div>
-                                    @else
-                                    <div class="header-notifications-list px-2">
-                                        @foreach( $notifications as $n )
-                                        <?php
-                                        $meta = json_decode( $n->meta_data );
-                                        ?>
-                                        <a class="dropdown-item notification-row {{ $n->is_read ? 'notification-read' : '' }}" href="javacsript:;" data-id="{{ $n->id }}" data-url="{{ isset( $meta->url ) ? Helper::baseAdminUrl() . $meta->url : '' }}">
-                                            <div class="d-flex align-items-center">
-                                                <div>
-                                                    <div class="notification-box bg-light-primary text-primary"><i class="bi bi-person-badge"></i></div>
-                                                </div>
-                                                <div class="ms-3 flex-grow-1">
-                                                    @if ( $n->type == 1 )
-                                                    <div class="d-flex justify-content-between">
-                                                        <h6 class="mb-0 dropdown-msg-user">{{ __( $n->system_title ) }}</h6>
-                                                        <span class="msg-time float-end" style="margin-left: 5px;">{{ Helper::getDisplayTimeUnit( $n->created_at ) }}</span>
-                                                    </div>
-                                                    <small class="mb-0 dropdown-msg-text text-secondary d-flex align-items-center">{{ __( $n->system_content ) }}</small>
-                                                    @else
-                                                    <div class="d-flex justify-content-between">
-                                                        <h6 class="mb-0 dropdown-msg-user">{{ $n->title }}</h6>
-                                                        <span class="msg-time float-end" style="margin-left: 5px;">{{ Helper::getDisplayTimeUnit( $n->created_at ) }}</span>
-                                                    </div>
-                                                    <small class="mb-0 dropdown-msg-text text-secondary d-flex align-items-center">{{ $n->content }}</small>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </a>
-                                        @endforeach
-                                    </div>
-                                    <div class="p-2">
-                                        <div><hr class="dropdown-divider" /></div>
-                                        <a class="dropdown-item" href="#">
-                                            <div class="text-center">View All Notifications</div>
-                                        </a>
-                                    </div>
-                                    @endif
-                                </div>
-                            </li>
-                        </ul>
+                        
                     </div>
                     <?php
 
@@ -99,14 +40,14 @@
                             </div>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
+                            {{-- <li>
                                 <a class="dropdown-item" href="{{ route( 'admin.profile.index' ) }}">
                                     <div class="d-flex align-items-center">
                                         <div class=""><i class="bi bi-person-lines-fill"></i></div>
                                         <div class="ms-3"><span>{{ __( 'template.profile' ) }}</span></div>
                                     </div>
                                 </a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <hr class="dropdown-divider">
                             </li>

@@ -9,7 +9,7 @@ use App\Services\{
     Service,
 };
 
-class RoleController extends Controller
+class SaleController extends Controller
 {
     public function index() {
 

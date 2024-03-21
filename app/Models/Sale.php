@@ -14,18 +14,13 @@ use Helper;
 
 use Carbon\Carbon;
 
-class Role extends Model
+class Sale extends Model
 {
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'name',
-        'guard_name',
+        'price',
     ];
-
-    public function permissions() {
-        return $this->hasOne( Permission::class, 'permission_id', 'id' );
-    }
 
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
@@ -36,7 +31,7 @@ class Role extends Model
     }
 
     protected static $logAttributes = [
-
+        'price',
     ];
 
     protected static $logName = '';

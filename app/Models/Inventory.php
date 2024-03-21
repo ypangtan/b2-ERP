@@ -14,17 +14,25 @@ use Helper;
 
 use Carbon\Carbon;
 
-class Role extends Model
+class Inventory extends Model
 {
     use HasFactory, LogsActivity;
 
     protected $fillable = [
         'name',
-        'guard_name',
+        'price',
+        'category_id',
+        'type_id',
+        'desc',
+        'stock',
     ];
 
-    public function permissions() {
-        return $this->hasOne( Permission::class, 'permission_id', 'id' );
+    public function category() {
+        return $this->belongsTo( Category::class, 'category_id' );
+    }
+
+    public function type() {
+        return $this->belongsTo( Category::class, 'type_id' );
     }
 
     public function getEncryptedIdAttribute() {
@@ -36,7 +44,12 @@ class Role extends Model
     }
 
     protected static $logAttributes = [
-
+        'name',
+        'price',
+        'category',
+        'type',
+        'desc',
+        'stock',
     ];
 
     protected static $logName = '';

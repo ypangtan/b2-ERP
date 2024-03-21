@@ -9,8 +9,10 @@ use App\Http\Controllers\Admin\{
     AnnouncementController,
     AuditController,
     BankController,
+    CustomerController,
     DashboardController,
     DepositController,
+    InventoryController,
     MFAController,
     MissionController,
     MissionHistoryController,
@@ -49,8 +51,6 @@ Route::prefix( 'backoffice' )->group( function() {
             
             Route::prefix( 'dashboard' )->group( function() {
                 Route::get( '/', [ DashboardController::class, 'index' ] )->name( 'admin.dashboard.index' );
-                Route::post( 'total_datas', [ DashboardController::class, 'totalDatas' ] );
-                Route::post( 'monthly_sales', [ DashboardController::class, 'monthlySales' ] );
             } );
 
             Route::prefix( 'administrators' )->group( function() {
@@ -72,85 +72,81 @@ Route::prefix( 'backoffice' )->group( function() {
                 Route::post( 'update-administrator-status', [ AdministratorController::class, 'updateAdministratorStatus' ] )->name( 'admin.administrator.updateAdministratorStatus' );
             } );
 
-            Route::prefix( 'roles' )->group( function() {
+            Route::prefix( 'customers' )->group( function() {
 
-                Route::group( [ 'middleware' => [ 'permission:view roles' ] ], function() {
-                    Route::get( '/', [ RoleController::class, 'index' ] )->name( 'admin.module_parent.role.index' );
+                Route::group( [ 'middleware' => [ 'permission:view customers' ] ], function() {
+                    Route::get( '/', [ CustomerController::class, 'index' ] )->name( 'admin.module_parent.customer.index' );
                 } );
-                Route::group( [ 'middleware' => [ 'permission:add roles' ] ], function() {
-                    Route::get( 'add', [ RoleController::class, 'add' ] )->name( 'admin.role.add' );
+                Route::group( [ 'middleware' => [ 'permission:add customers' ] ], function() {
+                    Route::get( 'add', [ CustomerController::class, 'add' ] )->name( 'admin.customer.add' );
                 } );
-                Route::group( [ 'middleware' => [ 'permission:edit roles' ] ], function() {
-                    Route::get( 'edit', [ RoleController::class, 'edit' ] )->name( 'admin.role.edit' );
+                Route::group( [ 'middleware' => [ 'permission:edit customers' ] ], function() {
+                    Route::get( 'edit', [ CustomerController::class, 'edit' ] )->name( 'admin.customer.edit' );
                 } );
 
-                Route::post( 'all-roles', [ RoleController::class, 'allRoles' ] )->name( 'admin.role.allRoles' );
-                Route::post( 'one-role', [ RoleController::class, 'oneRole' ] )->name( 'admin.role.oneRole' );
-                Route::post( 'create-role', [ RoleController::class, 'createRole' ] )->name( 'admin.role.createRole' );
-                Route::post( 'update-role', [ RoleController::class, 'updateRole' ] )->name( 'admin.role.updateRole' );
+                Route::post( 'all-customers', [ CustomerController::class, 'allCustomers' ] )->name( 'admin.customer.allCustomers' );
+                Route::post( 'one-customer', [ CustomerController::class, 'oneCustomer' ] )->name( 'admin.customer.oneCustomer' );
+                Route::post( 'create-customer', [ CustomerController::class, 'createCustomer' ] )->name( 'admin.customer.createCustomer' );
+                Route::post( 'update-customer', [ CustomerController::class, 'updateCustomer' ] )->name( 'admin.customer.updateCustomer' );
+                Route::post( 'delete-customer', [ CustomerController::class, 'deleteCustomer' ] )->name( 'admin.customer.deleteCustomer' );
             } );
 
-            Route::prefix( 'users' )->group( function() {
+            Route::prefix( 'inventories' )->group( function() {
 
-                Route::get( 'import', [ UserController::class, 'import' ] );
-                Route::get( 'import2', [ UserController::class, 'import2' ] );
-
-                Route::group( [ 'middleware' => [ 'permission:view users' ] ], function() {
-                    Route::get( '/', [ UserController::class, 'index' ] )->name( 'admin.module_parent.user.index' );
+                Route::group( [ 'middleware' => [ 'permission:view inventories' ] ], function() {
+                    Route::get( '/', [ InventoryController::class, 'index' ] )->name( 'admin.module_parent.inventory.index' );
                 } );
-                Route::group( [ 'middleware' => [ 'permission:add users' ] ], function() {
-                    Route::get( 'add', [ UserController::class, 'add' ] )->name( 'admin.user.add' );
+                Route::group( [ 'middleware' => [ 'permission:add inventories' ] ], function() {
+                    Route::get( 'add', [ InventoryController::class, 'add' ] )->name( 'admin.inventory.add' );
                 } );
-                Route::group( [ 'middleware' => [ 'permission:edit users' ] ], function() {
-                    Route::get( 'edit', [ UserController::class, 'edit' ] )->name( 'admin.user.edit' );
+                Route::group( [ 'middleware' => [ 'permission:edit inventories' ] ], function() {
+                    Route::get( 'edit', [ InventoryController::class, 'edit' ] )->name( 'admin.inventory.edit' );
                 } );
 
-                Route::post( 'all-users', [ UserController::class, 'allUsers' ] )->name( 'admin.user.allUsers' );
-                Route::post( 'one-user', [ UserController::class, 'oneUser' ] )->name( 'admin.user.oneUser' );
-                Route::post( 'create-user', [ UserController::class, 'createUser' ] )->name( 'admin.user.createUser' );
-                Route::post( 'update-user', [ UserController::class, 'updateUser' ] )->name( 'admin.user.updateUser' );
-                Route::post( 'update-user-status', [ UserController::class, 'updateUserStatus' ] )->name( 'admin.user.updateUserStatus' );
+                Route::post( 'all-inventories', [ InventoryController::class, 'allInventories' ] )->name( 'admin.inventory.allInventories' );
+                Route::post( 'one-inventory', [ InventoryController::class, 'oneInventory' ] )->name( 'admin.inventory.oneInventory' );
+                Route::post( 'create-inventory', [ InventoryController::class, 'createInventory' ] )->name( 'admin.inventory.createInventory' );
+                Route::post( 'update-inventory', [ InventoryController::class, 'updateInventory' ] )->name( 'admin.inventory.updateInventory' );
+                Route::post( 'delete-inventory', [ InventoryController::class, 'deleteInventory' ] )->name( 'admin.inventory.deleteInventory' );
             } );
 
-            Route::prefix( 'announcements' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view announcements' ] ], function() {
-                    Route::get( '/', [ AnnouncementController::class, 'index' ] )->name( 'admin.module_parent.announcement.index' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:add announcements' ] ], function() {
-                    Route::get( 'add', [ AnnouncementController::class, 'add' ] )->name( 'admin.announcement.add' );
-                } );
-                Route::group( [ 'middleware' => [ 'permission:edit announcements' ] ], function() {
-                    Route::get( 'edit/{id?}', [ AnnouncementController::class, 'edit' ] )->name( 'admin.announcement.edit' );
-                } );
+            // Route::prefix( 'roles' )->group( function() {
 
-                Route::post( 'all-announcements', [ AnnouncementController::class, 'allAnnouncements' ] )->name( 'admin.announcement.allAnnouncements' );
-                Route::post( 'one-announcement', [ AnnouncementController::class, 'oneAnnouncement' ] )->name( 'admin.announcement.oneAnnouncement' );
-                Route::post( 'create-announcement', [ AnnouncementController::class, 'createAnnouncement' ] )->name( 'admin.announcement.createAnnouncement' );
-                Route::post( 'update-announcement', [ AnnouncementController::class, 'updateAnnouncement' ] )->name( 'admin.announcement.updateAnnouncement' );
-                Route::post( 'update-announcement-status', [ AnnouncementController::class, 'updateAnnouncementStatus' ] )->name( 'admin.announcement.updateAnnouncementStatus' );
+            //     Route::group( [ 'middleware' => [ 'permission:view roles' ] ], function() {
+            //         Route::get( '/', [ RoleController::class, 'index' ] )->name( 'admin.module_parent.role.index' );
+            //     } );
+            //     Route::group( [ 'middleware' => [ 'permission:add roles' ] ], function() {
+            //         Route::get( 'add', [ RoleController::class, 'add' ] )->name( 'admin.role.add' );
+            //     } );
+            //     Route::group( [ 'middleware' => [ 'permission:edit roles' ] ], function() {
+            //         Route::get( 'edit', [ RoleController::class, 'edit' ] )->name( 'admin.role.edit' );
+            //     } );
 
-                Route::post( 'cke-upload', [ AnnouncementController::class, 'ckeUpload' ] )->name( 'admin.announcement.ckeUpload' );
-            } );
+            //     Route::post( 'all-roles', [ RoleController::class, 'allRoles' ] )->name( 'admin.role.allRoles' );
+            //     Route::post( 'one-role', [ RoleController::class, 'oneRole' ] )->name( 'admin.role.oneRole' );
+            //     Route::post( 'create-role', [ RoleController::class, 'createRole' ] )->name( 'admin.role.createRole' );
+            //     Route::post( 'update-role', [ RoleController::class, 'updateRole' ] )->name( 'admin.role.updateRole' );
+            // } );
 
-            Route::prefix( 'settings' )->group( function() {
+            // Route::prefix( 'settings' )->group( function() {
 
-                Route::group( [ 'middleware' => [ 'permission:add settings|view settings|edit settings|delete settings' ] ], function() {
-                    Route::get( '/', [ SettingController::class, 'index' ] )->name( 'admin.module_parent.setting.index' );
-                } );
+            //     Route::group( [ 'middleware' => [ 'permission:add settings|view settings|edit settings|delete settings' ] ], function() {
+            //         Route::get( '/', [ SettingController::class, 'index' ] )->name( 'admin.module_parent.setting.index' );
+            //     } );
 
-                Route::post( 'settings', [ SettingController::class, 'settings' ] )->name( 'admin.setting.settings' );
-                Route::post( 'maintenance-settings', [ SettingController::class, 'maintenanceSettings' ] )->name( 'admin.setting.maintenanceSettings' );
-                Route::post( 'update-deposit-bank-detail', [ SettingController::class, 'updateDepositBankDetail' ] )->name( 'admin.setting.updateDepositBankDetail' );
-                Route::post( 'update-withdrawal-setting', [ SettingController::class, 'updateWithdrawalSetting' ] )->name( 'admin.setting.updateWithdrawalSetting' );
-                Route::post( 'update-maintenance-setting', [ SettingController::class, 'updateMaintenanceSetting' ] )->name( 'admin.setting.updateMaintenanceSetting' );
-            } );
+            //     Route::post( 'settings', [ SettingController::class, 'settings' ] )->name( 'admin.setting.settings' );
+            //     Route::post( 'maintenance-settings', [ SettingController::class, 'maintenanceSettings' ] )->name( 'admin.setting.maintenanceSettings' );
+            //     Route::post( 'update-deposit-bank-detail', [ SettingController::class, 'updateDepositBankDetail' ] )->name( 'admin.setting.updateDepositBankDetail' );
+            //     Route::post( 'update-withdrawal-setting', [ SettingController::class, 'updateWithdrawalSetting' ] )->name( 'admin.setting.updateWithdrawalSetting' );
+            //     Route::post( 'update-maintenance-setting', [ SettingController::class, 'updateMaintenanceSetting' ] )->name( 'admin.setting.updateMaintenanceSetting' );
+            // } );
 
-            Route::prefix( 'profile' )->group( function() {
+            // Route::prefix( 'profile' )->group( function() {
 
-                Route::get( '/', [ ProfileController::class, 'index' ] )->name( 'admin.profile.index' );
+            //     Route::get( '/', [ ProfileController::class, 'index' ] )->name( 'admin.profile.index' );
 
-                Route::post( 'update', [ ProfileController::class, 'update' ] )->name( 'admin.profile.update' );
-            } );
+            //     Route::post( 'update', [ ProfileController::class, 'update' ] )->name( 'admin.profile.update' );
+            // } );
 
         } );
 

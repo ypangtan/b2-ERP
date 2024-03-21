@@ -25,17 +25,5 @@ class AdministratorSeeder extends Seeder
             'updated_at' => date( 'Y-m-d H:i:s' ),
         ]);
 
-        DB::table( 'roles' )->insert( [
-            'name' => 'super_admin',
-            'guard_name' => 'admin',
-            'created_at' => date( 'Y-m-d H:i:s' ),
-            'updated_at' => date( 'Y-m-d H:i:s' ),
-        ] );
-
-        DB::table( 'model_has_roles' )->insert( [
-            'role_id' => 1,
-            'model_type' => 'App\Models\Administrator',
-            'model_id' => 1,
-        ] );
     }
 }
