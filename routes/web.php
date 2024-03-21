@@ -44,30 +44,6 @@ Route::middleware( 'checkMaintenance' )->group( function() {
     Route::middleware( 'auth:web' )->group( function() {
 
         Route::get( '/', [ ClientController::class, 'index' ] )->name( 'web.home' );
-        
-        Route::prefix( 'kyc' )->group( function() {
-            Route::get( '/', [ UserKycController::class, 'kyc' ] )->name( 'web.kyc.index' );
-            Route::post( 'get-user-kyc', [ UserKycController::class, 'getMemberKyc' ] )->name( 'web.kyc.getMemberKyc' );
-            Route::post( 'create-member-kyc', [ UserKycController::class, 'createKyc' ] )->name( 'web.kyc.createKyc' );
-            Route::post( 'update-member-kyc', [ UserKycController::class, 'updateMemberKyc' ] )->name( 'web.kyc.updateMemberKyc' );
-            Route::post( 'member-kyc-validate', [ UserKycController::class, 'memberKycValidate' ] )->name( 'web.kyc.memberKycValidate' );
-        } );
-
-        Route::get( 'membership', [ ClientController::class, 'membership' ] )->name( 'web.membership' );
-
-        Route::prefix( 'purchase' )->group( function() {
-            Route::get( '/', [ PackageOrderController::class, 'index' ] )->name( 'web.purchase.index' );
-            Route::get( 'histories', [ PackageOrderController::class, 'history' ] )->name( 'web.purchase.history' );
-
-            Route::post( '/', [ PackageOrderController::class, 'purchase' ] )->name( 'web.purchase.purchase' );
-            Route::post( 'otp', [ PackageOrderController::class, 'requestOtp' ] )->name( 'web.purchase.requestOtp' );
-        } );
-
-        Route::prefix( 'my-team' )->group( function() {
-            Route::get( '/', [ ClientController::class, 'myTeam' ] )->name( 'web.my_team.index' );
-            Route::post( 'data', [ ClientController::class, 'myTeamData' ] )->name( 'web.my_team.myTeamData' );
-            Route::get( 'ajax', [ ClientController::class, 'myTeamAjax' ] )->name( 'web.my_team.myTeamAjax' );
-        } );
 
         Route::prefix( 'profile' )->group( function() {
             Route::get( '/', [ ProfileController::class, 'profile' ] )->name( 'web.profile.index' );
@@ -85,40 +61,9 @@ Route::middleware( 'checkMaintenance' )->group( function() {
             Route::post( 'update-member-security-settings', [ ProfileController::class, 'updateMemberSecuritySettings' ] )->name( 'web.profile.updateMemberSecuritySettings' );
         } );
 
-        Route::prefix( 'mission' )->group( function() {
-            Route::get( '/', [ MissionController::class, 'mission' ] )->name( 'web.mission.index' );
-
-            Route::post( 'do', [ MissionController::class, 'doMission' ] )->name( 'web.mission.doMission' );
-        } );
-
-        Route::prefix( 'asset' )->group( function() {
-            Route::get( '/', [ WalletController::class, 'asset' ] )->name( 'web.asset.index' );
-            Route::get( 'histories', [ WalletController::class, 'assetHistory' ] )->name( 'web.asset.history' );
-        } );
-
-        Route::prefix( 'deposit' )->group( function() {
-            Route::get( '/', [ DepositController::class, 'index' ] )->name( 'web.deposit.index' );
-            Route::get( 'histories', [ DepositController::class, 'history' ] )->name( 'web.deposit.history' );
-
-            Route::post( '/', [ DepositController::class, 'deposit' ] )->name( 'web.deposit.deposit' );
-            Route::post( 'otp', [ DepositController::class, 'requestOtp' ] )->name( 'web.deposit.requestOtp' );
-        } );
-
-        Route::prefix( 'withdrawal' )->group( function() {
-            Route::get( '/', [ WithdrawalController::class, 'index' ] )->name( 'web.withdrawal.index' );
-            Route::get( 'histories', [ WithdrawalController::class, 'history' ] )->name( 'web.withdrawal.history' );
-
-            Route::post( '/', [ WithdrawalController::class, 'withdrawal' ] )->name( 'web.withdrawal.withdrawal' );
-            Route::post( 'otp', [ WithdrawalController::class, 'requestOtp' ] )->name( 'web.withdrawal.requestOtp' );
-        } );
-
         Route::prefix( 'announcements' )->group( function() {
             Route::get( '/', [ AnnouncementController::class, 'index' ] )->name( 'web.announcement.index' );
             Route::get( '{id?}', [ AnnouncementController::class, 'detail' ] )->name( 'web.announcement.detail' );
-        } );
-
-        Route::prefix( 'bank' )->group( function() {
-            Route::post( 'get-active-bank', [ BankController::class, 'getActiveBank' ] )->name( 'web.bank.getActiveBank' );
         } );
 
         Route::post( 'file/upload', [ FileManagerController::class, 'upload' ] )->withoutMiddleware( [\App\Http\Middleware\VerifyCsrfToken::class] )->name( 'member.file.upload' );

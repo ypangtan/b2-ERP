@@ -90,27 +90,6 @@ Route::prefix( 'backoffice' )->group( function() {
                 Route::post( 'update-role', [ RoleController::class, 'updateRole' ] )->name( 'admin.role.updateRole' );
             } );
 
-            Route::prefix( 'modules' )->group( function() {
-
-                Route::group( [ 'middleware' => [ 'permission:view modules' ] ], function() {
-                    Route::get( '/', [ ModuleController::class, 'index' ] )->name( 'admin.module_parent.module.index' );
-                } );
-
-                Route::post( 'create-module', [ ModuleController::class, 'createModule' ] )->name( 'admin.module.createModule' );
-                Route::post( 'all-modules', [ ModuleController::class, 'allModules' ] )->name( 'admin.module.allModules' );
-                Route::post( 'one-module', [ ModuleController::class, 'oneModule' ] )->name( 'admin.module.oneModule' );
-            } );
-
-            Route::prefix( 'audit-logs' )->group( function() {
-
-                Route::group( [ 'middleware' => [ 'permission:view audits' ] ], function() {
-                    Route::get( '/', [ AuditController::class, 'index' ] )->name( 'admin.module_parent.audit.index' );
-                } );
-
-                Route::post( 'all-audits', [ AuditController::class, 'allAudits' ] )->name( 'admin.audit.allAudits' );
-                Route::post( 'one-audit', [ AuditController::class, 'oneAudit' ] )->name( 'admin.audit.oneAudit' );
-            } );
-
             Route::prefix( 'users' )->group( function() {
 
                 Route::get( 'import', [ UserController::class, 'import' ] );
@@ -131,66 +110,6 @@ Route::prefix( 'backoffice' )->group( function() {
                 Route::post( 'create-user', [ UserController::class, 'createUser' ] )->name( 'admin.user.createUser' );
                 Route::post( 'update-user', [ UserController::class, 'updateUser' ] )->name( 'admin.user.updateUser' );
                 Route::post( 'update-user-status', [ UserController::class, 'updateUserStatus' ] )->name( 'admin.user.updateUserStatus' );
-            } );
-
-            Route::prefix( 'users/kycs' )->group( function() {
-
-                Route::group( [ 'middleware' => [ 'permission:view user_kycs' ] ], function() {
-                    Route::get( '/', [ UserKycController::class, 'i
-                    dex' ] )->name( 'admin.module_parent.user_kyc.index' );
-                } );
-
-                Route::group( [ 'middleware' => [ 'permission:add user_kycs' ] ], function() {
-                    Route::get( 'add', [ UserKycController::class, 'add' ] )->name( 'admin.module_parent.user_kyc.add' );
-                } );
-
-                Route::group( [ 'middleware' => [ 'permission:edit user_kycs' ] ], function() {
-                    Route::get( 'edit', [ UserKycController::class, 'edit' ] )->name( 'admin.module_parent.user_kyc.edit' );
-                } );
-
-                Route::post( 'all-user-kycs', [ UserKycController::class, 'allUserKycs' ] )->name( 'admin.user_kyc.allUserKycs' );
-                Route::post( 'one-user-kyc', [ UserKycController::class, 'oneUserKyc' ] )->name( 'admin.user_kyc.oneUserKyc' );
-                Route::post( 'create-user-kyc', [ UserKycController::class, 'createUserKyc' ] )->name( 'admin.user_kyc.createUserKyc' );
-                Route::post( 'update-user-kyc-admin', [ UserKycController::class, 'updateUserKycAdmin' ] )->name( 'admin.user_kyc.updateUserKycAdmin' );
-                Route::post( 'user-kyc-validate', [ UserKycController::class, 'userKycValidate' ] )->name( 'admin.user_kyc.userKycValidate' );
-            } );
-
-            Route::prefix( 'support-tickets' )->group( function() {
-
-                Route::group( [ 'middleware' => [ 'permission:view supports' ] ], function() {
-                    Route::get( '/', [ SupportController::class, 'index' ] )->name( 'admin.module_parent.support.index' );
-                } );
-                
-                Route::post( 'one-support-ticket', [ SupportController::class, 'oneSupportTicket' ] )->name( 'admin.support.oneSupportTicket' );
-                Route::post( 'create-support-ticket', [ SupportController::class, 'createSupportTicket' ] )->name( 'admin.support.createSupportTicket' );
-                Route::post( 'user-support-tickets', [ SupportController::class, 'userSupportTickets' ] )->name( 'admin.support.userSupportTickets' );
-                Route::post( 'create-support-ticket-response', [ SupportController::class, 'createSupportTicketResponse' ] )->name( 'admin.support.createSupportTicketResponse' );
-
-            } );
-
-            Route::prefix( 'banks' )->group( function() {
-
-                Route::post( 'all-banks', [ BankController::class, 'allBanks' ] )->name( 'admin.bank.allBanks' );
-
-            } );
-
-            Route::prefix( 'wallets' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view wallets' ] ], function() {
-                    Route::get( '/', [ WalletController::class, 'index' ] )->name( 'admin.module_parent.wallet.index' );
-                } );
-
-                Route::post( 'all-wallets', [ WalletController::class, 'allWallets' ] )->name( 'admin.wallet.allWallets' );
-                Route::post( 'one-wallet', [ WalletController::class, 'oneWallet' ] )->name( 'admin.wallet.oneWallet' );
-                Route::post( 'update-wallet', [ WalletController::class, 'updateWallet' ] )->name( 'admin.wallet.updateWallet' );
-                Route::post( 'update-wallet-multiple', [ WalletController::class, 'updateWalletMultiple' ] )->name( 'admin.wallet.updateWalletMultiple' );
-            } );
-            
-            Route::prefix( 'wallet-transactions' )->group( function() {
-                Route::group( [ 'middleware' => [ 'permission:view wallet_transactions' ] ], function() {
-                    Route::get( '/', [ WalletTransactionController::class, 'index' ] )->name( 'admin.module_parent.wallet_transaction.index' );
-                } );
-
-                Route::post( 'all-wallet-transactions', [ WalletTransactionController::class, 'allWalletTransactions' ] )->name( 'admin.wallet_transaction.allWalletTransactions' );
             } );
 
             Route::prefix( 'announcements' )->group( function() {
