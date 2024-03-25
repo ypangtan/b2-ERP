@@ -1,6 +1,6 @@
 <?php
-array_unshift( $data['categories'],[ 'title' => __( 'datatables.all_x', [ 'title' => __( 'inventory.category' ) ] ), 'value' => '' ] );
-array_unshift( $data['types'],[ 'title' => __( 'datatables.all_x', [ 'title' => __( 'inventory.type' ) ] ), 'value' => '' ] );
+array_unshift( $data['customers'],[ 'title' => __( 'datatables.all_x', [ 'title' => __( 'inventory.customer' ) ] ), 'value' => '' ] );
+array_unshift( $data['inventories'],[ 'title' => __( 'datatables.all_x', [ 'title' => __( 'inventory.inventory' ) ] ), 'value' => '' ] );
 $columns = [
     [
         'type' => 'default',
@@ -14,40 +14,22 @@ $columns = [
         'title' => __( 'datatables.registered_date' ),
     ],
     [
-        'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'inventory.name' ) ] ),
-        'id' => 'name',
-        'title' => __( 'inventory.name' ),
-    ],
-    [
-        'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'inventory.price' ) ] ),
-        'id' => 'price',
-        'title' => __( 'inventory.price' ),
+        'type' => 'select',
+        'options' => $data['customers'],
+        'id' => 'customer',
+        'title' => __( 'sale.customer' ),
     ],
     [
         'type' => 'select',
-        'options' => $data['categories'],
-        'id' => 'category',
-        'title' => __( 'inventory.category' ),
+        'options' => $data['inventories'],
+        'id' => 'inventory',
+        'title' => __( 'sale.inventory' ),
     ],
     [
-        'type' => 'select',
-        'options' => $data['types'],
-        'id' => 'type',
-        'title' => __( 'inventory.type' ),
-    ],
-    [
-        'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'inventory.desc' ) ] ),
-        'id' => 'desc',
-        'title' => __( 'inventory.desc' ),
-    ],
-    [
-        'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'inventory.stock' ) ] ),
-        'id' => 'stock',
-        'title' => __( 'inventory.stock' ),
+        'type' => 'default',
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'sale.quantity' ) ] ),
+        'id' => 'quantity',
+        'title' => __( 'sale.quantity' ),
     ],
     [
         'type' => 'default',
@@ -60,11 +42,11 @@ $columns = [
 <div class="card">
     <div class="card-body">
         <div class="mb-3 text-end">
-            @can( 'add inventories' )
-            <a class="btn btn-sm btn-primary" href="{{ route( 'admin.inventory.add' ) }}">{{ __( 'template.create' ) }}</a>
+            @can( 'add sales' )
+            <a class="btn btn-sm btn-primary" href="{{ route( 'admin.sale.add' ) }}">{{ __( 'template.create' ) }}</a>
             @endcan
         </div>
-        <x-data-tables id="inventory_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
+        <x-data-tables id="sale_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
     </div>
 </div>
 
@@ -80,7 +62,7 @@ $columns = [
     @endforeach
     
     var dt_table,
-        dt_table_name = '#inventory_table',
+        dt_table_name = '#sale_table',
         dt_table_config = {
             language: {
                 'lengthMenu': '{{ __( "datatables.lengthMenu" ) }}',
@@ -94,11 +76,11 @@ $columns = [
                 }
             },
             ajax: {
-                url: '{{ route( 'admin.inventory.allInventories' ) }}',
+                url: '{{ route( 'admin.sale.allSales' ) }}',
                 data: {
                     '_token': '{{ csrf_token() }}',
                 },
-                dataSrc: 'inventories',
+                dataSrc: 'sales',
             },
             lengthMenu: [
                 [ 10, 25, 50, 999999 ],
@@ -108,12 +90,9 @@ $columns = [
             columns: [
                 { data: null },
                 { data: 'created_at' },
-                { data: 'name' },
-                { data: 'price' },
-                { data: 'category' },
-                { data: 'type' },
-                { data: 'desc' },
-                { data: 'stock' },
+                { data: 'customers' },
+                { data: 'inventories' },
+                { data: 'quantity' },
                 { data: 'encrypted_id' },
             ],
             columnDefs: [
@@ -125,37 +104,19 @@ $columns = [
                     },
                 },
                 {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "name" ) }}' ),
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "customer" ) }}' ),
                     render: function( data, type, row, meta ) {   
-                        return data ?? '-';
+                        return data ? data.name : '-';
                     },
                 },
                 {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "price" ) }}' ),
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "inventory" ) }}' ),
                     render: function( data, type, row, meta ) {   
-                        return data ?? '-';
+                        return data ? data.name : '-';
                     },
                 },
                 {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "category" ) }}' ),
-                    render: function( data, type, row, meta ) {   
-                        return data.name ?? '-';
-                    },
-                },
-                {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "type" ) }}' ),
-                    render: function( data, type, row, meta ) {   
-                        return data.name ?? '-';
-                    },
-                },
-                {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "desc" ) }}' ),
-                    render: function( data, type, row, meta ) {   
-                        return data ?? '-';
-                    },
-                },
-                {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "stock" ) }}' ),
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "quantity" ) }}' ),
                     render: function( data, type, row, meta ) {   
                         return data ?? '-';
                     },
@@ -167,17 +128,17 @@ $columns = [
                     className: 'text-center',
                     render: function( data, type, row, meta ) {
 
-                        @canany( [ 'edit inventories', 'view inventories', 'delete inventories' ] )
+                        @canany( [ 'edit sales', 'view sales', 'delete sales' ] )
 
                         let view = '',
                             edit = '',
                             status = '';
 
-                        @can( 'edit inventories' )
+                        @can( 'edit sales' )
                         view += '<li class="dropdown-item click-action dt-edit" data-id="' + data + '">{{ __( 'datatables.edit' ) }}</li>';
                         @endcan
 
-                        @can( 'delete inventories' )
+                        @can( 'delete sales' )
                         view += '<li class="dropdown-item click-action dt-delete" data-id="' + data + '">{{ __( 'datatables.delete' ) }}</li>';
                         @endcan
 
@@ -204,7 +165,7 @@ $columns = [
         document.addEventListener( 'DOMContentLoaded', function() {
        
        $( document ).on( 'click', '.dt-edit', function() {
-           window.location.href = '{{ route( 'admin.inventory.edit' ) }}?id=' + $( this ).data( 'id' );
+           window.location.href = '{{ route( 'admin.sale.edit' ) }}?id=' + $( this ).data( 'id' );
        } );
 
        let uid = 0,
@@ -216,8 +177,8 @@ $columns = [
             uid = $( this ).data( 'id' );
             scope = 'delete';
 
-            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.inventories' ) ) ] ) }}' );
-            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.inventories' ) ) ] ) }}' );
+            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.sales' ) ) ] ) }}' );
+            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.sales' ) ) ] ) }}' );
 
             modalConfirmation.show();
         } );
@@ -227,7 +188,7 @@ $columns = [
             switch ( scope ) {
                 case 'delete':
                     $.ajax( {
-                        url: '{{ route( 'admin.inventory.deleteInventory' ) }}',
+                        url: '{{ route( 'admin.sale.deleteSale' ) }}',
                         type: 'POST',
                         data: {
                             id: uid,

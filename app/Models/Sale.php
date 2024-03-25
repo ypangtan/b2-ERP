@@ -19,8 +19,19 @@ class Sale extends Model
     use HasFactory, LogsActivity;
 
     protected $fillable = [
+        'customer_id',
+        'product_id',
+        'quantity',
         'price',
     ];
+
+    public function inventories() {
+        return $this->belongsTo( Inventory::class, 'product_id' );
+    }
+
+    public function customers() {
+        return $this->belongsTo( Customer::class, 'customer_id' );
+    }
 
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
@@ -31,6 +42,9 @@ class Sale extends Model
     }
 
     protected static $logAttributes = [
+        'customer_id',
+        'product_id',
+        'quantity',
         'price',
     ];
 

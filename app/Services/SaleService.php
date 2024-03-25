@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\{
 use Illuminate\Validation\Rules\Password;
 
 use App\Models\{
+    Customer,
     Inventory,
     Sale,
     SaleItems,
@@ -26,11 +27,33 @@ use Helper;
 use Carbon\Carbon;
 
 class SaleService {
-    
+
+    public static function Customers() {
+
+        $customers = Customer::where( 'status', 10 )
+            ->get();
+        $customers->append( [
+            'encrypted_id',
+        ] );
+        return $customers;
+    }
+
+    public static function Inventories() {
+
+        $inventories = Inventory::all();
+
+        $inventories->append( [
+            'encrypted_id',
+        ] );
+
+        return $inventories;
+    }
+
     public static function allSales( $request ) {
 
         $sale = Sale::with(
-            'sale_items'
+            'inventories',
+            'customers',
         )->select( 'sales.*' );
 
         $filterObject = self::filter( $request, $sale );
@@ -108,11 +131,18 @@ class SaleService {
         ] );
 
         $sale = Sale::with(
-            'sale_items'
+            'inventories',
+            'customers',
         )->find( $request->id );
 
         if ( $sale ) {
             $sale->append( [
+                'encrypted_id',
+            ] );
+            $sale->inventories->append( [
+                'encrypted_id',
+            ] );
+            $sale->customers->append( [
                 'encrypted_id',
             ] );
         }
@@ -132,7 +162,16 @@ class SaleService {
         $validator = Validator::make( $request->all(), [
             'inventory_id' => [ 'required',  'exists:inventories,id' ],
             'customer_id' => [ 'required',  'exists:customers,id' ],
-            'quantity' => [ 'required', 'lte:inventories,stock' ],
+            'quantity' => [ 'required', function( $attribute, $value, $fail ) use ( $request ) {
+
+                $inventory = Inventory::find($request->inventory_id);
+
+                $total_stock = $inventory->stock;
+
+                if ( $value > $total_stock ) {
+                    $fail( __( 'sale.invalid_stock' ) );
+                }
+            } ],
         ] );
 
         $attributeName = [
@@ -151,19 +190,17 @@ class SaleService {
 
             $product = Inventory::find( $request->inventory_id);
             $product->stock -= $request->quantity;
+            $product->save();
 
             $totalPrice = $request->quantity * $product->price;
 
             $createSale = Sale::create( [
                 'customer_id' => $request->customer_id ,
-                'price' =>  $totalPrice,
-            ] );
-            
-            $createsaleItem = SaleItems::create( [
                 'product_id' => $request->inventory_id ,
-                'sale_id' => $createSale->id ,
+                'price' =>  $totalPrice,
                 'quantity' => $request->quantity ,
             ] );
+            
 
             DB::commit();
 
@@ -196,10 +233,13 @@ class SaleService {
             'customer_id' => [ 'required',  'exists:customers,id' ],
             'quantity' => [ 'required', function( $attribute, $value, $fail ) use ( $request ) {
 
-                $old_sale = SaleItems::find($request->id);
+                $old_sale = Sale::find($request->id);
                 $inventory = Inventory::find($request->inventory_id);
-
-                $total_stock = $old_sale->quantity + $inventory->stock;
+                if( $request->inventory_id == $old_sale->product_id ){
+                    $total_stock = $old_sale->quantity + $inventory->stock;
+                } else {
+                    $total_stock = $inventory->stock;
+                }
 
                 if ( $value > $total_stock ) {
                     $fail( __( 'sale.invalid_stock' ) );
@@ -221,17 +261,27 @@ class SaleService {
         $validator->setAttributeNames( $attributeName )->validate();
         
         try {
-
             $updateSale = Sale::lockForUpdate()
                 ->find( $request->id );
+            
+            if( $updateSale->inventory_id == $request->inventory_id ){
+                $product = Inventory::find( $request->inventory_id);
+                $product->stock = $product->stock - $request->quantity + $updateSale->quantity;
+                $product->save();
+            }else{
+                $product_old = Inventory::find( $updateSale->product_id);
+                $product_old->stock += $updateSale->quantity;
+                $product_old->save();
+                $product = Inventory::find( $request->inventory_id);
+                $product->stock -= $request->quantity;
+                $product->save();
+                $updateSale->product_id = $request->inventory_id;
+            }
+            $updateSale->quantity = $request->quantity;
+            $totalPrice = $request->quantity * $product->price;
 
-            $updateSale->name = strtolower( $request->name );
-            $updateSale->price = $request->price;
-            $updateSale->category = strtolower( $request->category );
-            $updateSale->type = strtolower( $request->type );
-            $updateSale->desc = strtolower( $request->desc );
-            $updateSale->stock = $request->stock;
-
+            $updateSale->price = $totalPrice;
+            $updateSale->customer_id = $request->customer_id;
             $updateSale->save();
 
             DB::commit();
@@ -256,9 +306,15 @@ class SaleService {
             'id' => Helper::decode( $request->id ),
         ] );
 
-        $deleteSale = Sale::find( $request->id )
-            ->delete();
+        $deleteSale = Sale::find( $request->id );
+
+        $product = Inventory::lockForUpdate()
+            ->find( $deleteSale->product_id );
+        $product->stock +=  $deleteSale->quantity;
+        $product->save();
         
+        $deleteSale->delete();
+
         return response()->json( [
             'message' => __( 'template.x_deleted', [ 'title' => Str::singular( __( 'template.sales' ) ) ] ),
         ] );

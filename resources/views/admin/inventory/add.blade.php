@@ -34,7 +34,7 @@ $inventory_create = 'inventory_create';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $inventory_create }}type" class="col-sm-5 col-form-label">{{ __( 'inventory.type' ) }}</label>
+                    <label for="{{ $inventory_create }}_type" class="col-sm-5 col-form-label">{{ __( 'inventory.type' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-select form-select-sm" id="{{ $inventory_create }}_type">
                             <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'inventory.type' ) ] ) }}</option>

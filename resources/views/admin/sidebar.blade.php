@@ -67,6 +67,14 @@
                         </a>
                     </li>
                     @endcan
+                    @can( 'view sales' )
+                    <li class="{{ $controller == 'App\Http\Controllers\Admin\SaleController' ? 'mm-active' : '' }}">
+                        <a href="{{ route( 'admin.module_parent.sale.index' ) }}">
+                            <div class="parent-icon"><i class="align-middle feather" icon-name="shopping-cart"></i></div>
+                            <div class="menu-title">{{ __( 'template.sales' ) }}</div>
+                        </a>
+                    </li>
+                    @endcan
                     {{-- @can( 'view settings' )
                     <li class="{{ $controller == 'App\Http\Controllers\Admin\SettingController' ? 'mm-active' : '' }}">
                         <a href="{{ route( 'admin.module_parent.setting.index' ) }}">

@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\{
     ModuleController,
     ProfileController,
     RoleController,
+    SaleController,
     SettingController,
     SupportController,
     UserController,
@@ -108,6 +109,25 @@ Route::prefix( 'backoffice' )->group( function() {
                 Route::post( 'create-inventory', [ InventoryController::class, 'createInventory' ] )->name( 'admin.inventory.createInventory' );
                 Route::post( 'update-inventory', [ InventoryController::class, 'updateInventory' ] )->name( 'admin.inventory.updateInventory' );
                 Route::post( 'delete-inventory', [ InventoryController::class, 'deleteInventory' ] )->name( 'admin.inventory.deleteInventory' );
+            } );
+
+            Route::prefix( 'sales' )->group( function() {
+
+                Route::group( [ 'middleware' => [ 'permission:view sales' ] ], function() {
+                    Route::get( '/', [ SaleController::class, 'index' ] )->name( 'admin.module_parent.sale.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add sales' ] ], function() {
+                    Route::get( 'add', [ SaleController::class, 'add' ] )->name( 'admin.sale.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit sales' ] ], function() {
+                    Route::get( 'edit', [ SaleController::class, 'edit' ] )->name( 'admin.sale.edit' );
+                } );
+
+                Route::post( 'all-sales', [ SaleController::class, 'allSales' ] )->name( 'admin.sale.allSales' );
+                Route::post( 'one-sale', [ SaleController::class, 'oneSale' ] )->name( 'admin.sale.oneSale' );
+                Route::post( 'create-sale', [ SaleController::class, 'createSale' ] )->name( 'admin.sale.createSale' );
+                Route::post( 'update-sale', [ SaleController::class, 'updateSale' ] )->name( 'admin.sale.updateSale' );
+                Route::post( 'delete-sale', [ SaleController::class, 'deleteSale' ] )->name( 'admin.sale.deleteSale' );
             } );
 
             // Route::prefix( 'roles' )->group( function() {

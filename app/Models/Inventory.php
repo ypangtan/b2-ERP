@@ -14,6 +14,8 @@ use Helper;
 
 use Carbon\Carbon;
 
+use function PHPSTORM_META\type;
+
 class Inventory extends Model
 {
     use HasFactory, LogsActivity;
@@ -32,7 +34,7 @@ class Inventory extends Model
     }
 
     public function type() {
-        return $this->belongsTo( Category::class, 'type_id' );
+        return $this->belongsTo( type::class, 'type_id' );
     }
 
     public function getEncryptedIdAttribute() {
