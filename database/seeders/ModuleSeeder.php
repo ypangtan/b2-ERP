@@ -32,7 +32,7 @@ class ModuleSeeder extends Seeder
             }
         }
 
-        $permissionTypes = [ 'view', 'edit' ];
+        $permissionTypes = [ 'edit' ];
         $modules = [ 'role' ];
 
         foreach ($modules as $module) {
@@ -42,7 +42,15 @@ class ModuleSeeder extends Seeder
             }
         }
 
-    }
+        $permissionTypes = [ 'view' ];
+        $modules = [ 'role', 'financials', 'supply_chain' ];
+
+        foreach ($modules as $module) {
+            $module = module::create( [ 'name' => $module, 'guard' => $guard_name ] );
+            foreach ($permissionTypes as $permissionType) {
+                presetPermissions::create( [ 'action' => $permissionType, 'module_id' => $module->id ] );
+            }
+        }    }
 }
 
 
