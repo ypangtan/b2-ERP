@@ -24,9 +24,18 @@ use Carbon\Carbon;
 
 class RoleService {
 
+    public static function Modules() {
+        $modules = module::with( [
+            'presetPermissions'
+        ] )->select( 'modules.*' );
+
+        return $modules->get();
+    }
+
     public static function allRoles( $request ) {
 
-        $role = RoleModel::select( 'roles.*' );
+        $role = RoleModel::select( 'roles.*' )
+            ->where( 'name', '!=', 'super_admin');
 
         $filterObject = self::filter( $request, $role );
         $role = $filterObject['model'];
@@ -79,40 +88,6 @@ class RoleService {
 
         $filter = false;
 
-        if (  !empty( $request->created_date ) ) {
-            if ( str_contains( $request->created_date, 'to' ) ) {
-                $dates = explode( ' to ', $request->created_date );
-
-                $startDate = explode( '-', $dates[0] );
-                $start = Carbon::create( $startDate[0], $startDate[1], $startDate[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
-                
-                $endDate = explode( '-', $dates[1] );
-                $end = Carbon::create( $endDate[0], $endDate[1], $endDate[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
-
-                $model->whereBetween( 'roles.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );                
-            } else {
-
-                $dates = explode( '-', $request->created_date );
-    
-                $start = Carbon::create( $dates[0], $dates[1], $dates[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
-                $end = Carbon::create( $dates[0], $dates[1], $dates[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
-
-                $model->whereBetween( 'roles.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
-            }
-
-            $filter = true;
-        }
-
-        if ( !empty( $request->role_name ) ) {
-            $model->where( 'name', $request->role_name );
-            $filter = true;
-        }
-
-        if ( !empty( $request->guard_name ) ) {
-            $model->where( 'guard_name', $request->guard_name );
-            $filter = true;
-        }
-
         return [
             'filter' => $filter,
             'model' => $model,
@@ -133,83 +108,6 @@ class RoleService {
         return response()->json( [ 'role' => RoleModel::find( $request->id ), 'permissions' => $permission ] );
     }
 
-    public static function createRole( $request ) {
-
-        $validator = Validator::make( $request->all(), [
-            'role_name' => 'required|unique:roles,name',
-            'guard_name' => 'required',
-        ] );
-
-        $attributeName = [
-            'role_name' => __( 'role.role_name' ),
-            'guard_name' => __( 'role.guard_name' ),
-        ];
-
-        foreach ( $attributeName as $key => $aName ) {
-            $attributeName[$key] = strtolower( $aName );
-        }
-
-        $validator->setAttributeNames( $attributeName )->validate();
-
-        DB::beginTransaction();
-        
-        try {
-
-            $createRole = Role::create( [ 
-                'name' => $request->role_name,
-                'guard_name' => $request->guard_name,
-            ] );
-
-            app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-            
-            $permissions = [];
-
-            if ( !empty( $request->modules ) ) {
-                foreach ( $request->modules as $key => $module ) {
-                    $key = explode( '|', $key );
-                    if ( $key[1] != $createRole->guard_name ) {
-                        continue;
-                    }
-
-                    $moduleObject = Module::where( 'name', $key[0] )->first();
-
-                    foreach ( $module as $action ) {
-                        
-                        $exist = Permission::where( 'name', $action . ' ' . $key[0] )->first();
-                        if ( !$exist ) {
-                            $createPermission = Permission::create( [
-                                'name' => $action . ' ' . $key[0],
-                                'guard_name' => $key[1],
-                            ] );
-        
-                            $updatePermission = Permission::find( $createPermission->id );
-                            $updatePermission->module_id = $moduleObject->id;
-                            $updatePermission->save();
-                        }
-
-                        array_push( $permissions, $action . ' ' . $key[0] );
-                    }
-                }
-            }
-
-            $createRole->syncPermissions( $permissions );
-
-            DB::commit();
-
-        } catch ( \Throwable $th ) {
-
-            DB::rollback();
-
-            return response()->json( [
-                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
-            ], 500 );
-        }
-
-        return response()->json( [
-            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.roles' ) ) ] ),
-        ] );
-    }
-
     public static function updateRole( $request ) {
 
         $request->merge( [
@@ -224,38 +122,8 @@ class RoleService {
             $role = Role::findByName( $roleModel->name, $roleModel->guard_name );
 
             app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
-
-            $permissions = [];
             
-            if ( $request->modules ) {
-                foreach ( $request->modules as $key => $module ) {
-                    $key = explode( '|', $key );
-                    if ( $key[1] != $roleModel->guard_name ) {
-                        continue;
-                    }
-
-                    $moduleObject = Module::where( 'name', $key[0] )->first();
-
-                    foreach ( $module as $action ) {
-
-                        $exist = Permission::where( 'name', $action . ' ' . $key[0] )->first();
-                        if ( !$exist ) {
-                            $createPermission = Permission::create( [
-                                'name' => $action . ' ' . $key[0],
-                                'guard_name' => $key[1],
-                            ] );
-        
-                            $updatePermission = Permission::find( $createPermission->id );
-                            $updatePermission->module_id = $moduleObject->id;
-                            $updatePermission->save();
-                        }
-
-                        array_push( $permissions, $action . ' ' . $key[0] );
-                    }
-                }
-            }
-
-            $role->syncPermissions( $permissions );
+            $role->syncPermissions( $request->permissions );
 
             DB::commit();
 

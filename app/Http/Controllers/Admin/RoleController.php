@@ -6,45 +6,54 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Services\{
+    RoleService,
     Service,
 };
 
 class RoleController extends Controller
 {
     public function index() {
+        $this->data['header']['title'] = __( 'template.roles' );
+        $this->data['content'] = 'admin.role.index';
+        $this->data['breadcrumbs'] = [
+            'enabled' => true,
+            'main_title' => __( 'template.roles' ),
+            'title' => __( 'template.list' ),
+            'mobile_title' => __( 'template.roles' ),
+        ];
 
-    }
-
-    public function add() {
-
+        return view( 'admin.main' )->with( $this->data );
     }
 
     public function edit() {
 
+        $this->data['header']['title'] = __( 'template.roles' );
+        $this->data['content'] = 'admin.role.edit';
+        $this->data['breadcrumbs'] = [
+            'enabled' => true,
+            'main_title' => __( 'template.roles' ),
+            'title' => __( 'template.list' ),
+            'mobile_title' => __( 'template.roles' ),
+        ];
+
+        $this->data['data']['modules'] = [];
+        $this->data['data']['modules'] = RoleService::Modules();
+        return view( 'admin.main' )->with( $this->data );
     }
 
-    public function all( Request $request ) {
+    public function allRoles( Request $request ) {
 
-        return Service::all( $request );
+        return RoleService::allRoles( $request );
     }
 
-    public function one( Request $request ) {
+    public function oneRole( Request $request ) {
 
-        return Service::one( $request );
+        return RoleService::oneRole( $request );
     }
 
-    public function create( Request $request ) {
+    public function updateRole( Request $request ) {
 
-        return Service::create( $request );
+        return RoleService::updateRole( $request );
     }
 
-    public function update( Request $request ) {
-
-        return Service::update( $request );
-    }
-
-    public function updateStatus( Request $request ) {
-
-        return Service::updateStatus( $request );
-    }
 }

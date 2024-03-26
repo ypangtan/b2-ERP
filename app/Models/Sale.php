@@ -20,13 +20,13 @@ class Sale extends Model
 
     protected $fillable = [
         'customer_id',
-        'product_id',
+        'inventory_id',
         'quantity',
         'price',
     ];
 
     public function inventories() {
-        return $this->belongsTo( Inventory::class, 'product_id' );
+        return $this->belongsTo( Inventory::class, 'inventory_id' );
     }
 
     public function customers() {
@@ -43,7 +43,7 @@ class Sale extends Model
 
     protected static $logAttributes = [
         'customer_id',
-        'product_id',
+        'inventory_id',
         'quantity',
         'price',
     ];

@@ -61,6 +61,7 @@ return [
 
     'view' => 'View',
     'edit' => 'Edit',
+    'delete' => 'Delete',
 
     'sub_total' => 'Sub Total',
     'grand_total' => 'Grand Total',

@@ -36,6 +36,13 @@ return [
     'support_tickets' => 'Support Tickets',
     'support' => 'Support',
     'ticket_responses' => 'Ticket Responses',
+    'customers' => 'Customers',
+    'leads' => 'Leads',
+    'inventories' => 'Inventories',
+    'sales' => 'Sales',
+    'comments' => 'Comments',
+    'financials' => 'Financials',
+    'supply_chains' => 'Supply Chains',
 
     // Title
     'add_x' => 'Add :title',
@@ -95,5 +102,6 @@ return [
     'meta_title' => 'Meta Title',
     'meta_description' => 'Meta Description',
     'gallery' => 'Gallery',
-    'remarks' => 'Remarks'
+    'remarks' => 'Remarks',
+    'comingSoon' => 'Coming Soon',
 ];

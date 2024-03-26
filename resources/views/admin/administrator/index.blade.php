@@ -9,7 +9,7 @@ $columns = [
     [
         'type' => 'date',
         'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'datatables.registered_date' ) ] ),
-        'id' => 'registered_date',
+        'id' => 'created_at',
         'title' => __( 'datatables.registered_date' ),
     ],
     [
@@ -127,8 +127,7 @@ $columns = [
                 {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "role" ) }}' ),
                     render: function( data, type, row, meta ) {   
-                        let id = roles.map( e => e.key ).indexOf( data );
-                        return id != -1 ? roles[id].title : '-';
+                        return data ?? '-';
                     },
                 },
                 {

@@ -1,6 +1,6 @@
 <?php
-array_unshift( $data['customers'],[ 'title' => __( 'datatables.all_x', [ 'title' => __( 'sale.customer' ) ] ), 'value' => '' ] );
-array_unshift( $data['inventories'],[ 'title' => __( 'datatables.all_x', [ 'title' => __( 'sale.inventory' ) ] ), 'value' => '' ] );
+array_unshift( $data['customers'],[ 'title' => __( 'datatables.all_x', [ 'title' => __( 'comment.customer' ) ] ), 'value' => '' ] );
+array_unshift( $data['inventories'],[ 'title' => __( 'datatables.all_x', [ 'title' => __( 'comment.inventory' ) ] ), 'value' => '' ] );
 $columns = [
     [
         'type' => 'default',
@@ -17,19 +17,25 @@ $columns = [
         'type' => 'select',
         'options' => $data['customers'],
         'id' => 'customer',
-        'title' => __( 'sale.customer' ),
+        'title' => __( 'comment.customer' ),
     ],
     [
         'type' => 'select',
         'options' => $data['inventories'],
         'id' => 'inventory',
-        'title' => __( 'sale.inventory' ),
+        'title' => __( 'comment.inventory' ),
     ],
     [
         'type' => 'default',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'sale.quantity' ) ] ),
-        'id' => 'quantity',
-        'title' => __( 'sale.quantity' ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'comment.comment' ) ] ),
+        'id' => 'comment',
+        'title' => __( 'comment.comment' ),
+    ],
+    [
+        'type' => 'default',
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'comment.rating' ) ] ),
+        'id' => 'rating',
+        'title' => __( 'comment.rating' ),
     ],
     [
         'type' => 'default',
@@ -42,11 +48,11 @@ $columns = [
 <div class="card">
     <div class="card-body">
         <div class="mb-3 text-end">
-            @can( 'add sales' )
-            <a class="btn btn-sm btn-primary" href="{{ route( 'admin.sale.add' ) }}">{{ __( 'template.create' ) }}</a>
+            @can( 'add comments' )
+            <a class="btn btn-sm btn-primary" href="{{ route( 'admin.comment.add' ) }}">{{ __( 'template.create' ) }}</a>
             @endcan
         </div>
-        <x-data-tables id="sale_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
+        <x-data-tables id="comment_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
     </div>
 </div>
 
@@ -62,7 +68,7 @@ $columns = [
     @endforeach
     
     var dt_table,
-        dt_table_name = '#sale_table',
+        dt_table_name = '#comment_table',
         dt_table_config = {
             language: {
                 'lengthMenu': '{{ __( "datatables.lengthMenu" ) }}',
@@ -76,11 +82,11 @@ $columns = [
                 }
             },
             ajax: {
-                url: '{{ route( 'admin.sale.allSales' ) }}',
+                url: '{{ route( 'admin.comment.allComments' ) }}',
                 data: {
                     '_token': '{{ csrf_token() }}',
                 },
-                dataSrc: 'sales',
+                dataSrc: 'comments',
             },
             lengthMenu: [
                 [ 10, 25, 50, 999999 ],
@@ -92,7 +98,8 @@ $columns = [
                 { data: 'created_at' },
                 { data: 'customers' },
                 { data: 'inventories' },
-                { data: 'quantity' },
+                { data: 'comment' },
+                { data: 'rating' },
                 { data: 'encrypted_id' },
             ],
             columnDefs: [
@@ -116,7 +123,13 @@ $columns = [
                     },
                 },
                 {
-                    targets: parseInt( '{{ Helper::columnIndex( $columns, "quantity" ) }}' ),
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "comment" ) }}' ),
+                    render: function( data, type, row, meta ) {   
+                        return data ?? '-';
+                    },
+                },
+                {
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "rating" ) }}' ),
                     render: function( data, type, row, meta ) {   
                         return data ?? '-';
                     },
@@ -128,17 +141,17 @@ $columns = [
                     className: 'text-center',
                     render: function( data, type, row, meta ) {
 
-                        @canany( [ 'edit sales', 'view sales', 'delete sales' ] )
+                        @canany( [ 'edit comments', 'view comments', 'delete comments' ] )
 
                         let view = '',
                             edit = '',
                             status = '';
 
-                        @can( 'edit sales' )
+                        @can( 'edit comments' )
                         view += '<li class="dropdown-item click-action dt-edit" data-id="' + data + '">{{ __( 'datatables.edit' ) }}</li>';
                         @endcan
 
-                        @can( 'delete sales' )
+                        @can( 'delete comments' )
                         view += '<li class="dropdown-item click-action dt-delete" data-id="' + data + '">{{ __( 'datatables.delete' ) }}</li>';
                         @endcan
 
@@ -165,7 +178,7 @@ $columns = [
         document.addEventListener( 'DOMContentLoaded', function() {
        
        $( document ).on( 'click', '.dt-edit', function() {
-           window.location.href = '{{ route( 'admin.sale.edit' ) }}?id=' + $( this ).data( 'id' );
+           window.location.href = '{{ route( 'admin.comment.edit' ) }}?id=' + $( this ).data( 'id' );
        } );
 
        let uid = 0,
@@ -177,8 +190,8 @@ $columns = [
             uid = $( this ).data( 'id' );
             scope = 'delete';
 
-            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.sales' ) ) ] ) }}' );
-            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.sales' ) ) ] ) }}' );
+            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.comments' ) ) ] ) }}' );
+            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.comments' ) ) ] ) }}' );
 
             modalConfirmation.show();
         } );
@@ -188,7 +201,7 @@ $columns = [
             switch ( scope ) {
                 case 'delete':
                     $.ajax( {
-                        url: '{{ route( 'admin.sale.deleteSale' ) }}',
+                        url: '{{ route( 'admin.comment.deleteComment' ) }}',
                         type: 'POST',
                         data: {
                             id: uid,

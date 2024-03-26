@@ -16,7 +16,7 @@ class CreateAdministratorsTable extends Migration
         Schema::create('administrators', function (Blueprint $table) {
             $table->id();
             $table->string( 'username', 25 )->unique();
-            $table->string( 'email', 25 )->unique();
+            $table->string( 'email', 55 )->unique();
             $table->string( 'password' );
             $table->string( 'name', 50 )->nullable();
             $table->tinyInteger( 'role' );

@@ -26,6 +26,17 @@ use Helper;
 use Carbon\Carbon;
 
 class AdministratorService {
+
+    public static function roles(){
+
+        $role = RoleModel::select( 'roles.*' );
+
+        if( auth()->user()->role != 1 ){
+            $role->where('name', '!=', 'super_admin');
+        }
+        
+        return $role->get();
+    }
     
     public static function allAdministrators( $request ) {
 
@@ -160,6 +171,8 @@ class AdministratorService {
             $administrator->append( [
                 'encrypted_id',
             ] );
+
+            $administrator->role = Helper::encode( $administrator->role );
         }
 
         return $administrator;
@@ -168,6 +181,10 @@ class AdministratorService {
     public static function createAdministrator( $request ) {
 
         DB::beginTransaction();
+
+        $request->merge( [
+            'role' => Helper::decode( $request->role ),
+        ] );
 
         $validator = Validator::make( $request->all(), [
             'username' => [ 'required', 'unique:administrators,username', 'alpha_dash', new CheckASCIICharacter ],
@@ -227,6 +244,7 @@ class AdministratorService {
 
         $request->merge( [
             'id' => Helper::decode( $request->id ),
+            'role' => Helper::decode( $request->role ),
         ] );
 
         $validator = Validator::make( $request->all(), [
@@ -340,11 +358,4 @@ class AdministratorService {
             ->log( 'admin logout' );
     }
 
-    public static function updateNotificationSeen( $request ) {
-
-        AdministratorNotificationSeen::firstOrCreate( [
-            'an_id' => $request->id,
-            'administrator_id' => auth()->user()->id,
-        ] );
-    }
 }

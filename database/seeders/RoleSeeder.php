@@ -2,9 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Administrator;
+use App\Models\module;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleSeeder extends Seeder
 {
@@ -15,38 +20,44 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        DB::table( 'roles' )->insert( [
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+
+        $modules = module::all();
+
+        foreach ($modules as $module) {
+            foreach ($module->presetPermissions as $permissionType) {
+                Permission::create( ['name' => $permissionType->action . ' ' . $module->name ] );
+            }
+        }
+
+        $role = Role::create( [ 
             'name' => 'super_admin',
             'guard_name' => 'admin',
             'created_at' => date( 'Y-m-d H:i:s' ),
             'updated_at' => date( 'Y-m-d H:i:s' ),
-        ] );
+         ] )->givePermissionTo(Permission::all());
 
-        DB::table( 'roles' )->insert( [
-            'name' => 'start_up',
-            'guard_name' => 'user',
-            'created_at' => date( 'Y-m-d H:i:s' ),
-            'updated_at' => date( 'Y-m-d H:i:s' ),
-        ] );
-
-        DB::table( 'roles' )->insert( [
-            'name' => 'business',
-            'guard_name' => 'user',
-            'created_at' => date( 'Y-m-d H:i:s' ),
-            'updated_at' => date( 'Y-m-d H:i:s' ),
-        ] );
-
-        DB::table( 'roles' )->insert( [
+         $role = Role::create( [ 
             'name' => 'enterprise',
-            'guard_name' => 'user',
+            'guard_name' => 'admin',
             'created_at' => date( 'Y-m-d H:i:s' ),
             'updated_at' => date( 'Y-m-d H:i:s' ),
-        ] );
+         ] );
 
-        DB::table( 'model_has_roles' )->insert( [
-            'role_id' => 1,
-            'model_type' => 'App\Models\Administrator',
-            'model_id' => 1,
-        ] );
+         $role = Role::create( [ 
+            'name' => 'business',
+            'guard_name' => 'admin',
+            'created_at' => date( 'Y-m-d H:i:s' ),
+            'updated_at' => date( 'Y-m-d H:i:s' ),
+         ] );
+
+         $role = Role::create( [ 
+            'name' => 'start_up',
+            'guard_name' => 'admin',
+            'created_at' => date( 'Y-m-d H:i:s' ),
+            'updated_at' => date( 'Y-m-d H:i:s' ),
+         ] );
     }
 }
+
+

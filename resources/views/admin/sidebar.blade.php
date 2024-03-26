@@ -16,38 +16,37 @@
                             <div class="menu-title">{{ __( 'template.dashboard' ) }}</div>
                         </a>
                     </li>
-                    @can( 'view administrators' )
-                    <li class="{{ $controller == 'App\Http\Controllers\Admin\AdministratorController' ? 'mm-active' : '' }}">
-                        <a href="{{ route( 'admin.module_parent.administrator.index' ) }}">
-                            <div class="parent-icon"><i class="align-middle feather" icon-name="user"></i></div>
-                            <div class="menu-title">{{ __( 'template.administrators' ) }}</div>
-                        </a>
-                    </li>
-                    @endcan
 
-                    {{-- @canany( [ 'view users' ] )
-                    <li class="{{ $controller == 'App\Http\Controllers\Admin\UserController' ? 'mm-active' : '' }}">
+                    @canany( [ 'view administrators' ] )
+                    <li class="{{ $controller == 'App\Http\Controllers\Admin\AdministratorController' ? 'mm-active' : '' }}">
                         <a href="javascript:;" class="has-arrow">
                             <div class="parent-icon"><i class="align-middle feather" icon-name="users"></i></div>
                             <div class="menu-title">{{ __( 'template.users' ) }}</div>
                         </a>
                         <ul>
-                            @can( 'view users' )
-                            <li class="{{ $controller == 'App\Http\Controllers\Admin\UserController' && $action == 'index' ? 'mm-active' : '' }}">
-                                <a class="metismenu-child" href="{{ route( 'admin.module_parent.user.index' ) }}"><i class="bi bi-circle"></i>{{ __( 'template.users' ) }}</a>
+                            @can( 'view administrators' )
+                            <li class="{{ $controller == 'App\Http\Controllers\Admin\AdministratorController' && $action == 'index' ? 'mm-active' : '' }}">
+                                <a class="metismenu-child" href="{{ route( 'admin.module_parent.administrator.index' ) }}"><i class="bi bi-circle"></i>{{ __( 'template.users' ) }}</a>
                             </li>
                             @endcan
                             @can( 'view roles' )
                             <li class="{{ $controller == 'App\Http\Controllers\Admin\RoleController' && $action == 'index' ? 'mm-active' : '' }}">
                                 <a href="{{ route( 'admin.module_parent.role.index' ) }}">
-                                    <div class="parent-icon"><i class="align-middle feather" icon-name="shield"></i></div>
-                                    <div class="menu-title">{{ __( 'template.roles' ) }}</div>
+                                    <i class="bi bi-circle"></i>{{ __( 'template.roles' ) }}
                                 </a>
                             </li>
                             @endcan
                         </ul>
                     </li>
-                    @endcan --}}
+                    @endcan
+                    @can( 'view Leads' )
+                    <li class="{{ $controller == 'App\Http\Controllers\Admin\LeadController' ? 'mm-active' : '' }}">
+                        <a href="{{ route( 'admin.module_parent.lead.index' ) }}">
+                            <div class="parent-icon"><i class="align-middle feather" icon-name="flag"></i></div>
+                            <div class="menu-title">{{ __( 'template.leads' ) }}</div>
+                        </a>
+                    </li>
+                    @endcan
 
                     <li class="menu-label">{{ __( 'template.operations' ) }}</li>
                     
@@ -72,6 +71,30 @@
                         <a href="{{ route( 'admin.module_parent.sale.index' ) }}">
                             <div class="parent-icon"><i class="align-middle feather" icon-name="shopping-cart"></i></div>
                             <div class="menu-title">{{ __( 'template.sales' ) }}</div>
+                        </a>
+                    </li>
+                    @endcan
+                    @can( 'view comments' )
+                    <li class="{{ $controller == 'App\Http\Controllers\Admin\CommentController' ? 'mm-active' : '' }}">
+                        <a href="{{ route( 'admin.module_parent.comment.index' ) }}">
+                            <div class="parent-icon"><i class="align-middle feather" icon-name="message-square"></i></div>
+                            <div class="menu-title">{{ __( 'template.comments' ) }}</div>
+                        </a>
+                    </li>
+                    @endcan
+                    @can( 'view financials' )
+                    <li class="{{ $controller == 'App\Http\Controllers\Admin\FinancialController' ? 'mm-active' : '' }}">
+                        <a href="{{ route( 'admin.module_parent.financial.index' ) }}">
+                            <div class="parent-icon"><i class="align-middle feather" icon-name="file-text"></i></div>
+                            <div class="menu-title">{{ __( 'template.financials' ) }}</div>
+                        </a>
+                    </li>
+                    @endcan
+                    @can( 'view supply_chain' )
+                    <li class="{{ $controller == 'App\Http\Controllers\Admin\SupplyChainController' ? 'mm-active' : '' }}">
+                        <a href="{{ route( 'admin.module_parent.supply_chain.index' ) }}">
+                            <div class="parent-icon"><i class="align-middle feather" icon-name="truck"></i></div>
+                            <div class="menu-title">{{ __( 'template.supply_chains' ) }}</div>
                         </a>
                     </li>
                     @endcan

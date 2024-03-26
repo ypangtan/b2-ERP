@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Administrator;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,8 @@ class AdministratorSeeder extends Seeder
      */
     public function run()
     {
-        DB::table( 'administrators' )->insert([
+        
+        $superadmin = Administrator::create( [
             'username' => 'altasB2',
             'email' => 'altas@base2.my',
             'password' => Hash::make( 'altas1234' ),
@@ -23,7 +25,8 @@ class AdministratorSeeder extends Seeder
             'role' => 1,            
             'created_at' => date( 'Y-m-d H:i:s' ),
             'updated_at' => date( 'Y-m-d H:i:s' ),
-        ]);
-
+        ] );
+        $superadmin->assignRole('super_admin');
+        
     }
 }

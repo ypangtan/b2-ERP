@@ -9,10 +9,13 @@ use App\Http\Controllers\Admin\{
     AnnouncementController,
     AuditController,
     BankController,
+    CommentController,
     CustomerController,
     DashboardController,
     DepositController,
+    FinancialController,
     InventoryController,
+    LeadController,
     MFAController,
     MissionController,
     MissionHistoryController,
@@ -21,6 +24,7 @@ use App\Http\Controllers\Admin\{
     RoleController,
     SaleController,
     SettingController,
+    SupplyChainController,
     SupportController,
     UserController,
     UserKycController,
@@ -130,23 +134,60 @@ Route::prefix( 'backoffice' )->group( function() {
                 Route::post( 'delete-sale', [ SaleController::class, 'deleteSale' ] )->name( 'admin.sale.deleteSale' );
             } );
 
-            // Route::prefix( 'roles' )->group( function() {
+            Route::prefix( 'leads' )->group( function() {
 
-            //     Route::group( [ 'middleware' => [ 'permission:view roles' ] ], function() {
-            //         Route::get( '/', [ RoleController::class, 'index' ] )->name( 'admin.module_parent.role.index' );
-            //     } );
-            //     Route::group( [ 'middleware' => [ 'permission:add roles' ] ], function() {
-            //         Route::get( 'add', [ RoleController::class, 'add' ] )->name( 'admin.role.add' );
-            //     } );
-            //     Route::group( [ 'middleware' => [ 'permission:edit roles' ] ], function() {
-            //         Route::get( 'edit', [ RoleController::class, 'edit' ] )->name( 'admin.role.edit' );
-            //     } );
+                Route::group( [ 'middleware' => [ 'permission:view leads' ] ], function() {
+                    Route::get( '/', [ LeadController::class, 'index' ] )->name( 'admin.module_parent.lead.index' );
+                } );
 
-            //     Route::post( 'all-roles', [ RoleController::class, 'allRoles' ] )->name( 'admin.role.allRoles' );
-            //     Route::post( 'one-role', [ RoleController::class, 'oneRole' ] )->name( 'admin.role.oneRole' );
-            //     Route::post( 'create-role', [ RoleController::class, 'createRole' ] )->name( 'admin.role.createRole' );
-            //     Route::post( 'update-role', [ RoleController::class, 'updateRole' ] )->name( 'admin.role.updateRole' );
-            // } );
+            } );
+
+            Route::prefix( 'roles' )->group( function() {
+
+                Route::group( [ 'middleware' => [ 'permission:view roles' ] ], function() {
+                    Route::get( '/', [ RoleController::class, 'index' ] )->name( 'admin.module_parent.role.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit roles' ] ], function() {
+                    Route::get( 'edit', [ RoleController::class, 'edit' ] )->name( 'admin.role.edit' );
+                } );
+
+                Route::post( 'all-roles', [ RoleController::class, 'allRoles' ] )->name( 'admin.role.allRoles' );
+                Route::post( 'one-role', [ RoleController::class, 'oneRole' ] )->name( 'admin.role.oneRole' );
+                Route::post( 'update-role', [ RoleController::class, 'updateRole' ] )->name( 'admin.role.updateRole' );
+            } );
+
+            Route::prefix( 'comments' )->group( function() {
+
+                Route::group( [ 'middleware' => [ 'permission:view comments' ] ], function() {
+                    Route::get( '/', [ CommentController::class, 'index' ] )->name( 'admin.module_parent.comment.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add comments' ] ], function() {
+                    Route::get( 'add', [ CommentController::class, 'add' ] )->name( 'admin.comment.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit comments' ] ], function() {
+                    Route::get( 'edit', [ CommentController::class, 'edit' ] )->name( 'admin.comment.edit' );
+                } );
+
+                Route::post( 'all-comments', [ CommentController::class, 'allComments' ] )->name( 'admin.comment.allComments' );
+                Route::post( 'one-comment', [ CommentController::class, 'oneComment' ] )->name( 'admin.comment.oneComment' );
+                Route::post( 'create-comment', [ CommentController::class, 'createComment' ] )->name( 'admin.comment.createComment' );
+                Route::post( 'update-comment', [ CommentController::class, 'updateComment' ] )->name( 'admin.comment.updateComment' );
+                Route::post( 'delete-comment', [ CommentController::class, 'deleteComment' ] )->name( 'admin.comment.deleteComment' );
+            } );
+
+            Route::prefix( 'financials' )->group( function() {
+
+                Route::group( [ 'middleware' => [ 'permission:view financials' ] ], function() {
+                    Route::get( '/', [ FinancialController::class, 'index' ] )->name( 'admin.module_parent.financial.index' );
+                } );
+            } );
+
+            Route::prefix( 'supply_chain' )->group( function() {
+
+                Route::group( [ 'middleware' => [ 'permission:view supply_chains' ] ], function() {
+                    Route::get( '/', [ SupplyChainController::class, 'index' ] )->name( 'admin.module_parent.supply_chain.index' );
+                } );
+            } );
 
             // Route::prefix( 'settings' )->group( function() {
 

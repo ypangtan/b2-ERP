@@ -13,26 +13,21 @@ use Spatie\Activitylog\LogOptions;
 use Helper;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Comment extends Model
+class module extends Model
 {
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-        'customer_id',
-        'inventory_id',
-        'comment',
-        'rating',
+        'name',
+        'guard_name',
     ];
 
-    public function inventories() {
-        return $this->belongsTo( Inventory::class, 'inventory_id' );
+    public function presetPermissions(){
+        return $this->hasMany( presetPermissions::class, 'module_id' );
     }
 
-    public function customers() {
-        return $this->belongsTo( Customer::class, 'customer_id' );
-    }
-    
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
     }
@@ -42,10 +37,8 @@ class Comment extends Model
     }
 
     protected static $logAttributes = [
-        'customer_id',
-        'inventory_id',
-        'comment',
-        'rating',
+        'name',
+        'guard_name',
     ];
 
     protected static $logName = '';

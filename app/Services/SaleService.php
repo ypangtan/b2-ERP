@@ -196,7 +196,7 @@ class SaleService {
 
             $createSale = Sale::create( [
                 'customer_id' => $request->customer_id ,
-                'product_id' => $request->inventory_id ,
+                'inventory_id' => $request->inventory_id ,
                 'price' =>  $totalPrice,
                 'quantity' => $request->quantity ,
             ] );
@@ -235,7 +235,7 @@ class SaleService {
 
                 $old_sale = Sale::find($request->id);
                 $inventory = Inventory::find($request->inventory_id);
-                if( $request->inventory_id == $old_sale->product_id ){
+                if( $request->inventory_id == $old_sale->inventory_id ){
                     $total_stock = $old_sale->quantity + $inventory->stock;
                 } else {
                     $total_stock = $inventory->stock;
@@ -269,13 +269,13 @@ class SaleService {
                 $product->stock = $product->stock - $request->quantity + $updateSale->quantity;
                 $product->save();
             }else{
-                $product_old = Inventory::find( $updateSale->product_id);
+                $product_old = Inventory::find( $updateSale->inventory_id);
                 $product_old->stock += $updateSale->quantity;
                 $product_old->save();
                 $product = Inventory::find( $request->inventory_id);
                 $product->stock -= $request->quantity;
                 $product->save();
-                $updateSale->product_id = $request->inventory_id;
+                $updateSale->inventory_id = $request->inventory_id;
             }
             $updateSale->quantity = $request->quantity;
             $totalPrice = $request->quantity * $product->price;
@@ -309,7 +309,7 @@ class SaleService {
         $deleteSale = Sale::find( $request->id );
 
         $product = Inventory::lockForUpdate()
-            ->find( $deleteSale->product_id );
+            ->find( $deleteSale->inventory_id );
         $product->stock +=  $deleteSale->quantity;
         $product->save();
         

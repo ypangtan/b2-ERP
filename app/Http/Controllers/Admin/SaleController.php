@@ -34,8 +34,6 @@ class SaleController extends Controller
             $this->data['data']['inventories'][] = [ 'key' => $inventory->encrypted_id, 'value' => $inventory->encrypted_id, 'title' => $inventory->name ];
         }
 
-        
-
         return view( 'admin.main' )->with( $this->data );
     }
 

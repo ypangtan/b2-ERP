@@ -36,6 +36,13 @@ return [
     'support_tickets' => 'Support Tickets',
     'support' => 'Support',
     'ticket_responses' => 'Ticket Responses',
+    'customers' => '顾客',
+    'leads' => 'Leads',
+    'inventories' => '产品',
+    'sales' => '销量',
+    'comments' => '评论',
+    'financials' => '金融',
+    'supply_chains' => '供应',
 
     // Title
     'add_x' => '新增:title',
@@ -95,5 +102,6 @@ return [
     'meta_title' => '元标题',
     'meta_description' => '元描述',
     'gallery' => '相册',
-    'remarks' => '备注'
+    'remarks' => '备注',
+    'comingSoon' => '即将到来',
 ];

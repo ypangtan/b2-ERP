@@ -19,75 +19,58 @@ use Helper;
 class AdministratorController extends Controller {
 
     public function index() {
-
-        $this->data['header']['title'] = __( 'template.administrators' );
+        $this->data['header']['title'] = __( 'template.administrator' );
         $this->data['content'] = 'admin.administrator.index';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
-            'main_title' => __( 'template.administrators' ),
+            'main_title' => __( 'template.administrator' ),
             'title' => __( 'template.list' ),
-            'mobile_title' => __( 'template.administrators' ),
+            'mobile_title' => __( 'template.administrator' ),
         ];
 
-        $roles = [];
-        foreach( RoleModel::orderBy( 'id', 'ASC' )->get() as $role ) {
-            $roles[] = [ 'key' => $role->name, 'value' => $role->id, 'title' => __( 'role.' . $role->name ) ];
+        $this->data['data']['roles'] = [];
+        $roles = AdministratorService::roles();
+        foreach ( $roles as $role ) {
+            $this->data['data']['roles'][] = [ 'key' => $role->encrypted_id, 'value' => $role->encrypted_id, 'title' => $role->name ];
         }
-
-        $this->data['data']['roles'] = $roles;
 
         return view( 'admin.main' )->with( $this->data );
     }
 
     public function add() {
-
-        $this->data['header']['title'] = __( 'template.administrators' );
+        $this->data['header']['title'] = __( 'template.administrator' );
         $this->data['content'] = 'admin.administrator.add';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
-            'main_title' => __( 'template.administrators' ),
-            'title' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.administrators' ) ) ] ),
-            'mobile_title' => __( 'template.add_x', [ 'title' => \Str::singular( __( 'template.administrators' ) ) ] ),
+            'main_title' => __( 'template.administrator' ),
+            'title' => __( 'template.list' ),
+            'mobile_title' => __( 'template.administrator' ),
         ];
-        $roles = [];
-        foreach( RoleModel::orderBy( 'id', 'ASC' )->when( auth()->user()->role != 1, function( $query ) {
-            $query->where( 'name', '!=', 'super_admin' );
-        } )->get() as $role ) {
-            $roles[] = [ 'key' => $role->name, 'value' => $role->id, 'title' => __( 'role.' . $role->name ) ];
-        }
 
-        $this->data['data']['roles'] = $roles;
+        $this->data['data']['roles'] = [];
+        $roles = AdministratorService::roles();
+        foreach ( $roles as $role ) {
+            $this->data['data']['roles'][] = [ 'key' => $role->encrypted_id, 'value' => $role->encrypted_id, 'title' => $role->name ];
+        }
 
         return view( 'admin.main' )->with( $this->data );
     }
 
     public function edit( Request $request ) {
-
-        try {
-            $selectedAdmin = Administrator::find( Helper::decode( $request->id ) );
-            if ( auth()->user()->role != 1 && $selectedAdmin->role == 1 ) {
-                return redirect()->route( 'admin.module_parent.administrator.index' );
-            }
-        } catch ( \Throwable $th ) {
-            return redirect()->route( 'admin.module_parent.administrator.index' );
-        }
-
-        $this->data['header']['title'] = __( 'template.administrators' );
+        $this->data['header']['title'] = __( 'template.administrator' );
         $this->data['content'] = 'admin.administrator.edit';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
-            'main_title' => __( 'template.administrators' ),
-            'title' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.administrators' ) ) ] ),
-            'mobile_title' => __( 'template.edit_x', [ 'title' => \Str::singular( __( 'template.administrators' ) ) ] ),
+            'main_title' => __( 'template.administrator' ),
+            'title' => __( 'template.list' ),
+            'mobile_title' => __( 'template.administrator' ),
         ];
-        $roles = [];
-        foreach( RoleModel::orderBy( 'id', 'ASC' )->when( auth()->user()->role != 1, function( $query ) {
-            $query->where( 'name', '!=', 'super_admin' );
-        } )->get() as $role ) {
-            $roles[] = [ 'key' => $role->name, 'value' => $role->id, 'title' => __( 'role.' . $role->name ) ];
-        }
 
-        $this->data['data']['roles'] = $roles;
+        $this->data['data']['roles'] = [];
+        $roles = AdministratorService::roles();
+        foreach ( $roles as $role ) {
+            $this->data['data']['roles'][] = [ 'key' => $role->encrypted_id, 'value' => $role->encrypted_id, 'title' => $role->name ];
+        }
 
         return view( 'admin.main' )->with( $this->data );
     }
@@ -122,81 +105,4 @@ class AdministratorController extends Controller {
         return AdministratorService::logoutLog( $request );
     }
 
-    public function updateNotificationSeen( Request $request ) {
-
-        return AdministratorService::updateNotificationSeen( $request );
-    }
-
-    public function module() {
-
-        $this->data['header']['title'] = __( 'template.modules' );
-        $this->data['content'] = 'admin.administrator.module';
-        $this->data['breadcrumbs'] = [
-            'enabled' => true,
-            'main_title' => __( 'template.administrators' ),
-            'title' => __( 'template.modules' ),
-            'mobile_title' => __( 'template.modules' ),
-        ];
-
-        return view( 'admin.main' )->with( $this->data );
-    }
-
-    public function allModules( Request $request ) {
-
-        return ModuleService::allModules( $request );
-    }
-
-    public function oneModule( Request $request ) {
-
-        return ModuleService::oneModule($request  );
-    }
-
-    public function createModule( Request $request ) {
-
-        return ModuleService::createModule( $request );
-    }
-
-    public function updateModule( Request $request ) {
-
-        return ModuleService::updateModule($request  );
-    }
-
-    public function deleteModule( Request $request ) {
-
-        return ModuleService::deleteModule( $request );
-    }
-
-    public function role() {
-        
-        $this->data['header']['title'] = __( 'template.roles' );
-        $this->data['content'] = 'admin.administrator.role';
-        $this->data['breadcrumbs'] = [
-            'enabled' => true,
-            'main_title' => __( 'template.administrators' ),
-            'title' => __( 'template.roles' ),
-            'mobile_title' => __( 'template.roles' ),
-        ];
-
-        return view( 'admin.main' )->with( $this->data );
-    }
-
-    public function allRoles( Request $request ) {
-
-        return RoleService::allRoles( $request );
-    }
-
-    public function oneRole( Request $request ) {
-
-        return RoleService::oneRole( $request );
-    }
-
-    public function createRole( Request $request ) {
-
-        return RoleService::createRole( $request );
-    }
-
-    public function updateRole( Request $request ) {
-        
-        return RoleService::updateRole( $request );
-    }
 }
