@@ -25,7 +25,6 @@ class FinancialController extends Controller
             'mobile_title' => __( 'template.financials' ),
         ];
 
-
         return view( 'admin.main' )->with( $this->data );
     }
 }

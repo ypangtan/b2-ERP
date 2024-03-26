@@ -25,7 +25,6 @@ class SupplyChainController extends Controller
             'mobile_title' => __( 'template.supply_chains' ),
         ];
 
-
         return view( 'admin.main' )->with( $this->data );
     }
 }
