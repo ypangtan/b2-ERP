@@ -91,6 +91,44 @@ class CustomerService {
 
         $filter = false;
 
+        if ( !empty( $request->created_at ) ) {
+            if ( str_contains( $request->created_at, 'to' ) ) {
+                $dates = explode( ' to ', $request->created_at );
+
+                $startDate = explode( '-', $dates[0] );
+                $start = Carbon::create( $startDate[0], $startDate[1], $startDate[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
+                
+                $endDate = explode( '-', $dates[1] );
+                $end = Carbon::create( $endDate[0], $endDate[1], $endDate[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
+
+                $model->whereBetween( 'customers.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
+            } else {
+
+                $dates = explode( '-', $request->created_at );
+
+                $start = Carbon::create( $dates[0], $dates[1], $dates[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
+                $end = Carbon::create( $dates[0], $dates[1], $dates[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
+
+                $model->whereBetween( 'customers.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
+            }
+            $filter = true;
+        }
+
+        if ( !empty( $request->name ) ) {
+            $model->where( 'customers.name', $request->name );
+            $filter = true;
+        }
+
+        if ( !empty( $request->email ) ) {
+            $model->where( 'customers.email', $request->email );
+            $filter = true;
+        }
+
+        if ( !empty( $request->phone_number ) ) {
+            $model->where( 'customers.phone_number', $request->phone_number );
+            $filter = true;
+        }
+
         return [
             'filter' => $filter,
             'model' => $model,

@@ -44,7 +44,7 @@ $columns = [
         'title' => __( 'inventory.desc' ),
     ],
     [
-        'type' => 'input',
+        'type' => 'default',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'inventory.stock' ) ] ),
         'id' => 'stock',
         'title' => __( 'inventory.stock' ),

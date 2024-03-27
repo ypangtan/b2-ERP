@@ -13,5 +13,10 @@ return [
     |
     */
 
-
+    'enquiry' => 'Enquiry',
+    'call_back' => 'Call Back',
+    'order' => 'Order',
+    'complaint' => 'Complaint',
+    'service' => 'Service',
+    'other' => 'Other',
 ];

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Services\{
     InventoryService,
+    LeadService,
 };
 
 class LeadController extends Controller
@@ -21,7 +22,18 @@ class LeadController extends Controller
             'mobile_title' => __( 'template.leads' ),
         ];
 
-        
+        $this->data['data']['inventories'] = [];
+        $this->data['data']['customers'] = [];
+        $customers = LeadService::Customers();
+        foreach ( $customers as $customer ) {
+            $this->data['data']['customers'][] = [ 'key' => $customer->encrypted_id, 'value' => $customer->encrypted_id, 'title' => $customer->name ];
+        }
+
+        $inventories = LeadService::Inventories();
+        foreach ( $inventories as $inventory ) {
+            $this->data['data']['inventories'][] = [ 'key' => $inventory->encrypted_id, 'value' => $inventory->encrypted_id, 'title' => $inventory->name ];
+        }
+
         return view( 'admin.main' )->with( $this->data );
     }
 

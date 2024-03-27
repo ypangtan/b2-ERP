@@ -239,7 +239,7 @@ $columns = [
             }
         } );
 
-       $( '#registered_date' ).flatpickr( {
+       $( '#created_at' ).flatpickr( {
            mode: 'range',
            disableMobile: true,
            onClose: function( selected, dateStr, instance ) {

@@ -110,9 +110,9 @@ class AdministratorService {
 
         $filter = false;
 
-        if ( !empty( $request->registered_date ) ) {
-            if ( str_contains( $request->registered_date, 'to' ) ) {
-                $dates = explode( ' to ', $request->registered_date );
+        if ( !empty( $request->created_at ) ) {
+            if ( str_contains( $request->created_at, 'to' ) ) {
+                $dates = explode( ' to ', $request->created_at );
 
                 $startDate = explode( '-', $dates[0] );
                 $start = Carbon::create( $startDate[0], $startDate[1], $startDate[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
@@ -123,7 +123,7 @@ class AdministratorService {
                 $model->whereBetween( 'administrators.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
             } else {
 
-                $dates = explode( '-', $request->registered_date );
+                $dates = explode( '-', $request->created_at );
 
                 $start = Carbon::create( $dates[0], $dates[1], $dates[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
                 $end = Carbon::create( $dates[0], $dates[1], $dates[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
@@ -134,7 +134,7 @@ class AdministratorService {
         }
 
         if ( !empty( $request->username ) ) {
-            $model->where( 'administrators.name', $request->username );
+            $model->where( 'administrators.username', $request->username );
             $filter = true;
         }
 
@@ -144,7 +144,8 @@ class AdministratorService {
         }
 
         if ( !empty( $request->role ) ) {
-            $model->where( 'administrators.role', $request->role );
+            $role = Helper::decode( $request->role );
+            $model->where( 'administrators.role', $role );
             $filter = true;
         }
 

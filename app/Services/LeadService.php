@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\{
 use Illuminate\Validation\Rules\Password;
 
 use App\Models\{
+    Customer,
+    Inventory,
     Lead,
     Role as RoleModel
 };
@@ -25,10 +27,31 @@ use Helper;
 use Carbon\Carbon;
 
 class LeadService {
-    
+
+    public static function Customers() {
+
+        $customers = Customer::where( 'status', 10 )
+            ->get();
+        $customers->append( [
+            'encrypted_id',
+        ] );
+        return $customers;
+    }
+
+    public static function Inventories() {
+
+        $inventories = Inventory::all();
+
+        $inventories->append( [
+            'encrypted_id',
+        ] );
+
+        return $inventories;
+    }
+
     public static function allLeads( $request ) {
 
-        $lead = Lead::select( 'leads.*' );
+        $lead = Customer::select( 'Customers.*' );
 
         $filterObject = self::filter( $request, $lead );
         $lead = $filterObject['model'];
@@ -80,9 +103,7 @@ class LeadService {
             'leads' => $Leads,
             'draw' => $request->draw,
             'recordsFiltered' => $filter ? $leadCount : $lead->total,
-            'recordsTotal' => $filter ? Lead::when( auth()->user()->role != 1, function( $query ) {
-                $query->where( 'role', '!=', 1 );
-            } )->count() : $leadCount,
+            'recordsTotal' => $filter ? Customer::count() : $leadCount,
         ];
 
         return $data;

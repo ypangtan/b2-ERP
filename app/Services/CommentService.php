@@ -116,6 +116,41 @@ class CommentService {
 
         $filter = false;
 
+        if ( !empty( $request->created_at ) ) {
+            if ( str_contains( $request->created_at, 'to' ) ) {
+                $dates = explode( ' to ', $request->created_at );
+
+                $startDate = explode( '-', $dates[0] );
+                $start = Carbon::create( $startDate[0], $startDate[1], $startDate[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
+                
+                $endDate = explode( '-', $dates[1] );
+                $end = Carbon::create( $endDate[0], $endDate[1], $endDate[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
+
+                $model->whereBetween( 'commments.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
+            } else {
+
+                $dates = explode( '-', $request->created_at );
+
+                $start = Carbon::create( $dates[0], $dates[1], $dates[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
+                $end = Carbon::create( $dates[0], $dates[1], $dates[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
+
+                $model->whereBetween( 'commments.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
+            }
+            $filter = true;
+        }
+
+        if ( !empty( $request->customer ) ) {
+            $customer = Helper::decode( $request->customer );
+            $model->where( 'commments.customer_id', $customer );
+            $filter = true;
+        }
+
+        if ( !empty( $request->inventory ) ) {
+            $inventory = Helper::decode( $request->inventory );
+            $model->where( 'commments.inventory_id', $inventory );
+            $filter = true;
+        }
+
         return [
             'filter' => $filter,
             'model' => $model,

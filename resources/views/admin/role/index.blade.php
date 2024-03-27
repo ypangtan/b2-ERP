@@ -8,7 +8,7 @@ $columns = [
     [
         'type' => 'date',
         'placeholder' => __( 'datatables.search_x', [ 'title' => __( 'datatables.created_date' ) ] ),
-        'id' => 'created_date',
+        'id' => 'created_at',
         'title' => __( 'datatables.created_date' ),
     ],
     [
@@ -162,7 +162,7 @@ $contents = [
             window.location.href = '{{ route( 'admin.role.edit' ) }}?id=' + $( this ).data( 'id' );
         } );
 
-        $( '#created_date' ).flatpickr( {
+        $( '#created_at' ).flatpickr( {
             mode: 'range',
             disableMobile: true,
             onClose: function( selected, dateStr, instance ) {
