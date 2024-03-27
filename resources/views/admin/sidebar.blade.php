@@ -40,63 +40,12 @@
                     </li>
                     @endcan
 
-                    @canany( [ 'view Leads' ] )
+                    @can( 'view leads' )
                     <li class="{{ $controller == 'App\Http\Controllers\Admin\LeadController' ? 'mm-active' : '' }}">
-                        <a href="javascript:;" class="has-arrow">
+                        <a href="{{ route( 'admin.module_parent.lead.index' ) }}">
                             <div class="parent-icon"><i class="align-middle feather" icon-name="flag"></i></div>
                             <div class="menu-title">{{ __( 'template.leads' ) }}</div>
                         </a>
-                        <ul>
-                            @can( 'view Leads' )
-                            <li class="{{ $controller == 'App\Http\Controllers\Admin\LeadController' && $action == 'index' ? 'mm-active' : '' }}">
-                                <a class="metismenu-child" href="{{ route( 'admin.module_parent.lead.index' ) }}">
-                                    <i class="bi bi-circle"></i>{{ __( 'template.leads' ) }}
-                                </a>
-                            </li>
-                            @endcan
-                            @can( 'view enquiry' )
-                            <li class="{{ $controller == 'App\Http\Controllers\Admin\LeadController' && $action == 'enquiry' ? 'mm-active' : '' }}">
-                                <a href="{{ route( 'admin.lead.enquiry' ) }}">
-                                    <i class="bi bi-circle"></i>{{ __( 'template.enquiry' ) }}
-                                </a>
-                            </li>
-                            @endcan
-                            @can( 'view call_back' )
-                            <li class="{{ $controller == 'App\Http\Controllers\Admin\LeadController' && $action == 'call_back' ? 'mm-active' : '' }}">
-                                <a href="{{ route( 'admin.lead.call_back' ) }}">
-                                    <i class="bi bi-circle"></i>{{ __( 'template.call_back' ) }}
-                                </a>
-                            </li>
-                            @endcan
-                            @can( 'view order' )
-                            <li class="{{ $controller == 'App\Http\Controllers\Admin\LeadController' && $action == 'order' ? 'mm-active' : '' }}">
-                                <a href="{{ route( 'admin.lead.order' ) }}">
-                                    <i class="bi bi-circle"></i>{{ __( 'template.order' ) }}
-                                </a>
-                            </li>
-                            @endcan
-                            @can( 'view complaint' )
-                            <li class="{{ $controller == 'App\Http\Controllers\Admin\LeadController' && $action == 'complaint' ? 'mm-active' : '' }}">
-                                <a href="{{ route( 'admin.lead.complaint' ) }}">
-                                    <i class="bi bi-circle"></i>{{ __( 'template.complaint' ) }}
-                                </a>
-                            </li>
-                            @endcan
-                            @can( 'view service' )
-                            <li class="{{ $controller == 'App\Http\Controllers\Admin\LeadController' && $action == 'service' ? 'mm-active' : '' }}">
-                                <a href="{{ route( 'admin.lead.service' ) }}">
-                                    <i class="bi bi-circle"></i>{{ __( 'template.service' ) }}
-                                </a>
-                            </li>
-                            @endcan
-                            @can( 'view other' )
-                            <li class="{{ $controller == 'App\Http\Controllers\Admin\LeadController' && $action == 'other' ? 'mm-active' : '' }}">
-                                <a href="{{ route( 'admin.lead.other' ) }}">
-                                    <i class="bi bi-circle"></i>{{ __( 'template.other' ) }}
-                                </a>
-                            </li>
-                            @endcan
-                        </ul>
                     </li>
                     @endcan
 

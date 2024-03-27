@@ -12,10 +12,14 @@ use Illuminate\Support\Facades\{
 use Illuminate\Validation\Rules\Password;
 
 use App\Models\{
+    Callback,
     Customer,
+    Enquiry,
     Inventory,
     Lead,
-    Role as RoleModel
+    Other,
+    Role as RoleModel,
+    Service
 };
 
 use App\Rules\CheckASCIICharacter;
@@ -264,6 +268,207 @@ class LeadService {
         
         return response()->json( [
             'message' => __( 'template.x_deleted', [ 'title' => Str::singular( __( 'template.leads' ) ) ] ),
+        ] );
+    }
+
+    public static function createEnquiry( $request ){
+
+        DB::beginTransaction();
+
+        $request->merge( [
+            'customer_id' => Helper::decode( $request->customer_id ),
+            'inventory_id' => Helper::decode( $request->inventory_id ),
+        ] );
+
+        $validator = Validator::make( $request->all(), [
+            'customer_id' => [ 'required', 'exists:customers,id' ],
+            'inventory_id' => [ 'required', 'exists:inventories,id' ],
+            'remark' => [ 'required'],
+        ] );
+
+        $attributeName = [
+            'remark' => __( 'lead.remark' ),
+        ];
+
+        foreach ( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+
+        $validator->setAttributeNames( $attributeName )->validate();
+        
+        try {
+            
+            $lead = Lead::create( [
+                'customer_id' => $request->customer_id,
+                'inventory_id' => $request->inventory_id,
+                'status' => '20',
+            ] );
+
+            Enquiry::create( [
+                'lead_id' => $lead->id ,
+                'remark' => $request->remark ,
+            ] );
+
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.leads' ) ) ] ),
+        ] );
+    }
+
+    public static function createCallBack( $request ){
+
+        DB::beginTransaction();
+
+        $validator = Validator::make( $request->all(), [
+            'id' => [ 'required', 'exists:leads,id' ],
+            'remark' => [ 'required'],
+        ] );
+
+        $attributeName = [
+            'remark' => __( 'lead.remark' ),
+        ];
+
+        foreach ( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+
+        $validator->setAttributeNames( $attributeName )->validate();
+        
+        try {
+
+            $createCallBack = Callback::create( [
+                'lead_id' => $request->id ,
+                'remark' => $request->remark ,
+            ] );
+
+            $lead = Lead::lockForUpdate()
+                ->find( $request->id );
+            $lead->status = '10';
+            $lead->save();
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.leads' ) ) ] ),
+        ] );
+    }
+
+    public static function createService( $request ){
+
+        DB::beginTransaction();
+
+        $validator = Validator::make( $request->all(), [
+            'id' => [ 'required', 'exists:leads,id' ],
+            'name' => [ 'required'],
+            'charge' => [ 'required'],
+            'remark' => [ 'required'],
+        ] );
+
+        $attributeName = [
+            'name' => __( 'lead.service_name' ),
+            'charge' => __( 'lead.service_remark' ),
+            'remark' => __( 'lead.remark' ),
+        ];
+
+        foreach ( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+
+        $validator->setAttributeNames( $attributeName )->validate();
+        
+        try {
+
+            $createEnquiry = Service::create( [
+                'lead_id' => $request->id ,
+                'name' => $request->name ,
+                'charge' => $request->charge ,
+                'remark' => $request->remark ,
+            ] );
+            
+            $lead = Lead::lockForUpdate()
+                ->find( $request->id );
+            $lead->status = '40';
+            $lead->save();
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.leads' ) ) ] ),
+        ] );
+    }
+
+    public static function createOther( $request ){
+
+        DB::beginTransaction();
+
+        $validator = Validator::make( $request->all(), [
+            'id' => [ 'required', 'exists:leads,id' ],
+            'remark' => [ 'required'],
+        ] );
+
+        $attributeName = [
+            'remark' => __( 'lead.remark' ),
+        ];
+
+        foreach ( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+
+        $validator->setAttributeNames( $attributeName )->validate();
+        
+        try {
+
+            $createEnquiry = Other::create( [
+                'lead_id' => $request->id ,
+                'remark' => $request->remark ,
+            ] );
+
+            $lead = Lead::lockForUpdate()
+                ->find( $request->id );
+            $lead->status = '50';
+            $lead->save();
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.leads' ) ) ] ),
         ] );
     }
 

@@ -257,6 +257,42 @@ class CustomerService {
         ] );
     }
 
+    public static function updateCustomerStatus( $request ){
+
+        DB::beginTransaction();
+
+        $request->merge( [
+            'id' => Helper::decode( $request->id ),
+        ] );
+
+        $validator = Validator::make( $request->all(), [
+            'status' => 'required',
+        ] );
+        
+        $validator->validate();
+
+        try {
+
+            $updateUser = Customer::lockForUpdate()->find( $request->id );
+            $updateUser->status = $request->status;
+            $updateUser->save();
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollBack();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine()
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.customers' ) ) ] ),
+        ] );
+    }
+
     public static function deleteCustomer( $request ) {
 
         $request->merge( [

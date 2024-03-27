@@ -1,5 +1,4 @@
 <?php
-$lead_index = 'lead_index';
 $columns = [
     [
         'type' => 'default',
@@ -14,27 +13,27 @@ $columns = [
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'customer.name' ) ] ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'lead.name' ) ] ),
         'id' => 'name',
-        'title' => __( 'customer.name' ),
+        'title' => __( 'lead.name' ),
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'customer.email' ) ] ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'lead.email' ) ] ),
         'id' => 'email',
-        'title' => __( 'customer.email' ),
+        'title' => __( 'lead.email' ),
     ],
     [
         'type' => 'range',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'customer.age' ) ] ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'lead.age' ) ] ),
         'id' => 'age',
-        'title' => __( 'customer.age' ),
+        'title' => __( 'lead.age' ),
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'customer.phone_number' ) ] ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'lead.phone_number' ) ] ),
         'id' => 'phone_number',
-        'title' => __( 'customer.phone_number' ),
+        'title' => __( 'lead.phone_number' ),
     ],
     [
         'type' => 'select',
@@ -42,7 +41,11 @@ $columns = [
             [ 'value' => '', 'title' => __( 'datatables.all_x', [ 'title' => __( 'datatables.status' ) ] ) ],
             [ 'value' => 10, 'title' => __( 'lead.activated' ) ],
             [ 'value' => 20, 'title' => __( 'lead.enquired' ) ],
-            [ 'value' => 30, 'title' => __( 'lead.order' ) ],
+            [ 'value' => 30, 'title' => __( 'lead.call_back' ) ],
+            [ 'value' => 40, 'title' => __( 'lead.order' ) ],
+            [ 'value' => 50, 'title' => __( 'lead.complaint' ) ],
+            [ 'value' => 60, 'title' => __( 'lead.service' ) ],
+            [ 'value' => 70, 'title' => __( 'lead.other' ) ],
         ],
         'id' => 'status',
         'title' => __( 'datatables.status' ),
@@ -59,7 +62,7 @@ $columns = [
     <div class="card-body">
         <div class="mb-3 text-center">
         </div>
-        <x-data-tables id="customer_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
+        <x-data-tables id="lead_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
     </div>
 </div>
 
@@ -76,16 +79,32 @@ $columns = [
     
     var statusMapper = {
             '10': {
-                'text': '{{ __( 'datatables.activated' ) }}',
+                'text': '{{ __( 'lead.activated' ) }}',
                 'color': 'badge rounded-pill bg-success',
             },
             '20': {
-                'text': '{{ __( 'datatables.suspended' ) }}',
-                'color': 'badge rounded-pill bg-danger',
+                'text': '{{ __( 'lead.enquired' ) }}',
+                'color': 'badge rounded-pill bg-warning',
+            },
+            '30': {
+                'text': '{{ __( 'lead.order' ) }}',
+                'color': 'badge rounded-pill bg-warning',
+            },
+            '40': {
+                'text': '{{ __( 'lead.complaint' ) }}',
+                'color': 'badge rounded-pill bg-warning',
+            },
+            '50': {
+                'text': '{{ __( 'lead.service' ) }}',
+                'color': 'badge rounded-pill bg-warning',
+            },
+            '60': {
+                'text': '{{ __( 'lead.other' ) }}',
+                'color': 'badge rounded-pill bg-warning',
             },
         },
         dt_table,
-        dt_table_name = '#customer_table',
+        dt_table_name = '#lead_table',
         dt_table_config = {
             language: {
                 'lengthMenu': '{{ __( "datatables.lengthMenu" ) }}',
@@ -99,11 +118,11 @@ $columns = [
                 }
             },
             ajax: {
-                url: '{{ route( 'admin.customer.allCustomers' ) }}',
+                url: '{{ route( 'admin.lead.allLeads' ) }}',
                 data: {
                     '_token': '{{ csrf_token() }}',
                 },
-                dataSrc: 'customers',
+                dataSrc: 'leads',
             },
             lengthMenu: [
                 [ 10, 25, 50, 999999 ],
@@ -142,33 +161,41 @@ $columns = [
                     className: 'text-center',
                     render: function( data, type, row, meta ) {
 
-                        @canany( [ 'edit customers', 'view customers', 'delete customers' ] )
-
                         let view = '',
                             edit = '',
                             status = '';
 
-                        @can( 'edit customers' )
-                        view += '<li class="dropdown-item click-action dt-edit" data-id="' + data + '">{{ __( 'datatables.edit' ) }}</li>';
-                        @endcan
-
-                        @can( 'delete customers' )
-                        view += '<li class="dropdown-item click-action dt-delete" data-id="' + data + '">{{ __( 'datatables.delete' ) }}</li>';
-                        @endcan
+                        switch( row.status ){
+                            case 10 :
+                                status = '<li class="dropdown-item click-action dt-enquiry" data-id="' + data + '">{{ __( 'lead.enquiry' ) }}</li>';
+                            break;
+                            case 20 :
+                                status = '<li class="dropdown-item click-action dt-call_back" data-id="' + data + '">{{ __( 'lead.call_back' ) }}</li>';
+                                status += '<li class="dropdown-item click-action dt-order" data-id="' + data + '">{{ __( 'lead.order' ) }}</li>';
+                            break;
+                            case 30 :
+                                status = '<li class="dropdown-item click-action dt-enquiry" data-id="' + data + '">{{ __( 'lead.enquiry' ) }}</li>';
+                            break;
+                            case 40 :
+                            break;
+                            case 50 :
+                            break;
+                            case 60 :
+                            break;
+                        }
 
                         let html = 
                         `
                         <div class="dropdown">
                             <i class="text-primary click-action" icon-name="more-horizontal" data-bs-toggle="dropdown"></i>
                             <ul class="dropdown-menu">
-                            ` + view + `
+                            ` + status + `
                             </ul>
                         </div>
                         `;
                         return html;
                         @else
                         return '<i class="text-secondary" icon-name="more-horizontal" data-bs-toggle="dropdown"></i>';
-                        @endcanany
                     },
                 },
             ],
@@ -179,7 +206,7 @@ $columns = [
         document.addEventListener( 'DOMContentLoaded', function() {
        
        $( document ).on( 'click', '.dt-edit', function() {
-           window.location.href = '{{ route( 'admin.customer.edit' ) }}?id=' + $( this ).data( 'id' );
+           window.location.href = '{{ route( 'admin.lead.edit' ) }}?id=' + $( this ).data( 'id' );
        } );
 
        
@@ -192,8 +219,8 @@ $columns = [
             uid = $( this ).data( 'id' );
             scope = 'delete';
 
-            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.customers' ) ) ] ) }}' );
-            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.customers' ) ) ] ) }}' );
+            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.leads' ) ) ] ) }}' );
+            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.leads' ) ) ] ) }}' );
 
             modalConfirmation.show();
         } );
@@ -203,7 +230,7 @@ $columns = [
             switch ( scope ) {
                 case 'delete':
                     $.ajax( {
-                        url: '{{ route( 'admin.customer.deleteCustomer' ) }}',
+                        url: '{{ route( 'admin.lead.deletelead' ) }}',
                         type: 'POST',
                         data: {
                             id: uid,

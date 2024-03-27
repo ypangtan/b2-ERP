@@ -93,9 +93,11 @@ Route::prefix( 'backoffice' )->group( function() {
                 Route::post( 'one-customer', [ CustomerController::class, 'oneCustomer' ] )->name( 'admin.customer.oneCustomer' );
                 Route::post( 'create-customer', [ CustomerController::class, 'createCustomer' ] )->name( 'admin.customer.createCustomer' );
                 Route::post( 'update-customer', [ CustomerController::class, 'updateCustomer' ] )->name( 'admin.customer.updateCustomer' );
+                Route::post( 'update-customer-status', [ CustomerController::class, 'updateCustomerStatus' ] )->name( 'admin.customer.updateCustomerStatus' );
                 Route::post( 'delete-customer', [ CustomerController::class, 'deleteCustomer' ] )->name( 'admin.customer.deleteCustomer' );
+            
             } );
-
+            
             Route::prefix( 'inventories' )->group( function() {
 
                 Route::group( [ 'middleware' => [ 'permission:view inventories' ] ], function() {
@@ -138,31 +140,24 @@ Route::prefix( 'backoffice' )->group( function() {
 
                 Route::group( [ 'middleware' => [ 'permission:view leads' ] ], function() {
                     Route::get( '/', [ LeadController::class, 'index' ] )->name( 'admin.module_parent.lead.index' );
-                } );
-                
-                Route::group( [ 'middleware' => [ 'permission:view enquiry' ] ], function() {
                     Route::get( '/enquiry', [ LeadController::class, 'enquiry' ] )->name( 'admin.lead.enquiry' );
-                } );
-
-                Route::group( [ 'middleware' => [ 'permission:view call_back' ] ], function() {
                     Route::get( '/call_back', [ LeadController::class, 'call_back' ] )->name( 'admin.lead.call_back' );
-                } );
-
-                Route::group( [ 'middleware' => [ 'permission:view order' ] ], function() {
                     Route::get( '/order', [ LeadController::class, 'order' ] )->name( 'admin.lead.order' );
-                } );
-                
-                Route::group( [ 'middleware' => [ 'permission:view complaint' ] ], function() {
                     Route::get( '/complaint', [ LeadController::class, 'complaint' ] )->name( 'admin.lead.complaint' );
-                } );
-
-                Route::group( [ 'middleware' => [ 'permission:view service' ] ], function() {
                     Route::get( '/service', [ LeadController::class, 'service' ] )->name( 'admin.lead.service' );
+                    Route::get( '/other', [ LeadController::class, 'other' ] )->name( 'admin.lead.other' );
+
                 } );
 
-                Route::group( [ 'middleware' => [ 'permission:view other' ] ], function() {
-                    Route::get( '/other', [ LeadController::class, 'other' ] )->name( 'admin.lead.other' );
-                } );
+                
+                Route::post( '/lead-show', [ LeadController::class, 'oneLead' ] )->name( 'admin.lead.oneLead' );
+
+                Route::post( 'lead-add-enquiry', [ LeadController::class, 'createEnquiry' ] )->name( 'admin.lead.createEnquiry' );
+                Route::post( 'lead-add-call_back', [ LeadController::class, 'createCallBack' ] )->name( 'admin.lead.createCallBack' );
+                // Route::post( 'lead-add-order', [ SaleController::class, 'createSale' ] )->name( 'admin.lead.createOrder' );
+                // Route::post( 'lead-add-complaint', [ CommentController::class, 'createComment' ] )->name( 'admin.lead.createComplaint' );
+                Route::post( 'lead-add-service', [ LeadController::class, 'createService' ] )->name( 'admin.lead.createService' );
+                Route::post( 'lead-add-other', [ LeadController::class, 'createOther' ] )->name( 'admin.lead.createOther' );
 
             } );
 

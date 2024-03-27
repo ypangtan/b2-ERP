@@ -12,6 +12,7 @@ use App\Services\{
 
 class LeadController extends Controller
 {
+
     public function index() {
         $this->data['header']['title'] = __( 'template.leads' );
         $this->data['content'] = 'admin.lead.index';
@@ -119,6 +120,26 @@ class LeadController extends Controller
         ];
 
         return view( 'admin.main' )->with( $this->data );
+    }
+
+    public function oneLead( Request $request){
+        return LeadService::oneLead( $request );
+    }
+
+    public function createEnquiry( Request $request){
+        return LeadService::createEnquiry( $request );
+    }
+
+    public function createCallBack( Request $request){
+        return LeadService::createCallBack( $request );
+    }
+
+    public function createService( Request $request){
+        return LeadService::createService( $request );
+    }
+
+    public function createOther( Request $request){
+        return LeadService::createOther( $request );
     }
     
 }

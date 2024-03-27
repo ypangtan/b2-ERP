@@ -71,6 +71,11 @@ class CustomerController extends Controller
         return CustomerService::updateCustomer( $request );
     }
 
+    public function updateCustomerStatus( Request $request ) {
+
+        return CustomerService::updateCustomerStatus( $request );
+    }
+
     public function deleteCustomer( Request $request ) {
 
         return CustomerService::deleteCustomer( $request );
