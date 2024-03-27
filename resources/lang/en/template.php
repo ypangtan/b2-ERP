@@ -43,6 +43,12 @@ return [
     'comments' => 'Comments',
     'financials' => 'Financials',
     'supply_chains' => 'Supply Chains',
+    'enquiry' => 'Enquiry',
+    'call_back' => 'Call Back',
+    'order' => 'Order',
+    'complaint' => 'Complaint',
+    'service' => 'Service',
+    'other' => 'Other',
 
     // Title
     'add_x' => 'Add :title',

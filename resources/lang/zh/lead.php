@@ -13,5 +13,10 @@ return [
     |
     */
 
-
+    'enquiry' => '询问',
+    'call_back' => '退回',
+    'order' => '订单',
+    'complaint' => '投诉',
+    'service' => '服务',
+    'other' => '其他',
 ];

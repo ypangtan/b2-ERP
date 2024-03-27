@@ -37,4 +37,88 @@ class LeadController extends Controller
         return view( 'admin.main' )->with( $this->data );
     }
 
+    public function enquiry() {
+
+        $this->data['header']['title'] = __( 'template.leads' );
+        $this->data['content'] = 'admin.lead.enquiry';
+        $this->data['breadcrumbs'] = [
+            'enabled' => true,
+            'main_title' => __( 'template.leads' ),
+            'title' => __( 'template.list' ),
+            'mobile_title' => __( 'template.leads' ),
+        ];
+
+        return view( 'admin.main' )->with( $this->data );
+    }
+
+    public function call_back() {
+
+        $this->data['header']['title'] = __( 'template.leads' );
+        $this->data['content'] = 'admin.lead.call_back';
+        $this->data['breadcrumbs'] = [
+            'enabled' => true,
+            'main_title' => __( 'template.leads' ),
+            'title' => __( 'template.list' ),
+            'mobile_title' => __( 'template.leads' ),
+        ];
+
+        return view( 'admin.main' )->with( $this->data );
+    }
+
+    public function order() {
+
+        $this->data['header']['title'] = __( 'template.leads' );
+        $this->data['content'] = 'admin.lead.order';
+        $this->data['breadcrumbs'] = [
+            'enabled' => true,
+            'main_title' => __( 'template.leads' ),
+            'title' => __( 'template.list' ),
+            'mobile_title' => __( 'template.leads' ),
+        ];
+
+        return view( 'admin.main' )->with( $this->data );
+    }
+
+    public function complaint() {
+
+        $this->data['header']['title'] = __( 'template.leads' );
+        $this->data['content'] = 'admin.lead.complaint';
+        $this->data['breadcrumbs'] = [
+            'enabled' => true,
+            'main_title' => __( 'template.leads' ),
+            'title' => __( 'template.list' ),
+            'mobile_title' => __( 'template.leads' ),
+        ];
+
+        return view( 'admin.main' )->with( $this->data );
+    }
+
+    public function service() {
+
+        $this->data['header']['title'] = __( 'template.leads' );
+        $this->data['content'] = 'admin.lead.service';
+        $this->data['breadcrumbs'] = [
+            'enabled' => true,
+            'main_title' => __( 'template.leads' ),
+            'title' => __( 'template.list' ),
+            'mobile_title' => __( 'template.leads' ),
+        ];
+
+        return view( 'admin.main' )->with( $this->data );
+    }
+
+    public function other() {
+
+        $this->data['header']['title'] = __( 'template.leads' );
+        $this->data['content'] = 'admin.lead.other';
+        $this->data['breadcrumbs'] = [
+            'enabled' => true,
+            'main_title' => __( 'template.leads' ),
+            'title' => __( 'template.list' ),
+            'mobile_title' => __( 'template.leads' ),
+        ];
+
+        return view( 'admin.main' )->with( $this->data );
+    }
+    
 }

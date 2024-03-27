@@ -139,6 +139,30 @@ Route::prefix( 'backoffice' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view leads' ] ], function() {
                     Route::get( '/', [ LeadController::class, 'index' ] )->name( 'admin.module_parent.lead.index' );
                 } );
+                
+                Route::group( [ 'middleware' => [ 'permission:view enquiry' ] ], function() {
+                    Route::get( '/enquiry', [ LeadController::class, 'enquiry' ] )->name( 'admin.lead.enquiry' );
+                } );
+
+                Route::group( [ 'middleware' => [ 'permission:view call_back' ] ], function() {
+                    Route::get( '/call_back', [ LeadController::class, 'call_back' ] )->name( 'admin.lead.call_back' );
+                } );
+
+                Route::group( [ 'middleware' => [ 'permission:view order' ] ], function() {
+                    Route::get( '/order', [ LeadController::class, 'order' ] )->name( 'admin.lead.order' );
+                } );
+                
+                Route::group( [ 'middleware' => [ 'permission:view complaint' ] ], function() {
+                    Route::get( '/complaint', [ LeadController::class, 'complaint' ] )->name( 'admin.lead.complaint' );
+                } );
+
+                Route::group( [ 'middleware' => [ 'permission:view service' ] ], function() {
+                    Route::get( '/service', [ LeadController::class, 'service' ] )->name( 'admin.lead.service' );
+                } );
+
+                Route::group( [ 'middleware' => [ 'permission:view other' ] ], function() {
+                    Route::get( '/other', [ LeadController::class, 'other' ] )->name( 'admin.lead.other' );
+                } );
 
             } );
 
