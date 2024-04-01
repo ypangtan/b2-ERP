@@ -9,12 +9,7 @@ $lead_enquiry = 'lead_enquiry';
                 <div class="mb-3 row">
                     <label for="{{ $lead_enquiry }}_customer" class="col-sm-5 col-form-label">{{ __( 'lead.customer' ) }}</label>
                     <div class="col-sm-7">
-                        <select class="form-select form-select-sm" id="{{ $lead_enquiry }}_customer">
-                            <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'lead.customer' ) ] ) }}</option>
-                            @foreach( $data['customers'] as $customer )
-                            <option value="{{ $customer['value'] }}">{{ $customer['title'] }}</option>
-                            @endforeach
-                        </select>
+                        <input type="text" class="form-control form-control-sm" id="{{ $lead_enquiry }}_customer">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
@@ -50,13 +45,14 @@ $lead_enquiry = 'lead_enquiry';
 <script>
     document.addEventListener( 'DOMContentLoaded', function() {
 
-        let ce = '#{{ $lead_enquiry }}';
-        
-        $( ce + '_cancel' ).click( function() {
+        let le = '#{{ $lead_enquiry }}';
+        getLead();
+
+        $( le + '_cancel' ).click( function() {
             window.location.href = '{{ route( 'admin.module_parent.lead.index' ) }}';
         } );
 
-        $( ce + '_submit' ).click( function() {
+        $( le + '_submit' ).click( function() {
 
             resetInputValidation();
 
@@ -65,9 +61,9 @@ $lead_enquiry = 'lead_enquiry';
             } );
 
             let formData = new FormData();
-            formData.append( 'customer_id', $( ce + '_customer' ).val() );
-            formData.append( 'inventory_id', $( ce + '_inventory' ).val() );
-            formData.append( 'remark', $( ce + '_remark' ).val() );
+            formData.append( 'customer_id', '{{ request( 'id' ) }}' );
+            formData.append( 'inventory_id', $( le + '_inventory' ).val() );
+            formData.append( 'remark', $( le + '_remark' ).val() );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {
@@ -91,7 +87,7 @@ $lead_enquiry = 'lead_enquiry';
                     if ( error.status === 422 ) {
                         let errors = error.responseJSON.errors;
                         $.each( errors, function( key, value ) {
-                            $( ce + '_' + key ).addClass( 'is-invalid' ).next().text( value );
+                            $( le + '_' + key ).addClass( 'is-invalid' ).next().text( value );
                         } );
                     } else {
                         $( '#modal_danger .caption-text' ).html( error.responseJSON.message );
@@ -100,29 +96,24 @@ $lead_enquiry = 'lead_enquiry';
                 }
             } );
         } );
-        
-        var startup = '{{ request( 'id' ) }}' ? getEnquiry() : '';
 
-        function getEnquiry() {
+        function getLead() {
 
             $( 'body' ).loading( {
                 message: '{{ __( 'template.loading' ) }}'
             } );
 
             $.ajax( {
-                url: '{{ route( 'admin.lead.oneLead' ) }}',
+                url: '{{ route( 'admin.lead._oneLead' ) }}',
                 type: 'POST',
                 data: {
                     'id': '{{ request( 'id' ) }}',
                     '_token': '{{ csrf_token() }}'
                 },
                 success: function( response ) {
-
-                    $( ce + '_name' ).val( response.name );
-                    $( ce + '_email' ).val( response.email );
-                    $( ce + '_age' ).val( response.age );
-                    $( ce + '_phone_number' ).val( response.phone_number );
-
+                    console.log(response);
+                    $( le + '_customer' ).val( response.name );
+                    $( le + '_customer' ).attr('disabled',true);
                     $( 'body' ).loading( 'stop' );
                 },
             } );

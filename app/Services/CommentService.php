@@ -212,7 +212,7 @@ class CommentService {
         
         try {
 
-            $createAdmin = Comment::create( [
+            $createComment = Comment::create( [
                 'customer_id' => $request->customer_id ,
                 'inventory_id' => $request->inventory_id ,
                 'comment' => $request->comment ,

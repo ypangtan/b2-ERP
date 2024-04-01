@@ -91,16 +91,8 @@ $columns = [
                 'color': 'badge rounded-pill bg-warning',
             },
             '40': {
-                'text': '{{ __( 'lead.complaint' ) }}',
-                'color': 'badge rounded-pill bg-warning',
-            },
-            '50': {
-                'text': '{{ __( 'lead.service' ) }}',
-                'color': 'badge rounded-pill bg-warning',
-            },
-            '60': {
-                'text': '{{ __( 'lead.other' ) }}',
-                'color': 'badge rounded-pill bg-warning',
+                'text': '{{ __( 'lead.done' ) }}',
+                'color': 'badge rounded-pill bg-success',
             },
         },
         dt_table,
@@ -151,7 +143,10 @@ $columns = [
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "status" ) }}' ),
                     orderable: false,
                     render: function( data, type, row, meta ) {
-                        return '<span class="' + statusMapper[data].color + '">' + statusMapper[data].text + '</span>';
+                        countLead = row.leads.length - 1;
+                        leadStatus = row.leads[countLead] ? row.leads[countLead].status : data ;
+
+                        return '<span class="' + statusMapper[leadStatus].color + '">' + statusMapper[leadStatus].text + '</span>';
                     },
                 },
                 {
@@ -161,27 +156,24 @@ $columns = [
                     className: 'text-center',
                     render: function( data, type, row, meta ) {
 
-                        let view = '',
-                            edit = '',
-                            status = '';
-
-                        switch( row.status ){
-                            case 10 :
-                                status = '<li class="dropdown-item click-action dt-enquiry" data-id="' + data + '">{{ __( 'lead.enquiry' ) }}</li>';
-                            break;
-                            case 20 :
-                                status = '<li class="dropdown-item click-action dt-call_back" data-id="' + data + '">{{ __( 'lead.call_back' ) }}</li>';
-                                status += '<li class="dropdown-item click-action dt-order" data-id="' + data + '">{{ __( 'lead.order' ) }}</li>';
-                            break;
-                            case 30 :
-                                status = '<li class="dropdown-item click-action dt-enquiry" data-id="' + data + '">{{ __( 'lead.enquiry' ) }}</li>';
-                            break;
-                            case 40 :
-                            break;
-                            case 50 :
-                            break;
-                            case 60 :
-                            break;
+                        let status = '',
+                            countLead = row.leads.length - 1,
+                            leadStatus = row.leads[countLead] ? row.leads[countLead].status : row.status ;
+                        
+                        if( leadStatus == 10 ){
+                            status += '<li class="dropdown-item click-action dt-enquiry" data-id="' + data + '">{{ __( 'lead.enquiry' ) }}</li>';
+                        }
+                        else if ( leadStatus == 20 ){
+                            status += '<li class="dropdown-item click-action dt-call_back" data-id="' + row.leads[countLead].encrypted_id + '">{{ __( 'lead.call_back' ) }}</li>';
+                            status += '<li class="dropdown-item click-action dt-order" data-id="' + row.leads[countLead].encrypted_id + '">{{ __( 'lead.order' ) }}</li>';
+                        }
+                        else if ( leadStatus == 30 ){
+                            status += '<li class="dropdown-item click-action dt-complaint" data-id="' + row.leads[countLead].encrypted_id + '">{{ __( 'lead.complaint' ) }}</li>';
+                            status += '<li class="dropdown-item click-action dt-service" data-id="' + row.leads[countLead].encrypted_id + '">{{ __( 'lead.service' ) }}</li>';
+                            status += '<li class="dropdown-item click-action dt-other" data-id="' + row.leads[countLead].encrypted_id + '">{{ __( 'lead.other' ) }}</li>';
+                            status += '<li class="dropdown-item click-action dt-done" data-id="' + row.leads[countLead].encrypted_id + '">{{ __( 'lead.done' ) }}</li>';
+                        }else if( leadStatus == 40 ){
+                            status += '<li class="dropdown-item click-action dt-enquiry" data-id="' + data + '">{{ __( 'lead.enquiry' ) }}</li>';
                         }
 
                         let html = 
@@ -194,8 +186,6 @@ $columns = [
                         </div>
                         `;
                         return html;
-                        @else
-                        return '<i class="text-secondary" icon-name="more-horizontal" data-bs-toggle="dropdown"></i>';
                     },
                 },
             ],
@@ -203,24 +193,42 @@ $columns = [
         table_no = 0,
         timeout = null;
 
-        document.addEventListener( 'DOMContentLoaded', function() {
-       
-       $( document ).on( 'click', '.dt-edit', function() {
-           window.location.href = '{{ route( 'admin.lead.edit' ) }}?id=' + $( this ).data( 'id' );
-       } );
+    document.addEventListener( 'DOMContentLoaded', function() {
 
-       
+        $( document ).on( 'click', '.dt-enquiry', function() {
+            window.location.href = '{{ route( 'admin.lead.enquiry' ) }}?id=' + $( this ).data( 'id' );
+        } );
+
+        $( document ).on( 'click', '.dt-call_back', function() {
+            window.location.href = '{{ route( 'admin.lead.call_back' ) }}?id=' + $( this ).data( 'id' );
+        } );
+
+        $( document ).on( 'click', '.dt-order', function() {
+            window.location.href = '{{ route( 'admin.lead.order' ) }}?id=' + $( this ).data( 'id' );
+        } );
+
+        $( document ).on( 'click', '.dt-complaint', function() {
+            window.location.href = '{{ route( 'admin.lead.complaint' ) }}?id=' + $( this ).data( 'id' );
+        } );
+
+        $( document ).on( 'click', '.dt-service', function() {
+            window.location.href = '{{ route( 'admin.lead.service' ) }}?id=' + $( this ).data( 'id' );
+        } );
+
+        $( document ).on( 'click', '.dt-other', function() {
+            window.location.href = '{{ route( 'admin.lead.other' ) }}?id=' + $( this ).data( 'id' );
+        } );
 
        let uid = 0,
             status = '',
             scope = '';
 
-        $( document ).on( 'click', '.dt-delete', function() {
+        $( document ).on( 'click', '.dt-done', function() {
             uid = $( this ).data( 'id' );
-            scope = 'delete';
+            scope = 'status';
 
-            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.leads' ) ) ] ) }}' );
-            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.leads' ) ) ] ) }}' );
+            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.done' ), 'title' => Str::singular( __( 'template.leads' ) ) ] ) }}' );
+            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.done' ), 'title' => Str::singular( __( 'template.leads' ) ) ] ) }}' );
 
             modalConfirmation.show();
         } );
@@ -228,9 +236,9 @@ $columns = [
         $( document ).on( 'click', '#modal_confirmation_submit', function() {
 
             switch ( scope ) {
-                case 'delete':
+                case 'status':
                     $.ajax( {
-                        url: '{{ route( 'admin.lead.deletelead' ) }}',
+                        url: '{{ route( 'admin.lead.doneEnquiry' ) }}',
                         type: 'POST',
                         data: {
                             id: uid,
@@ -247,7 +255,8 @@ $columns = [
                             $( '#modal_danger .caption-text' ).html( error.responseJSON.message );
                             modalDanger.show();
                         },
-                    } );        
+                    } );   
+                break;     
             }
         } );
 

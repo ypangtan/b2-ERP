@@ -146,18 +146,18 @@ Route::prefix( 'backoffice' )->group( function() {
                     Route::get( '/complaint', [ LeadController::class, 'complaint' ] )->name( 'admin.lead.complaint' );
                     Route::get( '/service', [ LeadController::class, 'service' ] )->name( 'admin.lead.service' );
                     Route::get( '/other', [ LeadController::class, 'other' ] )->name( 'admin.lead.other' );
-
                 } );
-
                 
-                Route::post( '/lead-show', [ LeadController::class, 'oneLead' ] )->name( 'admin.lead.oneLead' );
-
+                Route::post( '/all-leads', [ LeadController::class, 'allLeads' ] )->name( 'admin.lead.allLeads' );
+                Route::post( '/one-lead', [ LeadController::class, 'oneLead' ] )->name( 'admin.lead.oneLead' );
+                Route::post( '/_one-lead', [ LeadController::class, '_oneLead' ] )->name( 'admin.lead._oneLead' );
                 Route::post( 'lead-add-enquiry', [ LeadController::class, 'createEnquiry' ] )->name( 'admin.lead.createEnquiry' );
                 Route::post( 'lead-add-call_back', [ LeadController::class, 'createCallBack' ] )->name( 'admin.lead.createCallBack' );
-                // Route::post( 'lead-add-order', [ SaleController::class, 'createSale' ] )->name( 'admin.lead.createOrder' );
-                // Route::post( 'lead-add-complaint', [ CommentController::class, 'createComment' ] )->name( 'admin.lead.createComplaint' );
+                Route::post( 'lead-add-order', [ LeadController::class, 'createOrder' ] )->name( 'admin.lead.createOrder' );
+                Route::post( 'lead-add-complaint', [ LeadController::class, 'createComplaint' ] )->name( 'admin.lead.createComplaint' );
                 Route::post( 'lead-add-service', [ LeadController::class, 'createService' ] )->name( 'admin.lead.createService' );
                 Route::post( 'lead-add-other', [ LeadController::class, 'createOther' ] )->name( 'admin.lead.createOther' );
+                Route::post( 'lead-done-enquiry', [ LeadController::class, 'doneEnquiry' ] )->name( 'admin.lead.doneEnquiry' );
 
             } );
 

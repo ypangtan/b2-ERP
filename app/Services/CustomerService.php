@@ -13,6 +13,7 @@ use Illuminate\Validation\Rules\Password;
 
 use App\Models\{
     Customer,
+    Lead,
 };
 
 use App\Rules\CheckASCIICharacter;
@@ -276,6 +277,11 @@ class CustomerService {
             $updateUser = Customer::lockForUpdate()->find( $request->id );
             $updateUser->status = $request->status;
             $updateUser->save();
+
+            if( $request->status == 30 ){
+                $lead = Lead::where( 'customer_id', $request->id )
+                    ->delete();
+            }
 
             DB::commit();
 

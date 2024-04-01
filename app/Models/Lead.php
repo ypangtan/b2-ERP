@@ -19,8 +19,23 @@ class Lead extends Model
     use HasFactory, LogsActivity;
 
     protected $fillable = [
-
+        'customer_id',
+        'inventory_id',
+        'user_id',
+        'status',
     ];
+
+    public function customers(){
+        return $this->belongsTo( Customer::class, 'customer_id' );
+    }
+
+    public function inventories(){
+        return $this->belongsTo( Inventory::class, 'inventory_id' );
+    }
+
+    public function users(){
+        return $this->belongsTo( Administrator::class, 'user_id' );
+    }
 
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
@@ -31,7 +46,10 @@ class Lead extends Model
     }
 
     protected static $logAttributes = [
-
+        'customer_id',
+        'inventory_id',
+        'user_id',
+        'status',
     ];
 
     protected static $logName = '';

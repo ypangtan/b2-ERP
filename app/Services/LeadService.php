@@ -13,12 +13,14 @@ use Illuminate\Validation\Rules\Password;
 
 use App\Models\{
     Callback,
+    Comment,
     Customer,
     Enquiry,
     Inventory,
     Lead,
     Other,
     Role as RoleModel,
+    Sale,
     Service
 };
 
@@ -29,6 +31,7 @@ use PragmaRX\Google2FAQRCode\Google2FA;
 use Helper;
 
 use Carbon\Carbon;
+use PDO;
 
 class LeadService {
 
@@ -36,6 +39,7 @@ class LeadService {
 
         $customers = Customer::where( 'status', 10 )
             ->get();
+
         $customers->append( [
             'encrypted_id',
         ] );
@@ -55,7 +59,9 @@ class LeadService {
 
     public static function allLeads( $request ) {
 
-        $lead = Customer::select( 'Customers.*' );
+        $lead = Customer::with( [
+            'leads',
+        ] )->select( 'customers.*' );
 
         $filterObject = self::filter( $request, $lead );
         $lead = $filterObject['model'];
@@ -92,9 +98,17 @@ class LeadService {
         $Leads->append( [
             'encrypted_id',
         ] );
+        
+        foreach ( $Leads as $leads ){
+            if( $leads[ 'status' ] == 20 ){
+                $leads->leads->append( [
+                    'encrypted_id',
+                ] );
+            }
+        }
 
-        $lead = Lead::select(
-            DB::raw( 'COUNT(leads.id) as total'
+        $lead = Customer::select(
+            DB::raw( 'COUNT(customers.id) as total'
         ) );
 
         $filterObject = self::filter( $request, $lead );
@@ -116,7 +130,11 @@ class LeadService {
     private static function filter( $request, $model ) {
 
         $filter = false;
-
+        $model->where('status', 10)
+            ->orWhereHas('leads', function ($subquery) {
+                $subquery->where('user_id', auth()->user()->id);
+            });
+            
         return [
             'filter' => $filter,
             'model' => $model,
@@ -129,146 +147,33 @@ class LeadService {
             'id' => Helper::decode( $request->id ),
         ] );
 
-        $lead = Lead::find( $request->id );
+        $lead = Lead::with([
+            'customers',
+            'inventories',
+        ])->find( $request->id );
 
         if ( $lead ) {
             $lead->append( [
                 'encrypted_id',
             ] );
         }
-
         return $lead;
     }
 
-    public static function createLead( $request ) {
+    public static function _oneLead( $request ) {
 
-        DB::beginTransaction();
-
-        $validator = Validator::make( $request->all(), [
-            'name' => [ 'required', 'unique:leads,name', 'alpha_dash', new CheckASCIICharacter ],
-            'price' => [ 'required'],
-            'category' => [ 'required' ],
-            'type' => [ 'required' ],
-            'desc' => [ 'required' ],
-            'stock' => [ 'required' ],
+        $request->merge( [
+            'id' => Helper::decode( $request->id ),
         ] );
 
-        $attributeName = [
-            'name' => __( 'lead.name' ),
-            'price' => __( 'lead.price' ),
-            'category' => __( 'lead.category' ),
-            'type' => __( 'lead.type' ),
-            'desc' => __( 'lead.desc' ),
-            'stock' => __( 'lead.stock' ),
-        ];
+        $customer = Customer::find( $request->id );
 
-        foreach ( $attributeName as $key => $aName ) {
-            $attributeName[$key] = strtolower( $aName );
-        }
-
-        $validator->setAttributeNames( $attributeName )->validate();
-        
-        try {
-
-            $createAdmin = Lead::create( [
-                'name' => strtolower( $request->name ),
-                'price' => $request->price ,
-                'category' => strtolower( $request->category ),
-                'type' => strtolower( $request->type ),
-                'desc' => strtolower( $request->desc ),
-                'stock' => $request->stock ,
+        if ( $customer ) {
+            $customer->append( [
+                'encrypted_id',
             ] );
-
-            DB::commit();
-
-        } catch ( \Throwable $th ) {
-
-            DB::rollback();
-
-            return response()->json( [
-                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
-            ], 500 );
         }
-
-        return response()->json( [
-            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.leads' ) ) ] ),
-        ] );
-    }
-
-    public static function updateLead( $request ) {
-
-        DB::beginTransaction();
-
-        $request->merge( [
-            'id' => Helper::decode( $request->id ),
-        ] );
-
-        $validator = Validator::make( $request->all(), [
-            'name' => [ 'required', 'unique:leads,name,' . $request->id, 'alpha_dash', new CheckASCIICharacter ],
-            'price' => [ 'required'],
-            'category' => [ 'required' ],
-            'type' => [ 'required' ],
-            'desc' => [ 'required' ],
-            'stock' => [ 'required' ],
-        ] );
-
-        $attributeName = [
-            'name' => __( 'lead.name' ),
-            'price' => __( 'lead.price' ),
-            'category' => __( 'lead.category' ),
-            'type' => __( 'lead.type' ),
-            'desc' => __( 'lead.desc' ),
-            'stock' => __( 'lead.stock' ),
-        ];
-
-        foreach ( $attributeName as $key => $aName ) {
-            $attributeName[$key] = strtolower( $aName );
-        }
-
-        $validator->setAttributeNames( $attributeName )->validate();
-        
-        try {
-
-            $updateLead = Lead::lockForUpdate()
-                ->find( $request->id );
-
-            $updateLead->name = strtolower( $request->name );
-            $updateLead->price = $request->price;
-            $updateLead->category = strtolower( $request->category );
-            $updateLead->type = strtolower( $request->type );
-            $updateLead->desc = strtolower( $request->desc );
-            $updateLead->stock = $request->stock;
-
-            $updateLead->save();
-
-            DB::commit();
-
-        } catch ( \Throwable $th ) {
-
-            DB::rollback();
-
-            return response()->json( [
-                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
-            ], 500 );
-        }
-
-        return response()->json( [
-            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.leads' ) ) ] ),
-        ] );
-    }
-
-    public static function deleteLead( $request ) {
-
-        $request->merge( [
-            'id' => Helper::decode( $request->id ),
-        ] );
-
-        $updateLead = Lead::find( $request->id )
-            ->delete();
-        
-        return response()->json( [
-            'message' => __( 'template.x_deleted', [ 'title' => Str::singular( __( 'template.leads' ) ) ] ),
-        ] );
+        return $customer;
     }
 
     public static function createEnquiry( $request ){
@@ -298,9 +203,15 @@ class LeadService {
         
         try {
             
+            $customer = Customer::lockForUpdate()
+                ->find( $request->customer_id );
+            $customer->status = 20;
+            $customer->save();
+
             $lead = Lead::create( [
-                'customer_id' => $request->customer_id,
+                'customer_id' => $customer->id,
                 'inventory_id' => $request->inventory_id,
+                'user_id' => auth()->user()->id,
                 'status' => '20',
             ] );
 
@@ -308,7 +219,6 @@ class LeadService {
                 'lead_id' => $lead->id ,
                 'remark' => $request->remark ,
             ] );
-
 
             DB::commit();
 
@@ -330,6 +240,10 @@ class LeadService {
 
         DB::beginTransaction();
 
+        $request->merge( [
+            'id' => Helper::decode( $request->id ),
+        ] );
+
         $validator = Validator::make( $request->all(), [
             'id' => [ 'required', 'exists:leads,id' ],
             'remark' => [ 'required'],
@@ -346,16 +260,141 @@ class LeadService {
         $validator->setAttributeNames( $attributeName )->validate();
         
         try {
+            $lead = Lead::lockForUpdate()
+                ->find( $request->id );
+            $lead->status = '10';
+            $lead->save();
 
             $createCallBack = Callback::create( [
                 'lead_id' => $request->id ,
                 'remark' => $request->remark ,
             ] );
 
+            $customer = Customer::lockForUpdate()
+                ->find( $lead->customer_id );
+            $customer->status = 10;
+            $customer->save();
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.leads' ) ) ] ),
+        ] );
+    }
+
+    public static function createOrder( $request ){
+
+        DB::beginTransaction();
+
+        $request->merge( [
+            'id' => Helper::decode( $request->id ),
+        ] );
+
+        $validator = Validator::make( $request->all(), [
+            'quantity' => [ 'required', function( $attribute, $value, $fail ) use ( $request ) {
+
+                $lead = Lead::find( $request->id );
+                $inventory = Inventory::find($lead->inventory_id);
+
+                $total_stock = $inventory->stock;
+
+                if ( $value > $total_stock ) {
+                    $fail( __( 'sale.invalid_stock' ) );
+                }
+            } ],
+        ] );
+
+        $attributeName = [
+            'quantity' => __( 'sale.quantity' ),
+        ];
+
+        foreach ( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+
+        $validator->setAttributeNames( $attributeName )->validate();
+        
+        try {
+            
+            
             $lead = Lead::lockForUpdate()
                 ->find( $request->id );
-            $lead->status = '10';
+            $lead->status = 30;
             $lead->save();
+
+            $product = Inventory::find( $lead->inventory_id);
+            $product->stock -= $request->quantity;
+            $product->save();
+
+            $totalPrice = $request->quantity * $product->price;
+
+            $createSale = Sale::create( [
+                'customer_id' => $lead->customer_id ,
+                'inventory_id' => $lead->inventory_id ,
+                'price' =>  $totalPrice,
+                'quantity' => $request->quantity ,
+            ] );
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.leads' ) ) ] ),
+        ] );
+    }
+
+    public static function createComplaint( $request ){
+
+        DB::beginTransaction();
+
+        $request->merge( [
+            'id' => Helper::decode( $request->id ),
+        ] );
+
+        $validator = Validator::make( $request->all(), [
+            'id' => [ 'required', 'exists:leads,id' ],
+            'comment' => [ 'required' ],
+            'rating' => [ 'required' ],
+        ] );
+
+        $attributeName = [
+            'comment' => __( 'lead.comment' ),
+            'rating' => __( 'lead.rating' ),
+        ];
+
+        foreach ( $attributeName as $key => $aName ) {
+            $attributeName[$key] = strtolower( $aName );
+        }
+
+        $validator->setAttributeNames( $attributeName )->validate();
+        
+        try {
+
+            $lead = Lead::find( $request->id );
+
+            $createComplaint = Comment::create( [
+                'customer_id' => $lead->customer_id ,
+                'inventory_id' => $lead->inventory_id ,
+                'comment' => $request->comment ,
+                'rating' => $request->rating ,
+            ] );
 
             DB::commit();
 
@@ -376,6 +415,10 @@ class LeadService {
     public static function createService( $request ){
 
         DB::beginTransaction();
+
+        $request->merge( [
+            'id' => Helper::decode( $request->id ),
+        ] );
 
         $validator = Validator::make( $request->all(), [
             'id' => [ 'required', 'exists:leads,id' ],
@@ -398,17 +441,12 @@ class LeadService {
         
         try {
 
-            $createEnquiry = Service::create( [
+            $createService = Service::create( [
                 'lead_id' => $request->id ,
                 'name' => $request->name ,
                 'charge' => $request->charge ,
                 'remark' => $request->remark ,
             ] );
-            
-            $lead = Lead::lockForUpdate()
-                ->find( $request->id );
-            $lead->status = '40';
-            $lead->save();
 
             DB::commit();
 
@@ -430,6 +468,10 @@ class LeadService {
 
         DB::beginTransaction();
 
+        $request->merge( [
+            'id' => Helper::decode( $request->id ),
+        ] );
+
         $validator = Validator::make( $request->all(), [
             'id' => [ 'required', 'exists:leads,id' ],
             'remark' => [ 'required'],
@@ -447,15 +489,11 @@ class LeadService {
         
         try {
 
-            $createEnquiry = Other::create( [
+            $createOther = Other::create( [
                 'lead_id' => $request->id ,
                 'remark' => $request->remark ,
             ] );
 
-            $lead = Lead::lockForUpdate()
-                ->find( $request->id );
-            $lead->status = '50';
-            $lead->save();
             DB::commit();
 
         } catch ( \Throwable $th ) {
@@ -470,6 +508,43 @@ class LeadService {
         return response()->json( [
             'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.leads' ) ) ] ),
         ] );
+    }
+
+    public static function doneEnquiry( $request ){
+
+        DB::beginTransaction();
+
+        try {
+
+            $request->merge( [
+                'id' => Helper::decode( $request->id ),
+            ] );
+
+            $lead = Lead::lockForUpdate()
+                ->find( $request->id );
+            $lead->status = 40;
+            $lead->save();
+
+            $customer = Customer::lockForUpdate()
+                ->find( $lead->customer_id );
+            $customer->status = 10;
+            $customer->save();
+
+            DB::commit();
+
+        } catch ( \Throwable $th ) {
+
+            DB::rollback();
+
+            return response()->json( [
+                'message' => $th->getMessage() . ' in line: ' . $th->getLine(),
+            ], 500 );
+        }
+
+        return response()->json( [
+            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.leads' ) ) ] ),
+        ] );
+
     }
 
 }

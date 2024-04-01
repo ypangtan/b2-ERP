@@ -82,6 +82,10 @@ $columns = [
                 'color': 'badge rounded-pill bg-success',
             },
             '20': {
+                'text': '{{ __( 'datatables.enquired' ) }}',
+                'color': 'badge rounded-pill bg-warning',
+            },
+            '30': {
                 'text': '{{ __( 'datatables.suspended' ) }}',
                 'color': 'badge rounded-pill bg-danger',
             },
@@ -152,9 +156,9 @@ $columns = [
 
                         @can( 'edit customers' )
                         view += '<li class="dropdown-item click-action dt-edit" data-id="' + data + '">{{ __( 'datatables.edit' ) }}</li>';
-                        status = row.status == 10 ? 
-                        '<li class="dropdown-item click-action dt-suspend" data-id="' + data + '">{{ __( 'datatables.suspend' ) }}</li>':
-                        '<li class="dropdown-item click-action dt-activate" data-id="' + data + '">{{ __( 'datatables.activate' ) }}</li>' ;
+                        status = row.status == 30 ? 
+                        '<li class="dropdown-item click-action dt-activate" data-id="' + data + '">{{ __( 'datatables.activate' ) }}</li>':
+                        '<li class="dropdown-item click-action dt-suspend" data-id="' + data + '">{{ __( 'datatables.suspend' ) }}</li>' ;
                         @endcan
 
                         @can( 'delete customers' )
@@ -195,7 +199,7 @@ $columns = [
         $( document ).on( 'click', '.dt-suspend', function() {
 
             uid = $( this ).data( 'id' );
-            status = 20,
+            status = 30,
             scope = 'status';
 
             $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.suspend' ), 'title' => Str::singular( __( 'template.customers' ) ) ] ) }}' );

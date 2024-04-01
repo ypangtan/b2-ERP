@@ -25,6 +25,10 @@ class Customer extends Model
         'phone_number',
     ];
 
+    public function leads() {
+        return $this->hasMany( Lead::class, 'customer_id');
+    }
+
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
     }

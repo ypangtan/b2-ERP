@@ -49,6 +49,13 @@ class LeadController extends Controller
             'mobile_title' => __( 'template.leads' ),
         ];
 
+        $this->data['data']['inventories'] = [];
+
+        $inventories = LeadService::Inventories();
+        foreach ( $inventories as $inventory ) {
+            $this->data['data']['inventories'][] = [ 'key' => $inventory->encrypted_id, 'value' => $inventory->encrypted_id, 'title' => $inventory->name ];
+        }
+
         return view( 'admin.main' )->with( $this->data );
     }
 
@@ -122,24 +129,44 @@ class LeadController extends Controller
         return view( 'admin.main' )->with( $this->data );
     }
 
-    public function oneLead( Request $request){
+    public function allLeads( Request $request ){
+        return LeadService::allLeads( $request );
+    }
+
+    public function oneLead( Request $request ){
         return LeadService::oneLead( $request );
     }
 
-    public function createEnquiry( Request $request){
+    public function _oneLead( Request $request ){
+        return LeadService::_oneLead( $request );
+    }
+
+    public function createEnquiry( Request $request ){
         return LeadService::createEnquiry( $request );
     }
 
-    public function createCallBack( Request $request){
+    public function createCallBack( Request $request ){
         return LeadService::createCallBack( $request );
     }
+    
+    public function createOrder( Request $request ){
+        return LeadService::createOrder( $request );
+    }
+    
+    public function createComplaint( Request $request ){
+        return LeadService::createComplaint( $request );
+    }
 
-    public function createService( Request $request){
+    public function createService( Request $request ){
         return LeadService::createService( $request );
     }
 
-    public function createOther( Request $request){
+    public function createOther( Request $request ){
         return LeadService::createOther( $request );
+    }
+    
+    public function doneEnquiry( Request $request ){
+        return LeadService::doneEnquiry( $request );
     }
     
 }
