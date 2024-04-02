@@ -30,7 +30,7 @@ class SaleService {
 
     public static function Customers() {
 
-        $customers = Customer::where( 'status', 10 )
+        $customers = Customer::where( 'status', '!=', 30 )
             ->get();
         $customers->append( [
             'encrypted_id',

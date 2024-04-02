@@ -8,7 +8,7 @@ $inventory_create = 'inventory_create';
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3 row">
-                    <label for="{{ $inventory_create }}_name" class="col-sm-5 col-form-label">{{ __( 'inventory.username' ) }}</label>
+                    <label for="{{ $inventory_create }}_name" class="col-sm-5 col-form-label">{{ __( 'inventory.name' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control form-control-sm" id="{{ $inventory_create }}_name">
                         <div class="invalid-feedback"></div>

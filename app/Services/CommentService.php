@@ -126,7 +126,7 @@ class CommentService {
                 $endDate = explode( '-', $dates[1] );
                 $end = Carbon::create( $endDate[0], $endDate[1], $endDate[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
 
-                $model->whereBetween( 'commments.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
+                $model->whereBetween( 'comments.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
             } else {
 
                 $dates = explode( '-', $request->created_at );
@@ -134,20 +134,20 @@ class CommentService {
                 $start = Carbon::create( $dates[0], $dates[1], $dates[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
                 $end = Carbon::create( $dates[0], $dates[1], $dates[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
 
-                $model->whereBetween( 'commments.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
+                $model->whereBetween( 'comments.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
             }
             $filter = true;
         }
 
         if ( !empty( $request->customer ) ) {
             $customer = Helper::decode( $request->customer );
-            $model->where( 'commments.customer_id', $customer );
+            $model->where( 'comments.customer_id', $customer );
             $filter = true;
         }
 
         if ( !empty( $request->inventory ) ) {
             $inventory = Helper::decode( $request->inventory );
-            $model->where( 'commments.inventory_id', $inventory );
+            $model->where( 'comments.inventory_id', $inventory );
             $filter = true;
         }
 
@@ -215,6 +215,7 @@ class CommentService {
             $createComment = Comment::create( [
                 'customer_id' => $request->customer_id ,
                 'inventory_id' => $request->inventory_id ,
+                'lead_id' => 0 ,
                 'comment' => $request->comment ,
                 'rating' => $request->rating ,
             ] );

@@ -21,6 +21,8 @@ class Sale extends Model
     protected $fillable = [
         'customer_id',
         'inventory_id',
+        'lead_id',
+        'remark',
         'quantity',
         'price',
     ];
@@ -44,6 +46,8 @@ class Sale extends Model
     protected static $logAttributes = [
         'customer_id',
         'inventory_id',
+        'lead_id',
+        'remark',
         'quantity',
         'price',
     ];

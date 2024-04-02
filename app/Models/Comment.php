@@ -21,6 +21,7 @@ class Comment extends Model
     protected $fillable = [
         'customer_id',
         'inventory_id',
+        'lead_id',
         'comment',
         'rating',
     ];
@@ -44,6 +45,7 @@ class Comment extends Model
     protected static $logAttributes = [
         'customer_id',
         'inventory_id',
+        'lead_id',
         'comment',
         'rating',
     ];

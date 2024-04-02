@@ -27,18 +27,11 @@ class DashboardController extends Controller {
             'mobile_title' => __( 'template.dashboard' ),
         ];
 
-        // $this->data['data'] = DashboardService::dashboardDatas( $request );
-
         return view( 'admin.main' )->with( $this->data );
     }
 
     public function totalDatas( Request $request ) {
 
         return DashboardService::totalDatas( $request );
-    }
-
-    public function monthlySales( Request $request ) {
-
-        return DashboardService::monthlySales( $request );
     }
 }

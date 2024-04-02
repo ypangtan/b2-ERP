@@ -22,7 +22,7 @@ class ModuleSeeder extends Seeder
     public function run()
     {
         $permissionTypes = [ 'create', 'view', 'edit', 'delete' ];
-        $modules = [ 'customers', 'leads', 'inventories', 'sales', 'administrators' ];
+        $modules = [ 'customers', 'leads', 'inventories', 'sales', 'administrators', 'comments' ];
         $guard_name = 'admin';
 
         foreach ($modules as $module) {
@@ -32,7 +32,7 @@ class ModuleSeeder extends Seeder
             }
         }
 
-        $permissionTypes = [ 'edit' ];
+        $permissionTypes = [ 'edit', 'view', 'viewDetail' ];
         $modules = [ 'role' ];
 
         foreach ($modules as $module) {
@@ -43,7 +43,7 @@ class ModuleSeeder extends Seeder
         }
 
         $permissionTypes = [ 'view' ];
-        $modules = [ 'role', 'financials', 'supply_chain' ];
+        $modules = [ 'financials', 'supply_chain' ];
 
         foreach ($modules as $module) {
             $module = module::create( [ 'name' => $module, 'guard' => $guard_name ] );

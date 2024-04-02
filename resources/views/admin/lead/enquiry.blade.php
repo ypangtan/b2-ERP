@@ -14,10 +14,10 @@ $lead_enquiry = 'lead_enquiry';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $lead_enquiry }}_inventory" class="col-sm-5 col-form-label">{{ __( 'sale.inventory' ) }}</label>
+                    <label for="{{ $lead_enquiry }}_inventory" class="col-sm-5 col-form-label">{{ __( 'lead.inventory' ) }}</label>
                     <div class="col-sm-7">
                         <select class="form-select form-select-sm" id="{{ $lead_enquiry }}_inventory">
-                            <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'sale.inventory' ) ] ) }}</option>
+                            <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'lead.inventory' ) ] ) }}</option>
                             @foreach( $data['inventories'] as $inventory )
                             <option value="{{ $inventory['value'] }}">{{ $inventory['title'] }}</option>
                             @endforeach

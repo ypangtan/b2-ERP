@@ -48,9 +48,7 @@ $columns = [
 <div class="card">
     <div class="card-body">
         <div class="mb-3 text-end">
-            @can( 'add comments' )
-            <a class="btn btn-sm btn-primary" href="{{ route( 'admin.comment.add' ) }}">{{ __( 'template.create' ) }}</a>
-            @endcan
+            
         </div>
         <x-data-tables id="comment_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
     </div>

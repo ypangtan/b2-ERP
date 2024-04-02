@@ -42,9 +42,7 @@ $columns = [
 <div class="card">
     <div class="card-body">
         <div class="mb-3 text-end">
-            @can( 'add sales' )
-            <a class="btn btn-sm btn-primary" href="{{ route( 'admin.sale.add' ) }}">{{ __( 'template.create' ) }}</a>
-            @endcan
+            
         </div>
         <x-data-tables id="sale_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
     </div>

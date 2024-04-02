@@ -49,51 +49,9 @@ $profile = 'profile';
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
-                @if ( config( 'services.mfa.enabled' ) )
-                <div class="mb-3 row">
-                    <label for="{{ $profile }}_mfa" class="col-sm-5 col-form-label">{{ __( 'mfa.mfa' ) }}</label>
-                    <div class="col-sm-7">
-                        <div class="col-form-label">
-                            @if ( empty( auth()->user()->mfa_secret ) ) 
-                            <strong class="text-primary" role="button" id="bind">{{ __( 'mfa.bind_now' ) }}</strong>
-                            @else
-                            <strong class="text-success">{{ __( 'mfa.binded' ) }}</strong>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                @endif
                 <div class="text-end">
                     <button id="{{ $profile }}_submit" type="button" class="btn btn-sm btn-primary">{{ __( 'template.save_changes' ) }}</button>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="modal_mfa_bind" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">{{ __( 'mfa.setup_mfa' ) }}</h5>
-            </div>
-            <div class="modal-body">
-                <div class="text-center mb-3">
-                    {{ __( 'mfa.first_mfa_step_1' ) }}
-                </div>
-                <div class="text-center mb-3">
-                    <?=$data['mfa_qr'];?>
-                </div>
-                <div class="text-center mb-3">
-                    {{ __( 'mfa.first_mfa_step_2' ) }}
-                </div>
-                <input class="form-control form-control-sm" placeholder="XXXXXX" id="mfa_code">
-                <div class="invalid-feedback"></div>
-                <input type="hidden" id="mfa_secret" value="<?=$data['mfa_secret']?>">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">{{ __( 'template.cancel' ) }}</button>
-                <button type="button" class="btn btn-sm btn-primary" id="mfa_submit">{{ __( 'template.submit' ) }}</button>
             </div>
         </div>
     </div>
@@ -132,44 +90,8 @@ $profile = 'profile';
             window.location.reload();
         } );
 
-        let p = '#profile',
-            modalMFABind = new bootstrap.Modal( document.getElementById( 'modal_mfa_bind' ) );
+        let p = '#profile';
 
-        $( '#bind' ).on( 'click', function() {
-            modalMFABind.show();
-        } );
-
-        $( '#modal_mfa_bind #mfa_submit' ).on( 'click', function() {
-
-            resetInputValidation();
-
-            $.ajax( {
-                url: '{{ route( 'admin.mfa.setupMFA' ) }}',
-                type: 'POST',
-                data: {
-                    code: $( '#mfa_code' ).val(),
-                    mfa_secret: $( '#mfa_secret' ).val(),
-                    _token: '{{ csrf_token() }}',
-                },
-                success: function( response ) {
-                    modalMFABind.hide();
-                    $( '#modal_success .caption-text' ).html( response.message );
-                    modalSuccess.show();
-                },
-                error: function( error ) {
-                    if ( error.status === 422 ) {
-                        let errors = error.responseJSON.errors;
-                        $.each( errors, function( key, value ) {
-                            $( '#mfa_' + key ).addClass( 'is-invalid' ).next().text( value );
-                        } );
-                    } else {
-                        modalMFABind.hide();
-                        $( '#modal_danger .caption-text' ).html( error.responseJSON.message );
-                        modalDanger.show();       
-                    }
-                }
-            } );
-        } );
 
         $( p + '_submit' ).click( function() {
 

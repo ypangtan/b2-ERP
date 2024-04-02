@@ -37,6 +37,30 @@ class Lead extends Model
         return $this->belongsTo( Administrator::class, 'user_id' );
     }
 
+    public function enquiries(){
+        return $this->hasMany( Enquiry::class, 'lead_id' );
+    }
+
+    public function call_backs(){
+        return $this->hasMany( Callback::class, 'lead_id' );
+    }
+
+    public function sales(){
+        return $this->hasMany( Sale::class, 'lead_id' );
+    }
+
+    public function complaint(){
+        return $this->hasMany( Comment::class, 'lead_id' );
+    }
+
+    public function services(){
+        return $this->hasMany( Service::class, 'lead_id' );
+    }
+
+    public function other(){
+        return $this->hasMany( Other::class, 'lead_id' );
+    }
+
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
     }

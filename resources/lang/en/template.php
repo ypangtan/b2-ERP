@@ -49,6 +49,7 @@ return [
     'complaint' => 'Complaint',
     'service' => 'Service',
     'other' => 'Other',
+    'lead_details' => 'Lead Details',
 
     // Title
     'add_x' => 'Add :title',

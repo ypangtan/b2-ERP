@@ -14,7 +14,7 @@ $lead_call_back = 'lead_call_back';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $lead_call_back }}_inventory" class="col-sm-5 col-form-label">{{ __( 'sale.inventory' ) }}</label>
+                    <label for="{{ $lead_call_back }}_inventory" class="col-sm-5 col-form-label">{{ __( 'lead.inventory' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control form-control-sm" id="{{ $lead_call_back }}_inventory">
                         <div class="invalid-feedback"></div>

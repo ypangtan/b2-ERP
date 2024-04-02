@@ -8,28 +8,28 @@ $lead_complaint = 'lead_complaint';
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3 row">
-                    <label for="{{ $lead_complaint }}_customer" class="col-sm-5 col-form-label">{{ __( 'comment.customer' ) }}</label>
+                    <label for="{{ $lead_complaint }}_customer" class="col-sm-5 col-form-label">{{ __( 'lead.customer' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control form-control-sm" id="{{ $lead_complaint }}_customer">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $lead_complaint }}_inventory" class="col-sm-5 col-form-label">{{ __( 'comment.inventory' ) }}</label>
+                    <label for="{{ $lead_complaint }}_inventory" class="col-sm-5 col-form-label">{{ __( 'lead.inventory' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control form-control-sm" id="{{ $lead_complaint }}_inventory">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $lead_complaint }}_comment" class="col-sm-5 col-form-label">{{ __( 'comment.comment' ) }}</label>
+                    <label for="{{ $lead_complaint }}_comment" class="col-sm-5 col-form-label">{{ __( 'lead.comment' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control form-control-sm" id="{{ $lead_complaint }}_comment">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $lead_complaint }}_rating" class="col-sm-5 col-form-label">{{ __( 'comment.rating' ) }}</label>
+                    <label for="{{ $lead_complaint }}_rating" class="col-sm-5 col-form-label">{{ __( 'lead.rating' ) }}</label>
                     <div class="col-sm-7">
                         <input type="number" class="form-control form-control-sm" id="{{ $lead_complaint }}_rating" min="0" max="5">
                         <div class="invalid-feedback"></div>

@@ -59,11 +59,160 @@ class LeadService {
 
     public static function allLeads( $request ) {
 
-        $lead = Customer::with( [
+        $customer = Customer::with( [
             'leads',
         ] )->select( 'customers.*' );
 
-        $filterObject = self::filter( $request, $lead );
+        $filterObject = self::filter( $request, $customer );
+        $customer = $filterObject['model'];
+        $filter = $filterObject['filter'];
+
+        if ( $request->input( 'order.0.column' ) != 0 ) {
+            $dir = $request->input( 'order.0.dir' );
+            switch ( $request->input( 'order.0.column' ) ) {
+                case 1:
+                    $customer->orderBy( 'created_at', $dir );
+                    break;
+                case 2:
+                    $customer->orderBy( 'name', $dir );
+                    break;
+                case 3:
+                    $customer->orderBy( 'email', $dir );
+                    break;
+                case 4:
+                    $customer->orderBy( 'age', $dir );
+                    break;
+                case 5:
+                    $customer->orderBy( 'phone_number', $dir );
+                    break;
+            }
+        }
+
+        $customerCount = $customer->count();
+
+        $limit = $request->length;
+        $offset = $request->start;
+
+        $Customers = $customer->skip( $offset )->take( $limit )->get();
+
+        $Customers->append( [
+            'encrypted_id',
+        ] );
+
+        foreach ( $Customers as $customer ){
+            if( $customer[ 'status' ] == 20 ){
+                $customer->leads->append( [
+                    'encrypted_id',
+                ] );
+            }
+        }
+
+        $customer = Customer::select(
+            DB::raw( 'COUNT(customers.id) as total'
+        ) );
+
+        $filterObject = self::filter( $request, $customer );
+        $customer = $filterObject['model'];
+        $filter = $filterObject['filter'];
+
+        $customer = $customer->first();
+
+        $data = [
+            'customers' => $Customers,
+            'draw' => $request->draw,
+            'recordsFiltered' => $filter ? $customerCount : $customer->total,
+            'recordsTotal' => $filter ? Customer::count() : $customerCount,
+        ];
+
+        return $data;
+    }
+
+    private static function filter( $request, $model ) {
+
+        $filter = false;
+        
+        $model->where(function ($query) {
+            $query->orWhereDoesntHave('leads')
+                  ->orWhereHas('leads', function ($subquery) {
+                      $subquery->where('user_id', auth()->user()->id);
+                  });
+        });
+
+        if ( !empty( $request->created_at ) ) {
+            if ( str_contains( $request->created_at, 'to' ) ) {
+                $dates = explode( ' to ', $request->created_at );
+
+                $startDate = explode( '-', $dates[0] );
+                $start = Carbon::create( $startDate[0], $startDate[1], $startDate[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
+                
+                $endDate = explode( '-', $dates[1] );
+                $end = Carbon::create( $endDate[0], $endDate[1], $endDate[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
+
+                $model->whereBetween( 'customers.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
+            } else {
+
+                $dates = explode( '-', $request->created_at );
+
+                $start = Carbon::create( $dates[0], $dates[1], $dates[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
+                $end = Carbon::create( $dates[0], $dates[1], $dates[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
+
+                $model->whereBetween( 'customers.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
+            }
+            $filter = true;
+        }    
+
+        if ( !empty( $request->name ) ) {
+            $model->where('customers.name', $request->name);
+            $filter = true;
+        }
+
+        if ( !empty( $request->phone_number ) ) {
+            $model->where( 'customers.phone_number', $request->phone_number );
+            $filter = true;
+        }
+
+        if (!empty($request->status)) {
+            if( $request->status == 10 ){
+                $model->where( 'status', 10 );
+            }else{
+                $model->where(function ($query) use ($request) {
+                    $query->whereExists(function ($subquery) use ($request) {
+                        $subquery->select(\DB::raw(1))
+                                 ->from('leads as l1')
+                                 ->whereColumn('l1.customer_id', 'customers.id')
+                                 ->where('l1.created_at', function ($innerSubquery) {
+                                     $innerSubquery->select(\DB::raw('MAX(created_at)'))
+                                                   ->from('leads as l2')
+                                                   ->whereColumn('l1.customer_id', 'l2.customer_id');
+                                 })
+                                 ->where('l1.status', $request->status);
+                    });
+                });
+                $filter = true;
+            }
+        }
+        
+  
+        return [
+            'filter' => $filter,
+            'model' => $model,
+        ];
+    }
+
+    public static function _allLeads( $request ) {
+
+        $lead = Lead::with( [
+            'customers',
+            'users',
+            'enquiries',
+            'call_backs',
+            'sales',
+            'complaint',
+            'services',
+            'other',
+        ] )->select( 'leads.*' );
+
+        $filterObject = self::_filter( $request, $lead );
         $lead = $filterObject['model'];
         $filter = $filterObject['filter'];
 
@@ -72,18 +221,6 @@ class LeadService {
             switch ( $request->input( 'order.0.column' ) ) {
                 case 1:
                     $lead->orderBy( 'created_at', $dir );
-                    break;
-                case 2:
-                    $lead->orderBy( 'name', $dir );
-                    break;
-                case 3:
-                    $lead->orderBy( 'email', $dir );
-                    break;
-                case 4:
-                    $lead->orderBy( 'role', $dir );
-                    break;
-                case 5:
-                    $lead->orderBy( 'status', $dir );
                     break;
             }
         }
@@ -98,20 +235,12 @@ class LeadService {
         $Leads->append( [
             'encrypted_id',
         ] );
-        
-        foreach ( $Leads as $leads ){
-            if( $leads[ 'status' ] == 20 ){
-                $leads->leads->append( [
-                    'encrypted_id',
-                ] );
-            }
-        }
 
-        $lead = Customer::select(
-            DB::raw( 'COUNT(customers.id) as total'
+        $lead = Lead::select(
+            DB::raw( 'COUNT(leads.id) as total'
         ) );
 
-        $filterObject = self::filter( $request, $lead );
+        $filterObject = self::_filter( $request, $lead );
         $lead = $filterObject['model'];
         $filter = $filterObject['filter'];
 
@@ -121,20 +250,54 @@ class LeadService {
             'leads' => $Leads,
             'draw' => $request->draw,
             'recordsFiltered' => $filter ? $leadCount : $lead->total,
-            'recordsTotal' => $filter ? Customer::count() : $leadCount,
+            'recordsTotal' => $filter ? lead::count() : $leadCount,
         ];
 
         return $data;
     }
 
-    private static function filter( $request, $model ) {
+    private static function _filter( $request, $model ) {
 
         $filter = false;
-        $model->where('status', 10)
-            ->orWhereHas('leads', function ($subquery) {
-                $subquery->where('user_id', auth()->user()->id);
-            });
-            
+
+        if ( !empty( $request->created_at ) ) {
+            if ( str_contains( $request->created_at, 'to' ) ) {
+                $dates = explode( ' to ', $request->created_at );
+
+                $startDate = explode( '-', $dates[0] );
+                $start = Carbon::create( $startDate[0], $startDate[1], $startDate[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
+                
+                $endDate = explode( '-', $dates[1] );
+                $end = Carbon::create( $endDate[0], $endDate[1], $endDate[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
+
+                $model->whereBetween( 'leads.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
+            } else {
+
+                $dates = explode( '-', $request->created_at );
+
+                $start = Carbon::create( $dates[0], $dates[1], $dates[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
+                $end = Carbon::create( $dates[0], $dates[1], $dates[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
+
+                $model->whereBetween( 'leads.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
+            }
+            $filter = true;
+        }    
+
+        if ( !empty( $request->user ) ) {
+            $model->join('administrators', 'leads.user_id', '=', 'administrators.id')->where( 'administrators.name', $request->user );
+            $filter = true;
+        }
+
+        if ( !empty( $request->customer ) ) {
+            $model->join('customers', 'leads.customer_id', '=', 'customers.id')->where( 'customers.name', $request->customer );
+            $filter = true;
+        }
+
+        if ( !empty( $request->status ) ) {
+            $model->where( 'leads.status', $request->status );
+            $filter = true;
+        }
+
         return [
             'filter' => $filter,
             'model' => $model,
@@ -340,6 +503,8 @@ class LeadService {
             $createSale = Sale::create( [
                 'customer_id' => $lead->customer_id ,
                 'inventory_id' => $lead->inventory_id ,
+                'lead_id' => $lead->id ,
+                'remark' =>  $request->remark,
                 'price' =>  $totalPrice,
                 'quantity' => $request->quantity ,
             ] );
@@ -392,6 +557,7 @@ class LeadService {
             $createComplaint = Comment::create( [
                 'customer_id' => $lead->customer_id ,
                 'inventory_id' => $lead->inventory_id ,
+                'lead_id' => $lead->id ,
                 'comment' => $request->comment ,
                 'rating' => $request->rating ,
             ] );

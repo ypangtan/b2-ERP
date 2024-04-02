@@ -49,6 +49,7 @@ return [
     'complaint' => '投诉',
     'service' => '服务',
     'other' => '其他',
+    'lead_details' => 'Lead Details',
 
     // Title
     'add_x' => '新增:title',

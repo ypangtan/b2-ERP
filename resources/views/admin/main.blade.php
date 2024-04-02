@@ -40,14 +40,14 @@
                             </div>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            {{-- <li>
+                            <li>
                                 <a class="dropdown-item" href="{{ route( 'admin.profile.index' ) }}">
                                     <div class="d-flex align-items-center">
                                         <div class=""><i class="bi bi-person-lines-fill"></i></div>
                                         <div class="ms-3"><span>{{ __( 'template.profile' ) }}</span></div>
                                     </div>
                                 </a>
-                            </li> --}}
+                            </li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>

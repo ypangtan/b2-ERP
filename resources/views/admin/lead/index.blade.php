@@ -18,13 +18,13 @@ $columns = [
         'title' => __( 'lead.name' ),
     ],
     [
-        'type' => 'input',
+        'type' => 'default',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'lead.email' ) ] ),
         'id' => 'email',
         'title' => __( 'lead.email' ),
     ],
     [
-        'type' => 'range',
+        'type' => 'default',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'lead.age' ) ] ),
         'id' => 'age',
         'title' => __( 'lead.age' ),
@@ -41,11 +41,8 @@ $columns = [
             [ 'value' => '', 'title' => __( 'datatables.all_x', [ 'title' => __( 'datatables.status' ) ] ) ],
             [ 'value' => 10, 'title' => __( 'lead.activated' ) ],
             [ 'value' => 20, 'title' => __( 'lead.enquired' ) ],
-            [ 'value' => 30, 'title' => __( 'lead.call_back' ) ],
-            [ 'value' => 40, 'title' => __( 'lead.order' ) ],
-            [ 'value' => 50, 'title' => __( 'lead.complaint' ) ],
-            [ 'value' => 60, 'title' => __( 'lead.service' ) ],
-            [ 'value' => 70, 'title' => __( 'lead.other' ) ],
+            [ 'value' => 30, 'title' => __( 'lead.order' ) ],
+            [ 'value' => 40, 'title' => __( 'lead.done' ) ],
         ],
         'id' => 'status',
         'title' => __( 'datatables.status' ),
@@ -114,7 +111,7 @@ $columns = [
                 data: {
                     '_token': '{{ csrf_token() }}',
                 },
-                dataSrc: 'leads',
+                dataSrc: 'customers',
             },
             lengthMenu: [
                 [ 10, 25, 50, 999999 ],

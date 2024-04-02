@@ -40,12 +40,28 @@
                     </li>
                     @endcan
 
-                    @can( 'view leads' )
+                    @canany( [ 'view leads', 'viewDetail leads' ] )
                     <li class="{{ $controller == 'App\Http\Controllers\Admin\LeadController' ? 'mm-active' : '' }}">
-                        <a href="{{ route( 'admin.module_parent.lead.index' ) }}">
+                        <a href="javascript:;" class="has-arrow">
                             <div class="parent-icon"><i class="align-middle feather" icon-name="flag"></i></div>
                             <div class="menu-title">{{ __( 'template.leads' ) }}</div>
                         </a>
+                        <ul>
+                            @can( 'view leads' )
+                            <li class="{{ $controller == 'App\Http\Controllers\Admin\LeadController' && $action == 'index' ? 'mm-active' : '' }}">
+                                <a class="metismenu-child" href="{{ route( 'admin.module_parent.lead.index' ) }}">
+                                    <i class="bi bi-circle"></i>{{ __( 'template.leads' ) }}
+                                </a>
+                            </li>
+                            @endcan
+                            @can( 'viewDetail leads' )
+                            <li class="{{ $controller == 'App\Http\Controllers\Admin\LeadController' && $action == 'detail' ? 'mm-active' : '' }}">
+                                <a href="{{ route( 'admin.lead.detail' ) }}">
+                                    <i class="bi bi-circle"></i>{{ __( 'template.lead_details' ) }}
+                                </a>
+                            </li>
+                            @endcan
+                        </ul>
                     </li>
                     @endcan
 

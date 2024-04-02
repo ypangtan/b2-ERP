@@ -56,6 +56,8 @@ Route::prefix( 'backoffice' )->group( function() {
             
             Route::prefix( 'dashboard' )->group( function() {
                 Route::get( '/', [ DashboardController::class, 'index' ] )->name( 'admin.dashboard.index' );
+
+                Route::post( '/total-datas', [ DashboardController::class, 'totalDatas' ] )->name( 'admin.dashboard.totalDatas' );
             } );
 
             Route::prefix( 'administrators' )->group( function() {
@@ -122,16 +124,12 @@ Route::prefix( 'backoffice' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view sales' ] ], function() {
                     Route::get( '/', [ SaleController::class, 'index' ] )->name( 'admin.module_parent.sale.index' );
                 } );
-                Route::group( [ 'middleware' => [ 'permission:add sales' ] ], function() {
-                    Route::get( 'add', [ SaleController::class, 'add' ] )->name( 'admin.sale.add' );
-                } );
                 Route::group( [ 'middleware' => [ 'permission:edit sales' ] ], function() {
                     Route::get( 'edit', [ SaleController::class, 'edit' ] )->name( 'admin.sale.edit' );
                 } );
 
                 Route::post( 'all-sales', [ SaleController::class, 'allSales' ] )->name( 'admin.sale.allSales' );
                 Route::post( 'one-sale', [ SaleController::class, 'oneSale' ] )->name( 'admin.sale.oneSale' );
-                Route::post( 'create-sale', [ SaleController::class, 'createSale' ] )->name( 'admin.sale.createSale' );
                 Route::post( 'update-sale', [ SaleController::class, 'updateSale' ] )->name( 'admin.sale.updateSale' );
                 Route::post( 'delete-sale', [ SaleController::class, 'deleteSale' ] )->name( 'admin.sale.deleteSale' );
             } );
@@ -140,6 +138,7 @@ Route::prefix( 'backoffice' )->group( function() {
 
                 Route::group( [ 'middleware' => [ 'permission:view leads' ] ], function() {
                     Route::get( '/', [ LeadController::class, 'index' ] )->name( 'admin.module_parent.lead.index' );
+                    Route::get( '/detail', [ LeadController::class, 'detail' ] )->name( 'admin.lead.detail' );
                     Route::get( '/enquiry', [ LeadController::class, 'enquiry' ] )->name( 'admin.lead.enquiry' );
                     Route::get( '/call_back', [ LeadController::class, 'call_back' ] )->name( 'admin.lead.call_back' );
                     Route::get( '/order', [ LeadController::class, 'order' ] )->name( 'admin.lead.order' );
@@ -149,6 +148,7 @@ Route::prefix( 'backoffice' )->group( function() {
                 } );
                 
                 Route::post( '/all-leads', [ LeadController::class, 'allLeads' ] )->name( 'admin.lead.allLeads' );
+                Route::post( '/_all-leads', [ LeadController::class, '_allLeads' ] )->name( 'admin.lead._allLeads' );
                 Route::post( '/one-lead', [ LeadController::class, 'oneLead' ] )->name( 'admin.lead.oneLead' );
                 Route::post( '/_one-lead', [ LeadController::class, '_oneLead' ] )->name( 'admin.lead._oneLead' );
                 Route::post( 'lead-add-enquiry', [ LeadController::class, 'createEnquiry' ] )->name( 'admin.lead.createEnquiry' );
@@ -180,16 +180,12 @@ Route::prefix( 'backoffice' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view comments' ] ], function() {
                     Route::get( '/', [ CommentController::class, 'index' ] )->name( 'admin.module_parent.comment.index' );
                 } );
-                Route::group( [ 'middleware' => [ 'permission:add comments' ] ], function() {
-                    Route::get( 'add', [ CommentController::class, 'add' ] )->name( 'admin.comment.add' );
-                } );
                 Route::group( [ 'middleware' => [ 'permission:edit comments' ] ], function() {
                     Route::get( 'edit', [ CommentController::class, 'edit' ] )->name( 'admin.comment.edit' );
                 } );
 
                 Route::post( 'all-comments', [ CommentController::class, 'allComments' ] )->name( 'admin.comment.allComments' );
                 Route::post( 'one-comment', [ CommentController::class, 'oneComment' ] )->name( 'admin.comment.oneComment' );
-                Route::post( 'create-comment', [ CommentController::class, 'createComment' ] )->name( 'admin.comment.createComment' );
                 Route::post( 'update-comment', [ CommentController::class, 'updateComment' ] )->name( 'admin.comment.updateComment' );
                 Route::post( 'delete-comment', [ CommentController::class, 'deleteComment' ] )->name( 'admin.comment.deleteComment' );
             } );
@@ -221,12 +217,12 @@ Route::prefix( 'backoffice' )->group( function() {
             //     Route::post( 'update-maintenance-setting', [ SettingController::class, 'updateMaintenanceSetting' ] )->name( 'admin.setting.updateMaintenanceSetting' );
             // } );
 
-            // Route::prefix( 'profile' )->group( function() {
+            Route::prefix( 'profile' )->group( function() {
 
-            //     Route::get( '/', [ ProfileController::class, 'index' ] )->name( 'admin.profile.index' );
+                Route::get( '/', [ ProfileController::class, 'index' ] )->name( 'admin.profile.index' );
 
-            //     Route::post( 'update', [ ProfileController::class, 'update' ] )->name( 'admin.profile.update' );
-            // } );
+                Route::post( 'update', [ ProfileController::class, 'update' ] )->name( 'admin.profile.update' );
+            } );
 
         } );
 

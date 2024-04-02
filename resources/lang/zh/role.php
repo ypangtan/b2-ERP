@@ -33,6 +33,7 @@ return [
 
     'add' => '添加',
     'view' => '查看',
+    'create' => '创建',
     'edit' => '编辑',
     'delete' => '删除',
     'upload' => '上传',

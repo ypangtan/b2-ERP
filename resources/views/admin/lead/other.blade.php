@@ -14,7 +14,7 @@ $lead_other = 'lead_other';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $lead_other }}_inventory" class="col-sm-5 col-form-label">{{ __( 'sale.inventory' ) }}</label>
+                    <label for="{{ $lead_other }}_inventory" class="col-sm-5 col-form-label">{{ __( 'lead.inventory' ) }}</label>
                     <div class="col-sm-7">
                         <input type="text" class="form-control form-control-sm" id="{{ $lead_other }}_inventory">
                         <div class="invalid-feedback"></div>
