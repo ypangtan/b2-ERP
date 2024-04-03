@@ -14,7 +14,7 @@
     <div class="col">
         <div class="card overflow-hidden radius-10">
             <div class="card-body">
-                <p>{{ __( 'dashboard.enquiried' ) }}</p>
+                <p>{{ __( 'dashboard.enquiring' ) }}</p>
                 <h4 class="card-value" id="enquiry">
                     <div class="spinner-border spinner-border-sm" role="status" style="width: 1.5rem; height: 1.5rem; border-width: .05em">
                         <span class="visually-hidden">Loading...</span>
@@ -52,7 +52,7 @@
     <div class="col-xxl-12">
         <div class="card overflow-hidden radius-10">
             <div class="card-body">
-                <canvas id="myChart" style="max-width:88%; padding-left:6%; max-height: 550px;"></canvas>
+                <canvas id="salesChart" style="padding:3%; max-height: 550px;"></canvas>
             </div>
         </div>
     </div>
@@ -60,41 +60,6 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-
-        const xValues = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'July', 'Aug', 'Sep', 'Oct', 'Noc', 'Dec'];
-
-        new Chart("myChart", {
-            type: "line",
-            data: {
-                labels: xValues,
-                datasets: [
-                    {
-                        label: 'sales',
-                        data: [860,1140,1060,1060,1070,1110,1330,2210,7830,2478,7830,2478],
-                        borderColor: "blue",
-                        fill: true
-                    },
-                ]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        display: true,
-                        align: 'end',
-                        labels:{
-                            useBorderRadius: true,
-                            borderRadius: 5,
-                            boxWidth: 50,
-                            boxHeight:20,
-                        }
-                    },
-                    title: {
-                        display: true,
-                        text: '{{ __( 'dashboard.monthly_report' ) }}',
-                    }
-                },
-            }
-        });
 
         getDashboardData();
 
@@ -110,9 +75,59 @@
                     $( '#enquiry' ).html( response.enquiry );
                     $( '#done' ).html( response.done );
                     $( '#complaint' ).html( response.complaint );
+                    showSaleChart( response.sale_report , response.years[0], response.years[11]);
                 }
             } );
         }
+        
+        function showSaleChart(data, startYear, endYear) {
+            new Chart("salesChart", {
+                type: "line",
+                data: {
+                    datasets: [{
+                        label: '{{ __( 'dashboard.sales' ) }}',
+                        data: data,
+                        borderColor: "rgba(0, 0, 255, 0.8)",
+                        backgroundColor : "rgba(0, 0, 255, 0.2)",
+                        fill: {
+                            "above" : "rgba(0, 0, 255, 0.2)",
+                            "target" : {
+                                "value":0
+                            }
+                        },
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: true,
+                            align: 'end',
+                            backgroundColor : "blue",
+                            color : "blue",
+                            labels: {
+                                useBorderRadius: true,
+                                borderRadius: 5,
+                                boxWidth: 50,
+                                boxHeight: 20,
+                                font: {
+                                    size: 14,
+                                    family:  "'Montserrat', sans-serif",
+                                },
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: '{{ __( 'dashboard.monthly_sales_report_bewteen' ) }} ' + startYear + ' {{ __( 'dashboard.to' ) }} ' + endYear,
+                            font: {
+                                size: 18,
+                                family:  "'Montserrat', sans-serif",
+                            },
+                        }
+                    },
+                }
+            });
+        }
+
     } );
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

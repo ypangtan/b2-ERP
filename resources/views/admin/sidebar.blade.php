@@ -3,7 +3,7 @@
                 <div class="sidebar-header">
                     <div>
                         <!-- admin/img/icons/default.png -->
-                        <img src="{{ asset( 'admin/images/logo.png' ) }}" class="logo-icon" alt="logo icon" />
+                        <img src="{{ asset( 'admin/images/logo.png' ) }}" style="width: 100px;" class="logo-icon" alt="logo icon" />
                     </div>
                     
                     <div class="toggle-icon ms-auto"><i class="bi bi-list"></i></div>

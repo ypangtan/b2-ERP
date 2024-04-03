@@ -14,8 +14,25 @@ return [
     */
 
     'all' => 'All Customers',
-    'enquiried' => 'Total Customers Enquiried',
+    'enquiring' => 'Total Customers Enquiring',
     'done' => 'Total Lead Done',
     'complaint' => 'Total Customers Complaint',
+    'sales' => 'Sales',
 
+    'monthly_sales_report_bewteen' => 'Monthly Sales Report Bewteen',
+    'to' => 'To',
+
+    // month
+    'Jan' => 'January',
+    'Feb' => 'Febuary',
+    'Mar' => 'March',
+    'Apr' => 'April',
+    'May' => 'May',
+    'Jun' => 'June',
+    'Jul' => 'July',
+    'Aug' => 'August',
+    'Sep' => 'September',
+    'Oct' => 'October',
+    'Nov' => 'November',
+    'Dec' => 'December',
 ];

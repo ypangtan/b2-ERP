@@ -19,8 +19,8 @@ return [
     'complaint' => '投诉',
     'service' => '服务',
     'other' => '其他',
-    'done' => 'Done',
-    'activated' => 'Acticated',
+    'done' => '完成',
+    'activated' => '已激活',
     
     // Customer Detail
     'name' => '名字',

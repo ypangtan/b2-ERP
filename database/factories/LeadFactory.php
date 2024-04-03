@@ -2,10 +2,15 @@
 
 namespace Database\Factories;
 
+use App\Models\{
+    Customer,
+    Inventory,
+    Administrator
+};
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-class UserFactory extends Factory
+class LeadFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -15,11 +20,16 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
-            'email' => $this->faker->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
+            'customer_id' => function () {
+                return Customer::factory()->create()->id;
+            },
+            'inventory_id' => function () {
+                return Inventory::factory()->create()->id;
+            },
+            'user_id' => '1',
+            'status' => $this->faker->randomElement(['10', '20', '30', '40']),
+            'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'), 
+            'updated_at' => now(),
         ];
     }
 

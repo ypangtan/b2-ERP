@@ -37,9 +37,9 @@ return [
     'support' => 'Support',
     'ticket_responses' => 'Ticket Responses',
     'customers' => '顾客',
-    'leads' => 'Leads',
+    'leads' => '带领',
     'inventories' => '产品',
-    'sales' => '销量',
+    'sales' => '销售',
     'comments' => '评论',
     'financials' => '金融',
     'supply_chains' => '供应',
@@ -49,7 +49,7 @@ return [
     'complaint' => '投诉',
     'service' => '服务',
     'other' => '其他',
-    'lead_details' => 'Lead Details',
+    'lead_details' => '带领详情',
 
     // Title
     'add_x' => '新增:title',

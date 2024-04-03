@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             AdministratorSeeder::class,
             CategorySeeder::class,
             TypeSeeder::class,
+            TestingSeeder::class,
         ] );
     }
 }
