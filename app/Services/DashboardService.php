@@ -37,8 +37,10 @@ class DashboardService {
             '11' => __( 'dashboard.Nov' ),  
             '12' => __( 'dashboard.Dec' ), 
         ];
+        
         $sale_report = [];
         $years = [];
+
         for( $i = 1 ; $i <= 12; $i++ ){
             $currentMonthYear = date( "Y-m" ,strtotime( '-' . 12 - $i . ' months' ) );
 

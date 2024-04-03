@@ -51,8 +51,11 @@
 <div class="row">
     <div class="col-xxl-12">
         <div class="card overflow-hidden radius-10">
-            <div class="card-body">
-                <canvas id="salesChart" style="padding:3%; max-height: 550px;"></canvas>
+            <div class="card-body text-center">
+                <div id="loading-div" class="spinner-border spinner-border-sm" role="status" style="width: 1.5rem; height: 1.5rem; border-width: .05em;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <canvas id="salesChart" style="padding:3%; max-height: 550px; display:none;"></canvas>
             </div>
         </div>
     </div>
@@ -75,6 +78,8 @@
                     $( '#enquiry' ).html( response.enquiry );
                     $( '#done' ).html( response.done );
                     $( '#complaint' ).html( response.complaint );
+                    $( '#salesChart').show(); 
+                    $( '#loading-div').hide(); 
                     showSaleChart( response.sale_report , response.years[0], response.years[11]);
                 }
             } );
@@ -98,6 +103,12 @@
                     }]
                 },
                 options: {
+                    elements:{
+                        point:{
+                            hoverRadius: 5,
+                            hoverBorderWidth: 2,
+                        },
+                    },
                     plugins: {
                         legend: {
                             display: true,

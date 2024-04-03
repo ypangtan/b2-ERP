@@ -24,7 +24,7 @@ use Carbon\Carbon;
 class Helper {
 
     public static function websiteName() {
-        return 'Red Fox';
+        return 'RedFox';
     }
 
     public static function baseUrl() {
