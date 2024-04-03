@@ -92,10 +92,10 @@
                     datasets: [{
                         label: '{{ __( 'dashboard.sales' ) }}',
                         data: data,
-                        borderColor: "rgba(0, 0, 255, 0.8)",
-                        backgroundColor : "rgba(0, 0, 255, 0.2)",
+                        borderColor: "rgba(52, 97, 255, 1)",
+                        backgroundColor : "rgba(52, 97, 255, 0.2)",
                         fill: {
-                            "above" : "rgba(0, 0, 255, 0.2)",
+                            "above" : "rgba(52, 97, 255, 0.2)",
                             "target" : {
                                 "value":0
                             }
@@ -113,8 +113,6 @@
                         legend: {
                             display: true,
                             align: 'end',
-                            backgroundColor : "blue",
-                            color : "blue",
                             labels: {
                                 useBorderRadius: true,
                                 borderRadius: 5,
@@ -124,7 +122,7 @@
                                     size: 14,
                                     family:  "'Montserrat', sans-serif",
                                 },
-                            }
+                            },
                         },
                         title: {
                             display: true,

@@ -33,6 +33,7 @@ return [
 
     'add' => 'Add',
     'view' => 'View',
+    'viewDetail' => 'View Detail',
     'create' => 'Create',
     'edit' => 'Edit',
     'delete' => 'Delete',

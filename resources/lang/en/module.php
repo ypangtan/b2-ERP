@@ -24,5 +24,6 @@ return [
     'supply_chain' => 'Supply Chain',
     'sales' => 'Sales',
     'customers' => 'Customers',
+    'comments' => 'Comments',
 
 ];

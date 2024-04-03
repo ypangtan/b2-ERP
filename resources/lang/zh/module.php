@@ -24,5 +24,6 @@ return [
     'supply_chain' => '供应链',
     'sales' => '销量',
     'customers' => '顾客',
+    'comments' => '投诉',
 
 ];

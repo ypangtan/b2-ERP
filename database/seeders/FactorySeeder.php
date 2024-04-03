@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
-class TestingSeeder extends Seeder
+class FactorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -26,7 +26,7 @@ class TestingSeeder extends Seeder
      */
     public function run()
     {
-        // Customer::factory()->count(300)->create();
+        Customer::factory()->count(100)->create();
         // Inventory::factory()->count(300)->create();
         // Lead::factory()->count(300)->create();
         Sale::factory()->count(1000)->create();

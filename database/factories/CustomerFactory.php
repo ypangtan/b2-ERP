@@ -19,6 +19,7 @@ class CustomerFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'age' => $this->faker->numberBetween(18, 90),
             'phone_number' => $this->faker->unique()->phoneNumber(),
+            'status' => $this->faker->randomElement(['10', '20']),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'), 
             'updated_at' => now(),
         ];

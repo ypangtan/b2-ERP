@@ -40,7 +40,7 @@ return [
     'leads' => '带领',
     'inventories' => '产品',
     'sales' => '销售',
-    'comments' => '评论',
+    'comments' => '投诉',
     'financials' => '金融',
     'supply_chains' => '供应',
     'enquiry' => '询问',

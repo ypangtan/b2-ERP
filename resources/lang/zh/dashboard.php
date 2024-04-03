@@ -17,6 +17,7 @@ return [
     'enquiring' => '询问的客户总数',
     'done' => '完成总销售追踪',
     'complaint' => '客户投诉总数',
+    'sales' => '销售',
 
     'monthly_sales_report_bewteen' => '每月销售报告从',
     'to' => '至',

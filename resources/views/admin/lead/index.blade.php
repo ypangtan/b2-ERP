@@ -141,7 +141,7 @@ $columns = [
                     orderable: false,
                     render: function( data, type, row, meta ) {
                         countLead = row.leads.length - 1;
-                        leadStatus = row.leads[countLead] ? row.leads[countLead].status : data ;
+                        leadStatus = row.leads[countLead] ? row.leads[countLead].status : 10 ;
 
                         return '<span class="' + statusMapper[leadStatus].color + '">' + statusMapper[leadStatus].text + '</span>';
                     },
@@ -155,7 +155,7 @@ $columns = [
 
                         let status = '',
                             countLead = row.leads.length - 1,
-                            leadStatus = row.leads[countLead] ? row.leads[countLead].status : row.status ;
+                            leadStatus = row.leads[countLead] ? row.leads[countLead].status : 10 ;
                         
                         if( leadStatus == 10 ){
                             status += '<li class="dropdown-item click-action dt-enquiry" data-id="' + data + '">{{ __( 'lead.enquiry' ) }}</li>';
