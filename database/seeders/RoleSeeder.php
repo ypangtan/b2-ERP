@@ -35,8 +35,10 @@ class RoleSeeder extends Seeder
             'create leads', 'edit leads', 'view leads', 'delete leads', 'viewDetail leads', 
             'create inventories', 'edit inventories', 'view inventories', 'delete inventories', 
             'create sales', 'edit sales', 'view sales', 'delete sales', 
+            'create suppliers', 'edit suppliers', 'view suppliers', 'delete suppliers', 
+            'create purchases', 'edit purchases', 'view purchases', 'delete purchases', 
             'create comments', 'edit comments', 'view comments', 'delete comments', 
-            'view financials', 'view supply_chain', 
+            'view financials', 'view risks', 
         ];
 
         $business = [
@@ -44,13 +46,16 @@ class RoleSeeder extends Seeder
             'create leads', 'edit leads', 'view leads', 'delete leads', 'viewDetail leads', 
             'create sales', 'edit sales', 'view sales', 'delete sales', 
             'create comments', 'edit comments', 'view comments', 'delete comments', 
-            'view financials', 'view supply_chain', 
+            'create suppliers', 'edit suppliers', 'view suppliers', 'delete suppliers', 
+            'view financials', 'view risks', 
         ];
 
         $start_up = [
             'create customers', 'edit customers', 'view customers', 'delete customers', 
             'create leads', 'edit leads', 'view leads', 'delete leads', 'viewDetail leads', 
-            'view financials', 'view supply_chain', 
+            'create sales', 'edit sales', 'view sales', 'delete sales', 
+            'create comments', 'edit comments', 'view comments', 'delete comments', 
+            'view financials', 'view risks', 
         ];
 
         $role = Role::create( [ 
@@ -72,14 +77,14 @@ class RoleSeeder extends Seeder
             'guard_name' => 'admin',
             'created_at' => date( 'Y-m-d H:i:s' ),
             'updated_at' => date( 'Y-m-d H:i:s' ),
-         ] );
+         ] )->givePermissionTo( $business );
 
          $role = Role::create( [ 
             'name' => 'start_up',
             'guard_name' => 'admin',
             'created_at' => date( 'Y-m-d H:i:s' ),
             'updated_at' => date( 'Y-m-d H:i:s' ),
-         ] );
+         ] )->givePermissionTo( $start_up );
     }
 }
 

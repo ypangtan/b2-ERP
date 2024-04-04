@@ -39,9 +39,9 @@ $columns = [
         'type' => 'select',
         'options' => [
             [ 'value' => '', 'title' => __( 'datatables.all_x', [ 'title' => __( 'datatables.status' ) ] ) ],
-            [ 'value' => 10, 'title' => __( 'lead.activated' ) ],
-            [ 'value' => 20, 'title' => __( 'lead.enquired' ) ],
-            [ 'value' => 30, 'title' => __( 'lead.suspended' ) ],
+            [ 'value' => 10, 'title' => __( 'datatables.activated' ) ],
+            [ 'value' => 20, 'title' => __( 'datatables.enquired' ) ],
+            [ 'value' => 30, 'title' => __( 'datatables.suspended' ) ],
         ],
         'id' => 'status',
         'title' => __( 'datatables.status' ),

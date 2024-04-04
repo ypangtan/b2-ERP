@@ -125,6 +125,11 @@ class CustomerService {
             $filter = true;
         }
 
+        if ( !empty( $request->status ) ) {
+            $model->where( 'customers.status', $request->status );
+            $filter = true;
+        }
+
         return [
             'filter' => $filter,
             'model' => $model,

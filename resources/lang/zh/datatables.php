@@ -43,6 +43,7 @@ return [
     'suspend' => '停用',
     'activate' => '启用',
     'activated' => '启用中',
+    'enquired' => '追踪中',
     'suspended' => '停用中',
     'enabled' => '启用中',
     'disabled' => '已停用',

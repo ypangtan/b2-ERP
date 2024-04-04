@@ -52,7 +52,7 @@ class ModuleSeeder extends Seeder
         }
 
         $permissionTypes = [ 'view' ];
-        $modules = [ 'financials', 'supply_chain' ];
+        $modules = [ 'financials', 'risks' ];
         foreach ($modules as $module) {
             $module = module::create( [ 'name' => $module, 'guard' => $guard_name ] );
             foreach ($permissionTypes as $permissionType) {

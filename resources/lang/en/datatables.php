@@ -43,6 +43,7 @@ return [
     'suspend' => 'Suspend',
     'activate' => 'Activate',
     'activated' => 'Activated',
+    'enquired' => 'Enquired',
     'suspended' => 'Suspended',
     'enabled' => 'Enabled',
     'disabled' => 'Disabled',
