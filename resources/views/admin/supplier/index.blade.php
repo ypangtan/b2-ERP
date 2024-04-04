@@ -13,35 +13,34 @@ $columns = [
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'customer.name' ) ] ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'supplier.name' ) ] ),
         'id' => 'name',
-        'title' => __( 'customer.name' ),
+        'title' => __( 'supplier.name' ),
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'customer.email' ) ] ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'supplier.email' ) ] ),
         'id' => 'email',
-        'title' => __( 'customer.email' ),
+        'title' => __( 'supplier.email' ),
     ],
     [
         'type' => 'range',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'customer.age' ) ] ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'supplier.age' ) ] ),
         'id' => 'age',
-        'title' => __( 'customer.age' ),
+        'title' => __( 'supplier.age' ),
     ],
     [
         'type' => 'input',
-        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'customer.phone_number' ) ] ),
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'supplier.phone_number' ) ] ),
         'id' => 'phone_number',
-        'title' => __( 'customer.phone_number' ),
+        'title' => __( 'supplier.phone_number' ),
     ],
     [
         'type' => 'select',
         'options' => [
             [ 'value' => '', 'title' => __( 'datatables.all_x', [ 'title' => __( 'datatables.status' ) ] ) ],
-            [ 'value' => 10, 'title' => __( 'lead.activated' ) ],
-            [ 'value' => 20, 'title' => __( 'lead.enquired' ) ],
-            [ 'value' => 30, 'title' => __( 'lead.suspended' ) ],
+            [ 'value' => 10, 'title' => __( 'datatables.activated' ) ],
+            [ 'value' => 20, 'title' => __( 'datatables.suspended' ) ],
         ],
         'id' => 'status',
         'title' => __( 'datatables.status' ),
@@ -57,11 +56,11 @@ $columns = [
 <div class="card">
     <div class="card-body">
         <div class="mb-3 text-end">
-            @can( 'add customers' )
-            <a class="btn btn-sm btn-primary" href="{{ route( 'admin.customer.add' ) }}">{{ __( 'template.create' ) }}</a>
+            @can( 'add suppliers' )
+            <a class="btn btn-sm btn-primary" href="{{ route( 'admin.supplier.add' ) }}">{{ __( 'template.create' ) }}</a>
             @endcan
         </div>
-        <x-data-tables id="customer_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
+        <x-data-tables id="supplier_table" enableFilter="true" enableFooter="false" columns="{{ json_encode( $columns ) }}" />
     </div>
 </div>
 
@@ -82,16 +81,12 @@ $columns = [
                 'color': 'badge rounded-pill bg-success',
             },
             '20': {
-                'text': '{{ __( 'datatables.enquired' ) }}',
-                'color': 'badge rounded-pill bg-warning',
-            },
-            '30': {
                 'text': '{{ __( 'datatables.suspended' ) }}',
-                'color': 'badge rounded-pill bg-danger',
+                'color': 'badge rounded-pill bg-warning',
             },
         },
         dt_table,
-        dt_table_name = '#customer_table',
+        dt_table_name = '#supplier_table',
         dt_table_config = {
             language: {
                 'lengthMenu': '{{ __( "datatables.lengthMenu" ) }}',
@@ -105,11 +100,11 @@ $columns = [
                 }
             },
             ajax: {
-                url: '{{ route( 'admin.customer.allCustomers' ) }}',
+                url: '{{ route( 'admin.supplier.allSuppliers' ) }}',
                 data: {
                     '_token': '{{ csrf_token() }}',
                 },
-                dataSrc: 'customers',
+                dataSrc: 'suppliers',
             },
             lengthMenu: [
                 [ 10, 25, 50, 999999 ],
@@ -148,20 +143,20 @@ $columns = [
                     className: 'text-center',
                     render: function( data, type, row, meta ) {
 
-                        @canany( [ 'edit customers', 'view customers', 'delete customers' ] )
+                        @canany( [ 'edit suppliers', 'view suppliers', 'delete suppliers' ] )
 
                         let view = '',
                             edit = '',
                             status = '';
 
-                        @can( 'edit customers' )
+                        @can( 'edit suppliers' )
                         view += '<li class="dropdown-item click-action dt-edit" data-id="' + data + '">{{ __( 'datatables.edit' ) }}</li>';
                         status = row.status == 30 ? 
                         '<li class="dropdown-item click-action dt-activate" data-id="' + data + '">{{ __( 'datatables.activate' ) }}</li>':
                         '<li class="dropdown-item click-action dt-suspend" data-id="' + data + '">{{ __( 'datatables.suspend' ) }}</li>' ;
                         @endcan
 
-                        @can( 'delete customers' )
+                        @can( 'delete suppliers' )
                         view += '<li class="dropdown-item click-action dt-delete" data-id="' + data + '">{{ __( 'datatables.delete' ) }}</li>';
                         @endcan
 
@@ -189,7 +184,7 @@ $columns = [
         document.addEventListener( 'DOMContentLoaded', function() {
        
        $( document ).on( 'click', '.dt-edit', function() {
-           window.location.href = '{{ route( 'admin.customer.edit' ) }}?id=' + $( this ).data( 'id' );
+           window.location.href = '{{ route( 'admin.supplier.edit' ) }}?id=' + $( this ).data( 'id' );
        } );
 
        let uid = 0,
@@ -199,11 +194,11 @@ $columns = [
         $( document ).on( 'click', '.dt-suspend', function() {
 
             uid = $( this ).data( 'id' );
-            status = 30,
+            status = 20,
             scope = 'status';
 
-            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.suspend' ), 'title' => Str::singular( __( 'template.customers' ) ) ] ) }}' );
-            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.suspend' ), 'title' => Str::singular( __( 'template.customers' ) ) ] ) }}' );
+            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.suspend' ), 'title' => Str::singular( __( 'template.suppliers' ) ) ] ) }}' );
+            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.suspend' ), 'title' => Str::singular( __( 'template.suppliers' ) ) ] ) }}' );
 
             modalConfirmation.show();
         } );
@@ -214,8 +209,8 @@ $columns = [
             status = 10,
             scope = 'status';
 
-            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.activate' ), 'title' => Str::singular( __( 'template.customers' ) ) ] ) }}' );
-            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.activate' ), 'title' => Str::singular( __( 'template.customers' ) ) ] ) }}' );
+            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.activate' ), 'title' => Str::singular( __( 'template.suppliers' ) ) ] ) }}' );
+            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.activate' ), 'title' => Str::singular( __( 'template.suppliers' ) ) ] ) }}' );
 
             modalConfirmation.show();
         } );
@@ -224,8 +219,8 @@ $columns = [
             uid = $( this ).data( 'id' );
             scope = 'delete';
 
-            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.customers' ) ) ] ) }}' );
-            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.customers' ) ) ] ) }}' );
+            $( '#modal_confirmation_title' ).html( '{{ __( 'template.x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.suppliers' ) ) ] ) }}' );
+            $( '#modal_confirmation_description' ).html( '{{ __( 'template.are_you_sure_to_x_y', [ 'action' => __( 'datatables.delete' ), 'title' => Str::singular( __( 'template.suppliers' ) ) ] ) }}' );
 
             modalConfirmation.show();
         } );
@@ -235,7 +230,7 @@ $columns = [
             switch ( scope ) {
                 case 'delete':
                     $.ajax( {
-                        url: '{{ route( 'admin.customer.deleteCustomer' ) }}',
+                        url: '{{ route( 'admin.supplier.deleteSupplier' ) }}',
                         type: 'POST',
                         data: {
                             id: uid,
@@ -256,7 +251,7 @@ $columns = [
                 break;
                 case 'status':
                     $.ajax( {
-                        url: '{{ route( 'admin.customer.updateCustomerStatus' ) }}',
+                        url: '{{ route( 'admin.supplier.updateSupplierStatus' ) }}',
                         type: 'POST',
                         data: {
                             id: uid,

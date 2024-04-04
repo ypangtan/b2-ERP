@@ -20,7 +20,7 @@ class CreateInventoriesTable extends Migration
             $table->string( 'name' )->nullable();
             $table->decimal( 'price' , 5, 2 )->nullable();
             $table->string( 'desc' )->nullable();
-            $table->decimal( 'stock' , 3, 0 )->nullable();
+            $table->decimal( 'stock' , 4, 0 )->nullable();
             $table->timestamps();
         });
     }

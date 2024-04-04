@@ -41,8 +41,11 @@ return [
     'inventories' => '产品',
     'sales' => '销售',
     'comments' => '投诉',
-    'financials' => '金融',
-    'supply_chains' => '供应',
+    'suppliers' => '供应商',
+    'purchases' => '进货',
+    'financials' => '金融管理',
+    'risks' => '风险管理',
+
     'enquiry' => '询问',
     'call_back' => '退回',
     'order' => '订单',

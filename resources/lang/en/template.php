@@ -41,8 +41,11 @@ return [
     'inventories' => 'Inventories',
     'sales' => 'Sales',
     'comments' => 'Comments',
-    'financials' => 'Financials',
-    'supply_chains' => 'Supply Chains',
+    'suppliers' => 'Suppliers',
+    'purchases' => 'Pruchases',
+    'financials' => 'Financials Management',
+    'risks' => 'Risk Management',
+
     'enquiry' => 'Enquiry',
     'call_back' => 'Call Back',
     'order' => 'Order',

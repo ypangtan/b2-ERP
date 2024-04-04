@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateServicesTable extends Migration
+class CreateSuppliersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,13 @@ class CreateServicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId( 'lead_id' )->constrained('leads')->onUpdate('restrict')->onDelete('cascade');
             $table->string( 'name' )->nullable();
-            $table->decimal( 'charge', 6, 2 )->nullable();
-            $table->string( 'remark' )->nullable();
+            $table->string( 'email' )->nullable();
+            $table->string( 'age' )->nullable();
+            $table->string( 'phone_number' )->nullable();
+            $table->string( 'status' )->default(10);
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ class CreateServicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('suppliers');
     }
 }

@@ -33,7 +33,7 @@ class ModuleSeeder extends Seeder
         }
 
         $permissionTypes = [ 'create', 'view', 'edit', 'delete'];
-        $modules = [ 'customers', 'inventories', 'sales', 'administrators', 'comments' ];
+        $modules = [ 'customers', 'inventories', 'sales', 'administrators', 'comments', 'purchases', 'suppliers' ];
         $guard_name = 'admin';
         foreach ($modules as $module) {
             $module = module::create( [ 'name' => $module, 'guard' => $guard_name ] );

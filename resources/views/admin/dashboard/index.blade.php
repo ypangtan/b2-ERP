@@ -78,17 +78,21 @@
                     $( '#enquiry' ).html( response.enquiry );
                     $( '#done' ).html( response.done );
                     $( '#complaint' ).html( response.complaint );
-                    $( '.loading-div').hide(); 
+                    $( '#loading-div').hide(); 
                     $( '#salesChart' ).show(); 
                     $( '#inventoriesChart' ).show(); 
-                    showSaleChart( response.chartdata[0] , response.years[0], response.years[11]);
+                    $data = {
+                        'sales' : response.sale_report, 
+                        'complaint' : response.complaint_report, 
+                    };
+                    showSaleChart( $data , response.years[0], response.years[11] );
                     
                 }
             } );
         }
         
         function showSaleChart(data, startYear, endYear) {
-            new Chart("salesChart", {
+            new Chart( "salesChart", {
                 type: "line",
                 data: {
                     datasets: [
@@ -106,7 +110,7 @@
                             },
                         },
                         {
-                            label: '{{ __( 'dashboard.Complaint' ) }}',
+                            label: '{{ __( 'dashboard.complaints' ) }}',
                             data: data.complaint,
                             borderColor: "rgba(255, 0, 0, 1)",
                             backgroundColor : "rgba(255, 0, 0, 0.2)",
@@ -120,8 +124,8 @@
                     ],
                 },
                 options: {
-                    elements:{
-                        point:{
+                    elements: {
+                        point: {
                             hoverRadius: 5,
                             hoverBorderWidth: 2,
                         },

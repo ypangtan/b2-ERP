@@ -99,6 +99,22 @@
                         </a>
                     </li>
                     @endcan
+                    @can( 'view suppliers' )
+                    <li class="{{ $controller == 'App\Http\Controllers\Admin\SupplierController' ? 'mm-active' : '' }}">
+                        <a href="{{ route( 'admin.module_parent.supplier.index' ) }}">
+                            <div class="parent-icon"><i class="align-middle feather" icon-name="users"></i></div>
+                            <div class="menu-title">{{ __( 'template.suppliers' ) }}</div>
+                        </a>
+                    </li>
+                    @endcan
+                    @can( 'view purchases' )
+                    <li class="{{ $controller == 'App\Http\Controllers\Admin\PurchaseController' ? 'mm-active' : '' }}">
+                        <a href="{{ route( 'admin.module_parent.purchase.index' ) }}">
+                            <div class="parent-icon"><i class="align-middle feather" icon-name="truck"></i></div>
+                            <div class="menu-title">{{ __( 'template.purchases' ) }}</div>
+                        </a>
+                    </li>
+                    @endcan
                     @can( 'view financials' )
                     <li class="{{ $controller == 'App\Http\Controllers\Admin\FinancialController' ? 'mm-active' : '' }}">
                         <a href="{{ route( 'admin.module_parent.financial.index' ) }}">
@@ -107,22 +123,15 @@
                         </a>
                     </li>
                     @endcan
-                    @can( 'view supply_chain' )
-                    <li class="{{ $controller == 'App\Http\Controllers\Admin\SupplyChainController' ? 'mm-active' : '' }}">
-                        <a href="{{ route( 'admin.module_parent.supply_chain.index' ) }}">
-                            <div class="parent-icon"><i class="align-middle feather" icon-name="truck"></i></div>
-                            <div class="menu-title">{{ __( 'template.supply_chains' ) }}</div>
+                    @can( 'view risks' )
+                    <li class="{{ $controller == 'App\Http\Controllers\Admin\RiskController' ? 'mm-active' : '' }}">
+                        <a href="{{ route( 'admin.module_parent.risk.index' ) }}">
+                            <div class="parent-icon"><i class="align-middle feather" icon-name="file"></i></div>
+                            <div class="menu-title">{{ __( 'template.risks' ) }}</div>
                         </a>
                     </li>
                     @endcan
-                    {{-- @can( 'view settings' )
-                    <li class="{{ $controller == 'App\Http\Controllers\Admin\SettingController' ? 'mm-active' : '' }}">
-                        <a href="{{ route( 'admin.module_parent.setting.index' ) }}">
-                            <div class="parent-icon"><i class="align-middle feather" icon-name="cog"></i></div>
-                            <div class="menu-title">{{ __( 'template.settings' ) }}</div>
-                        </a>
-                    </li>
-                    @endcan --}}
+                    
                 </ul>
                 <!--end navigation-->
             </aside>

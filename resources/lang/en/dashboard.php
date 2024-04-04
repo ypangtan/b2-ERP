@@ -18,6 +18,7 @@ return [
     'done' => 'Total Lead Done',
     'complaint' => 'Total Customers Complaint',
     'sales' => 'Sales',
+    'complaints' => 'Complaints',
 
     'monthly_sales_report_bewteen' => 'Monthly Sales Report Bewteen',
     'to' => 'To',

@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\{
 };
 
 use App\Models\{
-    Customer,
-    Lead,
+    Supplier,
 };
 
 use App\Rules\CheckASCIICharacter;
@@ -19,65 +18,66 @@ use Helper;
 
 use Carbon\Carbon;
 
-class CustomerService {
+class SupplierService {
     
-    public static function allCustomers( $request ) {
+    public static function allSuppliers( $request ) {
 
-        $customer = Customer::select( 'customers.*' );
+        $supplier = Supplier::select( 'suppliers.*' );
 
-        $filterObject = self::filter( $request, $customer );
-        $customer = $filterObject['model'];
+        $filterObject = self::filter( $request, $supplier );
+        $supplier = $filterObject['model'];
         $filter = $filterObject['filter'];
 
         if ( $request->input( 'order.0.column' ) != 0 ) {
             $dir = $request->input( 'order.0.dir' );
             switch ( $request->input( 'order.0.column' ) ) {
                 case 1:
-                    $customer->orderBy( 'created_at', $dir );
+                    $supplier->orderBy( 'created_at', $dir );
                     break;
                 case 2:
-                    $customer->orderBy( 'name', $dir );
+                    $supplier->orderBy( 'name', $dir );
                     break;
                 case 3:
-                    $customer->orderBy( 'email', $dir );
+                    $supplier->orderBy( 'email', $dir );
                     break;
                 case 4:
-                    $customer->orderBy( 'role', $dir );
+                    $supplier->orderBy( 'age', $dir );
                     break;
                 case 5:
-                    $customer->orderBy( 'status', $dir );
+                    $supplier->orderBy( 'phone_number', $dir );
+                    break;
+                case 6:
+                    $supplier->orderBy( 'status', $dir );
                     break;
             }
         }
 
-        $customerCount = $customer->count();
+        $supplierCount = $supplier->count();
 
         $limit = $request->length;
         $offset = $request->start;
 
-        $customers = $customer->skip( $offset )->take( $limit )->get();
+        $suppliers = $supplier->skip( $offset )->take( $limit )->get();
 
-        $customers->append( [
+        $suppliers->append( [
             'encrypted_id',
         ] );
 
-        $customer = Customer::select(
-            DB::raw( 'COUNT(customers.id) as total'
+        $supplier = Supplier::select(
+            DB::raw( 'COUNT(suppliers.id) as total'
         ) );
 
-        $filterObject = self::filter( $request, $customer );
-        $customer = $filterObject['model'];
+        $filterObject = self::filter( $request, $supplier );
+        $supplier = $filterObject['model'];
         $filter = $filterObject['filter'];
 
-        $customer = $customer->first();
+        $supplier = $supplier->first();
 
         $data = [
-            'customers' => $customers,
+            'suppliers' => $suppliers,
             'draw' => $request->draw,
-            'recordsFiltered' => $filter ? $customerCount : $customer->total,
-            'recordsTotal' => $filter ? Customer::when( auth()->user()->role != 1, function( $query ) {
-                $query->where( 'role', '!=', 1 );
-            } )->count() : $customerCount,
+            'recordsFiltered' => $filter ? $supplierCount : $supplier->total,
+            'recordsTotal' => $filter ? Supplier::count() : $supplierCount,
         ];
 
         return $data;
@@ -97,7 +97,7 @@ class CustomerService {
                 $endDate = explode( '-', $dates[1] );
                 $end = Carbon::create( $endDate[0], $endDate[1], $endDate[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
 
-                $model->whereBetween( 'customers.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
+                $model->whereBetween( 'suppliers.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
             } else {
 
                 $dates = explode( '-', $request->created_at );
@@ -105,23 +105,28 @@ class CustomerService {
                 $start = Carbon::create( $dates[0], $dates[1], $dates[2], 0, 0, 0, 'Asia/Kuala_Lumpur' );
                 $end = Carbon::create( $dates[0], $dates[1], $dates[2], 23, 59, 59, 'Asia/Kuala_Lumpur' );
 
-                $model->whereBetween( 'customers.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
+                $model->whereBetween( 'suppliers.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] );
             }
             $filter = true;
         }
 
         if ( !empty( $request->name ) ) {
-            $model->where( 'customers.name', $request->name );
+            $model->where( 'suppliers.name', $request->name );
             $filter = true;
         }
 
         if ( !empty( $request->email ) ) {
-            $model->where( 'customers.email', $request->email );
+            $model->where( 'suppliers.email', $request->email );
             $filter = true;
         }
 
         if ( !empty( $request->phone_number ) ) {
-            $model->where( 'customers.phone_number', $request->phone_number );
+            $model->where( 'suppliers.phone_number', $request->phone_number );
+            $filter = true;
+        }
+
+        if ( !empty( $request->status ) ) {
+            $model->where( 'suppliers.status', $request->status );
             $filter = true;
         }
 
@@ -131,39 +136,39 @@ class CustomerService {
         ];
     }
 
-    public static function oneCustomer( $request ) {
+    public static function oneSupplier( $request ) {
 
         $request->merge( [
             'id' => Helper::decode( $request->id ),
         ] );
 
-        $customer = Customer::find( $request->id );
+        $supplier = Supplier::find( $request->id );
 
-        if ( $customer ) {
-            $customer->append( [
+        if ( $supplier ) {
+            $supplier->append( [
                 'encrypted_id',
             ] );
         }
 
-        return $customer;
+        return $supplier;
     }
 
-    public static function createCustomer( $request ) {
+    public static function createSupplier( $request ) {
 
         DB::beginTransaction();
 
         $validator = Validator::make( $request->all(), [
-            'name' => [ 'required', 'unique:customers,name', 'alpha_dash', new CheckASCIICharacter ],
-            'email' => [ 'required', 'unique:customers,email', 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
+            'name' => [ 'required', 'unique:suppliers,name', 'alpha_dash', new CheckASCIICharacter ],
+            'email' => [ 'required', 'unique:suppliers,email', 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
             'age' => [ 'required' ],
-            'phone_number' => [ 'required', 'unique:customers,phone_number' ],
+            'phone_number' => [ 'required', 'unique:suppliers,phone_number' ],
         ] );
 
         $attributeName = [
-            'name' => __( 'customer.name' ),
-            'email' => __( 'customer.email' ),
-            'age' => __( 'customer.age' ),
-            'phone_number' => __( 'customer.phone_number' ),
+            'name' => __( 'supplier.name' ),
+            'email' => __( 'supplier.email' ),
+            'age' => __( 'supplier.age' ),
+            'phone_number' => __( 'supplier.phone_number' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -174,7 +179,7 @@ class CustomerService {
         
         try {
 
-            $createAdmin = Customer::create( [
+            $createAdmin = Supplier::create( [
                 'name' => strtolower( $request->name ),
                 'email' => $request->email ,
                 'age' => $request->age ,
@@ -193,11 +198,11 @@ class CustomerService {
         }
 
         return response()->json( [
-            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.customers' ) ) ] ),
+            'message' => __( 'template.new_x_created', [ 'title' => Str::singular( __( 'template.suppliers' ) ) ] ),
         ] );
     }
 
-    public static function updateCustomer( $request ) {
+    public static function updateSupplier( $request ) {
 
         DB::beginTransaction();
 
@@ -206,17 +211,17 @@ class CustomerService {
         ] );
 
         $validator = Validator::make( $request->all(), [
-            'name' => [ 'required', 'unique:customers,name,' . $request->id, 'alpha_dash', new CheckASCIICharacter ],
-            'email' => [ 'required', 'unique:customers,email,' . $request->id, 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
+            'name' => [ 'required', 'unique:suppliers,name,' . $request->id, 'alpha_dash', new CheckASCIICharacter ],
+            'email' => [ 'required', 'unique:suppliers,email,' . $request->id, 'email', 'regex:/(.+)@(.+)\.(.+)/i', new CheckASCIICharacter ],
             'age' => [ 'required' ],
-            'phone_number' => [ 'required', 'unique:customers,phone_number,' . $request->id ],
+            'phone_number' => [ 'required', 'unique:suppliers,phone_number,' . $request->id ],
         ] );
 
         $attributeName = [
-            'name' => __( 'customer.name' ),
-            'email' => __( 'customer.email' ),
-            'age' => __( 'customer.age' ),
-            'phone_number' => __( 'customer.phone_number' ),
+            'name' => __( 'supplier.name' ),
+            'email' => __( 'supplier.email' ),
+            'age' => __( 'supplier.age' ),
+            'phone_number' => __( 'supplier.phone_number' ),
         ];
 
         foreach ( $attributeName as $key => $aName ) {
@@ -227,15 +232,15 @@ class CustomerService {
         
         try {
 
-            $updateCustomer = Customer::lockForUpdate()
+            $updatesupplier = supplier::lockForUpdate()
                 ->find( $request->id );
 
-            $updateCustomer->name = strtolower( $request->name );
-            $updateCustomer->email = $request->email;
-            $updateCustomer->age = $request->age ;
-            $updateCustomer->phone_number = $request->phone_number ;
+            $updatesupplier->name = strtolower( $request->name );
+            $updatesupplier->email = $request->email;
+            $updatesupplier->age = $request->age ;
+            $updatesupplier->phone_number = $request->phone_number ;
 
-            $updateCustomer->save();
+            $updatesupplier->save();
 
             DB::commit();
 
@@ -249,11 +254,11 @@ class CustomerService {
         }
 
         return response()->json( [
-            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.customers' ) ) ] ),
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.suppliers' ) ) ] ),
         ] );
     }
 
-    public static function updateCustomerStatus( $request ){
+    public static function updateSupplierstatus( $request ){
 
         DB::beginTransaction();
 
@@ -269,14 +274,9 @@ class CustomerService {
 
         try {
 
-            $updateUser = Customer::lockForUpdate()->find( $request->id );
+            $updateUser = supplier::lockForUpdate()->find( $request->id );
             $updateUser->status = $request->status;
             $updateUser->save();
-
-            if( $request->status == 30 ){
-                $lead = Lead::where( 'customer_id', $request->id )
-                    ->delete();
-            }
 
             DB::commit();
 
@@ -290,21 +290,21 @@ class CustomerService {
         }
 
         return response()->json( [
-            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.customers' ) ) ] ),
+            'message' => __( 'template.x_updated', [ 'title' => Str::singular( __( 'template.suppliers' ) ) ] ),
         ] );
     }
 
-    public static function deleteCustomer( $request ) {
+    public static function deleteSupplier( $request ) {
 
         $request->merge( [
             'id' => Helper::decode( $request->id ),
         ] );
 
-        $deleteCustomer = Customer::find( $request->id )
+        $deletesupplier = supplier::find( $request->id )
             ->delete();
         
         return response()->json( [
-            'message' => __( 'template.x_deleted', [ 'title' => Str::singular( __( 'template.customers' ) ) ] ),
+            'message' => __( 'template.x_deleted', [ 'title' => Str::singular( __( 'template.suppliers' ) ) ] ),
         ] );
     }
 

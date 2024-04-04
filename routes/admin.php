@@ -13,8 +13,11 @@ use App\Http\Controllers\Admin\{
     InventoryController,
     LeadController,
     ProfileController,
+    PurchaseController,
+    RiskController,
     RoleController,
     SaleController,
+    SupplierController,
     SupplyChainController,
 };
 
@@ -113,6 +116,44 @@ Route::prefix( 'backoffice' )->group( function() {
                 Route::post( 'delete-sale', [ SaleController::class, 'deleteSale' ] )->name( 'admin.sale.deleteSale' );
             } );
 
+            Route::prefix( 'suppliers' )->group( function() {
+
+                Route::group( [ 'middleware' => [ 'permission:view suppliers' ] ], function() {
+                    Route::get( '/', [ SupplierController::class, 'index' ] )->name( 'admin.module_parent.supplier.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add suppliers' ] ], function() {
+                    Route::get( 'add', [ SupplierController::class, 'add' ] )->name( 'admin.supplier.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit suppliers' ] ], function() {
+                    Route::get( 'edit', [ SupplierController::class, 'edit' ] )->name( 'admin.supplier.edit' );
+                } );
+
+                Route::post( 'all-suppliers', [ SupplierController::class, 'allSuppliers' ] )->name( 'admin.supplier.allSuppliers' );
+                Route::post( 'one-supplier', [ SupplierController::class, 'oneSupplier' ] )->name( 'admin.supplier.oneSupplier' );
+                Route::post( 'create-supplier', [ SupplierController::class, 'createSupplier' ] )->name( 'admin.supplier.createSupplier' );
+                Route::post( 'update-supplier', [ SupplierController::class, 'updateSupplier' ] )->name( 'admin.supplier.updateSupplier' );
+                Route::post( 'update-supplier-status', [ SupplierController::class, 'updateSupplierStatus' ] )->name( 'admin.supplier.updateSupplierStatus' );
+                Route::post( 'delete-supplier', [ SupplierController::class, 'deleteSupplier' ] )->name( 'admin.supplier.deleteSupplier' );
+            } );
+
+            Route::prefix( 'purchases' )->group( function() {
+
+                Route::group( [ 'middleware' => [ 'permission:view purchases' ] ], function() {
+                    Route::get( '/', [ PurchaseController::class, 'index' ] )->name( 'admin.module_parent.purchase.index' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:add purchases' ] ], function() {
+                    Route::get( 'add', [ PurchaseController::class, 'add' ] )->name( 'admin.purchase.add' );
+                } );
+                Route::group( [ 'middleware' => [ 'permission:edit purchases' ] ], function() {
+                    Route::get( 'edit', [ PurchaseController::class, 'edit' ] )->name( 'admin.purchase.edit' );
+                } );
+                Route::post( 'all-purchase', [ PurchaseController::class, 'allPurchases' ] )->name( 'admin.purchase.allPurchases' );
+                Route::post( 'one-purchase', [ PurchaseController::class, 'onePurchase' ] )->name( 'admin.purchase.onePurchase' );
+                Route::post( 'create-purchase', [ PurchaseController::class, 'createPurchase' ] )->name( 'admin.purchase.createPurchase' );
+                Route::post( 'update-purchase', [ PurchaseController::class, 'updatePurchase' ] )->name( 'admin.purchase.updatePurchase' );
+                Route::post( 'delete-purchase', [ PurchaseController::class, 'deletePurchase' ] )->name( 'admin.purchase.deletePurchase' );
+            } );
+
             Route::prefix( 'leads' )->group( function() {
 
                 Route::group( [ 'middleware' => [ 'permission:view leads' ] ], function() {
@@ -179,10 +220,10 @@ Route::prefix( 'backoffice' )->group( function() {
                 } );
             } );
 
-            Route::prefix( 'supply_chain' )->group( function() {
+            Route::prefix( 'risk' )->group( function() {
 
-                Route::group( [ 'middleware' => [ 'permission:view supply_chains' ] ], function() {
-                    Route::get( '/', [ SupplyChainController::class, 'index' ] )->name( 'admin.module_parent.supply_chain.index' );
+                Route::group( [ 'middleware' => [ 'permission:view risks' ] ], function() {
+                    Route::get( '/', [ RiskController::class, 'index' ] )->name( 'admin.module_parent.risk.index' );
                 } );
             } );
 
