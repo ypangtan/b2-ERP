@@ -12,13 +12,13 @@ $columns = [
         'title' => __( 'datatables.created_date' ),
     ],
     [
-        'type' => 'input',
+        'type' => 'default',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'role.role_name' ) ] ),
         'id' => 'role_name',
         'title' => __( 'role.role_name' ),
     ],
     [
-        'type' => 'input',
+        'type' => 'default',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'role.guard_name' ) ] ),
         'id' => 'guard_name',
         'title' => __( 'role.guard_name' ),
