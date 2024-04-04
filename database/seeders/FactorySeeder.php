@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Administrator;
 use App\Models\{
+    Comment,
     Customer,
     Inventory,
     Lead,
@@ -27,6 +28,7 @@ class FactorySeeder extends Seeder
     public function run()
     {
         Customer::factory()->count(100)->create();
+        Comment::factory()->count(300)->create();
         // Inventory::factory()->count(300)->create();
         // Lead::factory()->count(300)->create();
         Sale::factory()->count(1000)->create();

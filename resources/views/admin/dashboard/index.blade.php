@@ -78,9 +78,11 @@
                     $( '#enquiry' ).html( response.enquiry );
                     $( '#done' ).html( response.done );
                     $( '#complaint' ).html( response.complaint );
-                    $( '#salesChart').show(); 
-                    $( '#loading-div').hide(); 
-                    showSaleChart( response.sale_report , response.years[0], response.years[11]);
+                    $( '.loading-div').hide(); 
+                    $( '#salesChart' ).show(); 
+                    $( '#inventoriesChart' ).show(); 
+                    showSaleChart( response.chartdata[0] , response.years[0], response.years[11]);
+                    
                 }
             } );
         }
@@ -89,18 +91,33 @@
             new Chart("salesChart", {
                 type: "line",
                 data: {
-                    datasets: [{
-                        label: '{{ __( 'dashboard.sales' ) }}',
-                        data: data,
-                        borderColor: "rgba(52, 97, 255, 1)",
-                        backgroundColor : "rgba(52, 97, 255, 0.2)",
-                        fill: {
-                            "above" : "rgba(52, 97, 255, 0.2)",
-                            "target" : {
-                                "value":0
-                            }
+                    datasets: [
+                        {
+                            label: '{{ __( 'dashboard.sales' ) }}',
+                            data: data.sales,
+                            borderColor: "rgba(52, 97, 255, 1)",
+                            backgroundColor : "rgba(52, 97, 255, 0.2)",
+                            fill: {
+                                "above" : "rgba(52, 97, 255, 0.2)",
+                                "below" : "rgba(52, 97, 255, 0.2)",
+                                "target" : {
+                                    "value" : 0,
+                                }
+                            },
                         },
-                    }]
+                        {
+                            label: '{{ __( 'dashboard.Complaint' ) }}',
+                            data: data.complaint,
+                            borderColor: "rgba(255, 0, 0, 1)",
+                            backgroundColor : "rgba(255, 0, 0, 0.2)",
+                            fill: {
+                                "above" : "rgba(255, 0, 0, 0.2)",
+                                "target" : {
+                                    "value" : 0
+                                }
+                            },
+                        },
+                    ],
                 },
                 options: {
                     elements:{

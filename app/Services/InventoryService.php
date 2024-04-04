@@ -5,7 +5,6 @@ namespace App\Services;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\{
     DB,
-    Hash,
     Validator,
 };
 
@@ -16,7 +15,7 @@ use App\Models\{
 };
 
 use App\Rules\CheckASCIICharacter;
-
+use Carbon\Carbon;
 use Helper;
 
 class InventoryService {

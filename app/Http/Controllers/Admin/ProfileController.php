@@ -9,8 +9,6 @@ use App\Services\{
     ProfileService,
 };
 
-use Helper;
-
 class ProfileController extends Controller {
 
     public function index() {

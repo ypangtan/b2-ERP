@@ -17,10 +17,6 @@ use App\Models\{
 
 use App\Rules\CheckASCIICharacter;
 
-use Helper;
-
-use Carbon\Carbon;
-
 class ProfileService {
 
     public static function update( $request ) {

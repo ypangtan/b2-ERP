@@ -9,23 +9,16 @@ use App\Services\{
     AdministratorService,
 };
 
-use App\Models\{
-    Administrator,
-    Role as RoleModel,
-};
-
-use Helper;
-
 class AdministratorController extends Controller {
 
     public function index() {
-        $this->data['header']['title'] = __( 'template.administrator' );
+        $this->data['header']['title'] = __( 'template.administrators' );
         $this->data['content'] = 'admin.administrator.index';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
-            'main_title' => __( 'template.administrator' ),
+            'main_title' => __( 'template.administrators' ),
             'title' => __( 'template.list' ),
-            'mobile_title' => __( 'template.administrator' ),
+            'mobile_title' => __( 'template.administrators' ),
         ];
 
         $this->data['data']['roles'] = [];
@@ -38,13 +31,13 @@ class AdministratorController extends Controller {
     }
 
     public function add() {
-        $this->data['header']['title'] = __( 'template.administrator' );
+        $this->data['header']['title'] = __( 'template.administrators' );
         $this->data['content'] = 'admin.administrator.add';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
-            'main_title' => __( 'template.administrator' ),
+            'main_title' => __( 'template.administrators' ),
             'title' => __( 'template.list' ),
-            'mobile_title' => __( 'template.administrator' ),
+            'mobile_title' => __( 'template.administrators' ),
         ];
 
         $this->data['data']['roles'] = [];
@@ -57,13 +50,13 @@ class AdministratorController extends Controller {
     }
 
     public function edit( Request $request ) {
-        $this->data['header']['title'] = __( 'template.administrator' );
+        $this->data['header']['title'] = __( 'template.administrators' );
         $this->data['content'] = 'admin.administrator.edit';
         $this->data['breadcrumbs'] = [
             'enabled' => true,
-            'main_title' => __( 'template.administrator' ),
+            'main_title' => __( 'template.administrators' ),
             'title' => __( 'template.list' ),
-            'mobile_title' => __( 'template.administrator' ),
+            'mobile_title' => __( 'template.administrators' ),
         ];
 
         $this->data['data']['roles'] = [];

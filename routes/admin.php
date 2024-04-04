@@ -6,43 +6,21 @@ use App\Http\Controllers\FileManagerController;
 
 use App\Http\Controllers\Admin\{
     AdministratorController,
-    AnnouncementController,
-    AuditController,
-    BankController,
     CommentController,
     CustomerController,
     DashboardController,
-    DepositController,
     FinancialController,
     InventoryController,
     LeadController,
-    MFAController,
-    MissionController,
-    MissionHistoryController,
-    ModuleController,
     ProfileController,
     RoleController,
     SaleController,
-    SettingController,
     SupplyChainController,
-    SupportController,
-    UserController,
-    UserKycController,
-    WalletController,
-    WalletTransactionController,
 };
 
 Route::prefix( 'backoffice' )->group( function() {
 
     Route::middleware( 'auth:admin' )->group( function() {
-
-        Route::prefix( 'mfa' )->group( function() {
-            Route::get( 'first-setup', [ MFAController::class, 'firstSetup' ] )->name( 'admin.mfa.firstSetup' );
-            Route::post( 'setup-mfa', [ MFAController::class, 'setupMFA' ] )->name( 'admin.mfa.setupMFA' );
-
-            Route::get( 'verify', [ MFAController::class, 'verify' ] )->name( 'admin.mfa.verify' ); 
-            Route::post( 'verify-code', [ MFAController::class, 'verifyCode' ] )->name( 'admin.mfa.verifyCode' );
-        } );
 
         Route::prefix( 'administrators' )->group( function() {
             Route::post( 'logout', [ AdministratorController::class, 'logoutLog' ] )->name( 'admin.logoutLog' );
@@ -139,13 +117,16 @@ Route::prefix( 'backoffice' )->group( function() {
 
                 Route::group( [ 'middleware' => [ 'permission:view leads' ] ], function() {
                     Route::get( '/', [ LeadController::class, 'index' ] )->name( 'admin.module_parent.lead.index' );
-                    Route::get( '/detail', [ LeadController::class, 'detail' ] )->name( 'admin.lead.detail' );
                     Route::get( '/enquiry', [ LeadController::class, 'enquiry' ] )->name( 'admin.lead.enquiry' );
                     Route::get( '/call_back', [ LeadController::class, 'call_back' ] )->name( 'admin.lead.call_back' );
                     Route::get( '/order', [ LeadController::class, 'order' ] )->name( 'admin.lead.order' );
                     Route::get( '/complaint', [ LeadController::class, 'complaint' ] )->name( 'admin.lead.complaint' );
                     Route::get( '/service', [ LeadController::class, 'service' ] )->name( 'admin.lead.service' );
                     Route::get( '/other', [ LeadController::class, 'other' ] )->name( 'admin.lead.other' );
+                } );
+
+                Route::group( [ 'middleware' => [ 'permission:viewDetail leads' ] ], function() {
+                    Route::get( '/detail', [ LeadController::class, 'detail' ] )->name( 'admin.lead.detail' );
                 } );
                 
                 Route::post( '/all-leads', [ LeadController::class, 'allLeads' ] )->name( 'admin.lead.allLeads' );
@@ -204,19 +185,6 @@ Route::prefix( 'backoffice' )->group( function() {
                     Route::get( '/', [ SupplyChainController::class, 'index' ] )->name( 'admin.module_parent.supply_chain.index' );
                 } );
             } );
-
-            // Route::prefix( 'settings' )->group( function() {
-
-            //     Route::group( [ 'middleware' => [ 'permission:add settings|view settings|edit settings|delete settings' ] ], function() {
-            //         Route::get( '/', [ SettingController::class, 'index' ] )->name( 'admin.module_parent.setting.index' );
-            //     } );
-
-            //     Route::post( 'settings', [ SettingController::class, 'settings' ] )->name( 'admin.setting.settings' );
-            //     Route::post( 'maintenance-settings', [ SettingController::class, 'maintenanceSettings' ] )->name( 'admin.setting.maintenanceSettings' );
-            //     Route::post( 'update-deposit-bank-detail', [ SettingController::class, 'updateDepositBankDetail' ] )->name( 'admin.setting.updateDepositBankDetail' );
-            //     Route::post( 'update-withdrawal-setting', [ SettingController::class, 'updateWithdrawalSetting' ] )->name( 'admin.setting.updateWithdrawalSetting' );
-            //     Route::post( 'update-maintenance-setting', [ SettingController::class, 'updateMaintenanceSetting' ] )->name( 'admin.setting.updateMaintenanceSetting' );
-            // } );
 
             Route::prefix( 'profile' )->group( function() {
 

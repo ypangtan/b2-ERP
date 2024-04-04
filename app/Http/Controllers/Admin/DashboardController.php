@@ -9,10 +9,6 @@ use App\Services\{
     DashboardService
 };
 
-use Helper;
-
-use PragmaRX\Google2FAQRCode\Google2FA;
-
 class DashboardController extends Controller {
 
     public function index( Request $request ) {

@@ -5,11 +5,9 @@ namespace App\Services;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\{
     DB,
-    Validator,
 };
 
 use Spatie\Permission\Models\{
-    Permission,
     Role,
 };
 

@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 use App\Services\{
     SaleService,
-    Service,
 };
 
 class SaleController extends Controller

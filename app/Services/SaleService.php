@@ -5,22 +5,14 @@ namespace App\Services;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\{
     DB,
-    Hash,
     Validator,
 };
-
-use Illuminate\Validation\Rules\Password;
 
 use App\Models\{
     Customer,
     Inventory,
     Sale,
-    SaleItems,
 };
-
-use App\Rules\CheckASCIICharacter;
-
-use PragmaRX\Google2FAQRCode\Google2FA;
 
 use Helper;
 

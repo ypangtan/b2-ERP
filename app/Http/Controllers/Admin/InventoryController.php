@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 use App\Services\{
     InventoryService,
-    Service,
 };
 
 class InventoryController extends Controller

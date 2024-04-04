@@ -6,13 +6,9 @@ use App\Models\{
     Comment,
     Customer,
     Lead,
-    Order,
     Sale,
-    User,
-    VoucherUsage
 };
 use Carbon\Carbon;
-use Helper;
 
 class DashboardService {
 
@@ -47,9 +43,14 @@ class DashboardService {
             $startDate = explode( '-', $currentMonthYear );
             $end = Carbon::create( $startDate[0], $startDate[1], 31, 23, 59, 59 );
             $start = Carbon::create( $startDate[0], $startDate[1], 1, 0, 0, 0 );
+
             $sale_report[ $month[ $startDate[1] ] ] = Sale::whereBetween( 'sales.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] )
-                ->count();
-                
+                ->select( 'Sales.*' );
+            $complaint_report[ $month[ $startDate[1] ] ] = Comment::whereBetween( 'comments.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] )
+                ->select( 'comments.*' );
+            $sale_report[ $month[ $startDate[1] ] ] = self::filter( $sale_report[ $month[ $startDate[1] ] ] ) ;
+            $complaint_report[ $month[ $startDate[1] ] ] = self::filter( $complaint_report[ $month[ $startDate[1] ] ] ) ;
+               
             $years[] = $startDate[0];
         }
         
@@ -59,8 +60,19 @@ class DashboardService {
             'done' => $done,
             'complaint' => $complaint,
             'sale_report' => $sale_report,
+            'complaint_report' => $complaint_report,
             'years' => $years,
         ];
         return $data;
+    }
+
+    private static function filter( $model ){
+
+        if( Auth()->user()->role != 1 ){
+            $model->whereHas('leads' , function( $subquery ){
+                $subquery->where( 'leads.user_id', Auth()->user()->id );
+            });
+        }
+        return $model->count();
     }
 }

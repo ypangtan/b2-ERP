@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 use App\Services\{
     RoleService,
-    Service,
 };
 
 class RoleController extends Controller

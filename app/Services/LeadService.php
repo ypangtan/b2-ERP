@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\{
     Validator,
 };
 
-use Illuminate\Validation\Rules\Password;
-
 use App\Models\{
     Callback,
     Comment,
@@ -19,19 +17,14 @@ use App\Models\{
     Inventory,
     Lead,
     Other,
-    Role as RoleModel,
     Sale,
     Service
 };
 
-use App\Rules\CheckASCIICharacter;
-
-use PragmaRX\Google2FAQRCode\Google2FA;
 
 use Helper;
 
 use Carbon\Carbon;
-use PDO;
 
 class LeadService {
 

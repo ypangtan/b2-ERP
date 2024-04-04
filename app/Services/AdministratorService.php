@@ -13,13 +13,10 @@ use Illuminate\Validation\Rules\Password;
 
 use App\Models\{
     Administrator,
-    AdministratorNotificationSeen,
     Role as RoleModel
 };
 
 use App\Rules\CheckASCIICharacter;
-
-use PragmaRX\Google2FAQRCode\Google2FA;
 
 use Helper;
 

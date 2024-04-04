@@ -35,6 +35,10 @@ class Sale extends Model
         return $this->belongsTo( Customer::class, 'customer_id' );
     }
 
+    public function leads() {
+        return $this->belongsTo( Lead::class, 'lead_id' );
+    }
+
     public function getEncryptedIdAttribute() {
         return Helper::encode( $this->attributes['id'] );
     }

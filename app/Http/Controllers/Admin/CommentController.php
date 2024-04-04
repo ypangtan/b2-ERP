@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 use App\Services\{
     CommentService,
-    Service,
 };
 
 class CommentController extends Controller

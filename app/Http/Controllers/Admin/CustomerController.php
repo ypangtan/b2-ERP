@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 use App\Services\{
     CustomerService,
-    Service,
 };
 
 class CustomerController extends Controller
