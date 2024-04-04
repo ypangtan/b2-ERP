@@ -22,7 +22,6 @@ return [
     'other' => 'Other',
     'done' => 'Done',
     'activated' => 'Acticated',
-    'remark' => 'Remark',
 
     // Customer Detail
     'name' => 'Name',

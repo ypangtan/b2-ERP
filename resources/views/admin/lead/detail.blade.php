@@ -38,7 +38,7 @@ $columns = [
     [
         'type' => 'default',
         'id' => 'remark',
-        'title' => __( 'leads.remark' ),
+        'title' => __( 'lead.remark' ),
     ],
 ];
 ?>
