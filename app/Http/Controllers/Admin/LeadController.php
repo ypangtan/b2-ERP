@@ -43,7 +43,7 @@ class LeadController extends Controller
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.leads' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.lead_details' ),
             'mobile_title' => __( 'template.leads' ),
         ];
 
@@ -69,7 +69,7 @@ class LeadController extends Controller
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.leads' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.enquiry' ),
             'mobile_title' => __( 'template.leads' ),
         ];
 
@@ -90,7 +90,7 @@ class LeadController extends Controller
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.leads' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.call_back' ),
             'mobile_title' => __( 'template.leads' ),
         ];
 
@@ -104,7 +104,7 @@ class LeadController extends Controller
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.leads' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.order' ),
             'mobile_title' => __( 'template.leads' ),
         ];
 
@@ -118,7 +118,7 @@ class LeadController extends Controller
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.leads' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.complaint' ),
             'mobile_title' => __( 'template.leads' ),
         ];
 
@@ -132,7 +132,7 @@ class LeadController extends Controller
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.leads' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.service' ),
             'mobile_title' => __( 'template.leads' ),
         ];
 
@@ -146,7 +146,7 @@ class LeadController extends Controller
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.leads' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.other' ),
             'mobile_title' => __( 'template.leads' ),
         ];
 

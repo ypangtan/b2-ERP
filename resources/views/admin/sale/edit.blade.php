@@ -31,6 +31,13 @@ $sale_edit = 'sale_edit';
                     </div>
                 </div>
                 <div class="mb-3 row">
+                    <label for="{{ $sale_edit }}_remark" class="col-sm-5 col-form-label">{{ __( 'sale.remark' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control form-control-sm" id="{{ $sale_edit }}_remark">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="mb-3 row">
                     <label for="{{ $sale_edit }}_quantity" class="col-sm-5 col-form-label">{{ __( 'inventory.quantity' ) }}</label>
                     <div class="col-sm-7">
                         <input type="number" class="form-control form-control-sm" id="{{ $sale_edit }}_quantity">
@@ -68,6 +75,7 @@ $sale_edit = 'sale_edit';
             formData.append( 'id', '{{ request( 'id' ) }}' );
             formData.append( 'customer_id', $( se + '_customer' ).val() );
             formData.append( 'inventory_id', $( se + '_inventory' ).val() );
+            formData.append( 'remark', $( se + '_remark' ).val() );
             formData.append( 'quantity', $( se + '_quantity' ).val() );
             formData.append( '_token', '{{ csrf_token() }}' );
 
@@ -121,6 +129,7 @@ $sale_edit = 'sale_edit';
 
                     $( se + '_customer' ).val( response.customers.encrypted_id );
                     $( se + '_inventory' ).val( response.inventories.encrypted_id );
+                    $( se + '_remark' ).val( response.remark );
                     $( se + '_quantity' ).val( response.quantity );
 
                     $( 'body' ).loading( 'stop' );

@@ -19,18 +19,37 @@ class LeadFactory extends Factory
      */
     public function definition()
     {
-        return [
-            'customer_id' => function () {
-                return Customer::factory()->create()->id;
-            },
-            'inventory_id' => function () {
-                return Inventory::factory()->create()->id;
-            },
-            'user_id' => '1',
-            'status' => $this->faker->randomElement(['10', '20', '30', '40']),
-            'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'), 
-            'updated_at' => now(),
-        ];
+        $i = $this->faker->randomElement(['10', '20', '30', '40']);
+        if( $i == '20' || $i == '30' ){
+
+            $customer = Customer::factory()->create();
+            $customer->status = '20';
+            $customer->save();
+            return [
+                'customer_id' => $customer->id,
+                'inventory_id' => function () {
+                    return Inventory::factory()->create()->id;
+                },
+                'user_id' => '1',
+                'status' => $i,
+                'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'), 
+                'updated_at' => now(),
+            ];
+        }else{
+            return [
+                'customer_id' => function () {
+                    return Customer::factory()->create()->id;
+                },
+                'inventory_id' => function () {
+                    return Inventory::factory()->create()->id;
+                },
+                'user_id' => '1',
+                'status' => $i,
+                'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'), 
+                'updated_at' => now(),
+            ];
+        }
+       
     }
 
     /**

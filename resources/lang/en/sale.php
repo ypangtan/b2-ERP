@@ -16,4 +16,5 @@ return [
     'customer' => 'Customer',
     'inventory' => 'Inventory',
     'quantity' => 'Quantity',
+    'remark' => 'Remark',
 ];

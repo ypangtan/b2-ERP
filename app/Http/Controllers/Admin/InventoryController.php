@@ -39,7 +39,7 @@ class InventoryController extends Controller
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.inventories' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.create' ),
             'mobile_title' => __( 'template.inventories' ),
         ];
 
@@ -62,7 +62,7 @@ class InventoryController extends Controller
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.inventories' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.edit' ),
             'mobile_title' => __( 'template.inventories' ),
         ];
 

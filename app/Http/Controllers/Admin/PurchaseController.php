@@ -39,7 +39,7 @@ class PurchaseController extends Controller
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.purchases' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.create' ),
             'mobile_title' => __( 'template.purchases' ),
         ];
 
@@ -64,7 +64,7 @@ class PurchaseController extends Controller
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.purchases' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.edit' ),
             'mobile_title' => __( 'template.purchases' ),
         ];
 

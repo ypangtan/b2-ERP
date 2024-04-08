@@ -36,7 +36,7 @@ class AdministratorController extends Controller {
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.administrators' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.create' ),
             'mobile_title' => __( 'template.administrators' ),
         ];
 
@@ -55,7 +55,7 @@ class AdministratorController extends Controller {
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.administrators' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.edit' ),
             'mobile_title' => __( 'template.administrators' ),
         ];
 

@@ -42,7 +42,7 @@ class CommentController extends Controller
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.comments' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.create' ),
             'mobile_title' => __( 'template.comments' ),
         ];
 
@@ -67,7 +67,7 @@ class CommentController extends Controller
         $this->data['breadcrumbs'] = [
             'enabled' => true,
             'main_title' => __( 'template.comments' ),
-            'title' => __( 'template.list' ),
+            'title' => __( 'template.edit' ),
             'mobile_title' => __( 'template.comments' ),
         ];
 

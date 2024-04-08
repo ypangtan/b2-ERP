@@ -24,6 +24,12 @@ $columns = [
         'title' => __( 'lead.customer_name' ),
     ],
     [
+        'type' => 'input',
+        'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'lead.inventory' ) ] ),
+        'id' => 'inventories',
+        'title' => __( 'lead.inventory' ),
+    ],
+    [
         'type' => 'select',
         'options' => [
             [ 'value' => '', 'title' => __( 'datatables.all_x', [ 'title' => __( 'datatables.status' ) ] ) ],
@@ -111,6 +117,7 @@ $columns = [
                 { data: 'created_at' },
                 { data: 'users' },
                 { data: 'customers' },
+                { data: 'inventories' },
                 { data: 'status' },
                 { data: 'encrypted_id' },
             ],
@@ -131,6 +138,13 @@ $columns = [
                 },
                 {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "customer" ) }}' ),
+                    orderable: false,
+                    render: function( data, type, row, meta ) {
+                        return data ? data.name : '';
+                    },
+                },
+                {
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "inventories" ) }}' ),
                     orderable: false,
                     render: function( data, type, row, meta ) {
                         return data ? data.name : '';

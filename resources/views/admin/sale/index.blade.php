@@ -27,6 +27,11 @@ $columns = [
     ],
     [
         'type' => 'default',
+        'id' => 'remark',
+        'title' => __( 'sale.remark' ),
+    ],
+    [
+        'type' => 'default',
         'placeholder' =>  __( 'datatables.search_x', [ 'title' => __( 'sale.quantity' ) ] ),
         'id' => 'quantity',
         'title' => __( 'sale.quantity' ),
@@ -90,6 +95,7 @@ $columns = [
                 { data: 'created_at' },
                 { data: 'customers' },
                 { data: 'inventories' },
+                { data: 'remark' },
                 { data: 'quantity' },
                 { data: 'encrypted_id' },
             ],
@@ -111,6 +117,13 @@ $columns = [
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "inventory" ) }}' ),
                     render: function( data, type, row, meta ) {   
                         return data ? data.name : '-';
+                    },
+                },
+                {
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "remark" ) }}' ),
+                    orderable: false,
+                    render: function( data, type, row, meta ) {   
+                        return data ?? '-';
                     },
                 },
                 {

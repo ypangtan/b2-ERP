@@ -29,7 +29,7 @@ class FactorySeeder extends Seeder
     public function run()
     {
         Purchase::factory()->count(100)->create();
-        Customer::factory()->count(100)->create();
+        // Customer::factory()->count(100)->create();
         Comment::factory()->count(300)->create();
         // Inventory::factory()->count(300)->create();
         // Lead::factory()->count(300)->create();

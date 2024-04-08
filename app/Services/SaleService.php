@@ -189,6 +189,7 @@ class SaleService {
         $validator = Validator::make( $request->all(), [
             'inventory_id' => [ 'required',  'exists:inventories,id' ],
             'customer_id' => [ 'required',  'exists:customers,id' ],
+            'remark' => [ 'required' ],
             'quantity' => [ 'required', function( $attribute, $value, $fail ) use ( $request ) {
 
                 $inventory = Inventory::find($request->inventory_id);
@@ -204,6 +205,7 @@ class SaleService {
         $attributeName = [
             'inventory_id' => __( 'sale.inventory' ),
             'customer_id' => __( 'sale.customer' ),
+            'remark' => __( 'sale.remark' ),
             'quantity' => __( 'sale.quantity' ),
         ];
 
@@ -225,6 +227,7 @@ class SaleService {
                 'customer_id' => $request->customer_id ,
                 'inventory_id' => $request->inventory_id ,
                 'price' =>  $totalPrice,
+                'remark' =>  $request->remark,
                 'quantity' => $request->quantity ,
             ] );
             
@@ -258,6 +261,7 @@ class SaleService {
         $validator = Validator::make( $request->all(), [
             'inventory_id' => [ 'required',  'exists:inventories,id' ],
             'customer_id' => [ 'required',  'exists:customers,id' ],
+            'remark' => [ 'required' ],
             'quantity' => [ 'required', function( $attribute, $value, $fail ) use ( $request ) {
 
                 $old_sale = Sale::find($request->id);
@@ -277,6 +281,7 @@ class SaleService {
         $attributeName = [
             'inventory_id' => __( 'sale.inventory' ),
             'customer_id' => __( 'sale.customer' ),
+            'remark' => __( 'sale.remark' ),
             'quantity' => __( 'sale.quantity' ),
         ];
 
@@ -307,6 +312,7 @@ class SaleService {
             $updateSale->quantity = $request->quantity;
             $totalPrice = $request->quantity * $product->price;
 
+            $updateSale->remark = $request->remark;
             $updateSale->price = $totalPrice;
             $updateSale->customer_id = $request->customer_id;
             $updateSale->save();
