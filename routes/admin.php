@@ -18,7 +18,6 @@ use App\Http\Controllers\Admin\{
     RoleController,
     SaleController,
     SupplierController,
-    SupplyChainController,
 };
 
 Route::prefix( 'backoffice' )->group( function() {
@@ -106,12 +105,16 @@ Route::prefix( 'backoffice' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view sales' ] ], function() {
                     Route::get( '/', [ SaleController::class, 'index' ] )->name( 'admin.module_parent.sale.index' );
                 } );
+                Route::group( [ 'middleware' => [ 'permission:add sales' ] ], function() {
+                    Route::get( 'add', [ SaleController::class, 'add' ] )->name( 'admin.sale.add' );
+                } );
                 Route::group( [ 'middleware' => [ 'permission:edit sales' ] ], function() {
                     Route::get( 'edit', [ SaleController::class, 'edit' ] )->name( 'admin.sale.edit' );
                 } );
 
                 Route::post( 'all-sales', [ SaleController::class, 'allSales' ] )->name( 'admin.sale.allSales' );
                 Route::post( 'one-sale', [ SaleController::class, 'oneSale' ] )->name( 'admin.sale.oneSale' );
+                Route::post( 'create-sale', [ SaleController::class, 'createSale' ] )->name( 'admin.sale.createSale' );
                 Route::post( 'update-sale', [ SaleController::class, 'updateSale' ] )->name( 'admin.sale.updateSale' );
                 Route::post( 'delete-sale', [ SaleController::class, 'deleteSale' ] )->name( 'admin.sale.deleteSale' );
             } );
@@ -203,12 +206,17 @@ Route::prefix( 'backoffice' )->group( function() {
                 Route::group( [ 'middleware' => [ 'permission:view comments' ] ], function() {
                     Route::get( '/', [ CommentController::class, 'index' ] )->name( 'admin.module_parent.comment.index' );
                 } );
+                Route::group( [ 'middleware' => [ 'permission:add comments' ] ], function() {
+                    Route::get( 'add', [ CommentController::class, 'add' ] )->name( 'admin.comment.add' );
+                } );
+
                 Route::group( [ 'middleware' => [ 'permission:edit comments' ] ], function() {
                     Route::get( 'edit', [ CommentController::class, 'edit' ] )->name( 'admin.comment.edit' );
                 } );
 
                 Route::post( 'all-comments', [ CommentController::class, 'allComments' ] )->name( 'admin.comment.allComments' );
                 Route::post( 'one-comment', [ CommentController::class, 'oneComment' ] )->name( 'admin.comment.oneComment' );
+                Route::post( 'create-comment', [ CommentController::class, 'createComment' ] )->name( 'admin.comment.createComment' );
                 Route::post( 'update-comment', [ CommentController::class, 'updateComment' ] )->name( 'admin.comment.updateComment' );
                 Route::post( 'delete-comment', [ CommentController::class, 'deleteComment' ] )->name( 'admin.comment.deleteComment' );
             } );

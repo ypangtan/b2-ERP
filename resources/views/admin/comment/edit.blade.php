@@ -7,9 +7,9 @@ $comment_edit = 'comment_edit';
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3 row">
-                    <label for="{{ $comment_edit }}_customer" class="col-sm-5 col-form-label">{{ __( 'comment.customer' ) }}</label>
+                    <label for="{{ $comment_edit }}_customer_id" class="col-sm-5 col-form-label">{{ __( 'comment.customer' ) }}</label>
                     <div class="col-sm-7">
-                        <select class="form-select form-select-sm" id="{{ $comment_edit }}_customer">
+                        <select class="form-select form-select-sm" id="{{ $comment_edit }}_customer_id" disabled>
                             <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'comment.customer' ) ] ) }}</option>
                             @foreach( $data['customers'] as $customer )
                             <option value="{{ $customer['value'] }}">{{ $customer['title'] }}</option>
@@ -19,9 +19,9 @@ $comment_edit = 'comment_edit';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $comment_edit }}_inventory" class="col-sm-5 col-form-label">{{ __( 'comment.inventory' ) }}</label>
+                    <label for="{{ $comment_edit }}_inventory_id" class="col-sm-5 col-form-label">{{ __( 'comment.inventory' ) }}</label>
                     <div class="col-sm-7">
-                        <select class="form-select form-select-sm" id="{{ $comment_edit }}_inventory">
+                        <select class="form-select form-select-sm" id="{{ $comment_edit }}_inventory_id">
                             <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'comment.inventory' ) ] ) }}</option>
                             @foreach( $data['inventories'] as $inventory )
                             <option value="{{ $inventory['value'] }}">{{ $inventory['title'] }}</option>
@@ -73,8 +73,8 @@ $comment_edit = 'comment_edit';
 
             let formData = new FormData();
             formData.append( 'id', '{{ request( 'id' ) }}' );
-            formData.append( 'customer_id', $( ce + '_customer' ).val() );
-            formData.append( 'inventory_id', $( ce + '_inventory' ).val() );
+            formData.append( 'customer_id', $( ce + '_customer_id' ).val() );
+            formData.append( 'inventory_id', $( ce + '_inventory_id' ).val() );
             formData.append( 'comment', $( ce + '_comment' ).val() );
             formData.append( 'rating', $( ce + '_rating' ).val() );
             formData.append( '_token', '{{ csrf_token() }}' );
@@ -127,8 +127,8 @@ $comment_edit = 'comment_edit';
                 },
                 success: function( response ) {
 
-                    $( ce + '_customer' ).val( response.customers.encrypted_id );
-                    $( ce + '_inventory' ).val( response.inventories.encrypted_id );
+                    $( ce + '_customer_id' ).val( response.leads.customers.encrypted_id );
+                    $( ce + '_inventory_id' ).val( response.leads.inventories.encrypted_id );
                     $( ce + '_comment' ).val( response.comment );
                     $( ce + '_rating' ).val( response.rating );
 

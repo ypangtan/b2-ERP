@@ -7,9 +7,9 @@ $sale_edit = 'sale_edit';
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3 row">
-                    <label for="{{ $sale_edit }}_customer" class="col-sm-5 col-form-label">{{ __( 'sale.customer' ) }}</label>
+                    <label for="{{ $sale_edit }}_customer_id" class="col-sm-5 col-form-label">{{ __( 'sale.customer' ) }}</label>
                     <div class="col-sm-7">
-                        <select class="form-select form-select-sm" id="{{ $sale_edit }}_customer">
+                        <select class="form-select form-select-sm" id="{{ $sale_edit }}_customer_id" disabled>
                             <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'sale.customer' ) ] ) }}</option>
                             @foreach( $data['customers'] as $customer )
                             <option value="{{ $customer['value'] }}">{{ $customer['title'] }}</option>
@@ -19,9 +19,9 @@ $sale_edit = 'sale_edit';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $sale_edit }}_inventory" class="col-sm-5 col-form-label">{{ __( 'sale.inventory' ) }}</label>
+                    <label for="{{ $sale_edit }}_inventory_id" class="col-sm-5 col-form-label">{{ __( 'sale.inventory' ) }}</label>
                     <div class="col-sm-7">
-                        <select class="form-select form-select-sm" id="{{ $sale_edit }}_inventory">
+                        <select class="form-select form-select-sm" id="{{ $sale_edit }}_inventory_id">
                             <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'sale.inventory' ) ] ) }}</option>
                             @foreach( $data['inventories'] as $inventory )
                             <option value="{{ $inventory['value'] }}">{{ $inventory['title'] }}</option>
@@ -73,8 +73,8 @@ $sale_edit = 'sale_edit';
 
             let formData = new FormData();
             formData.append( 'id', '{{ request( 'id' ) }}' );
-            formData.append( 'customer_id', $( se + '_customer' ).val() );
-            formData.append( 'inventory_id', $( se + '_inventory' ).val() );
+            formData.append( 'customer_id', $( se + '_customer_id' ).val() );
+            formData.append( 'inventory_id', $( se + '_inventory_id' ).val() );
             formData.append( 'remark', $( se + '_remark' ).val() );
             formData.append( 'quantity', $( se + '_quantity' ).val() );
             formData.append( '_token', '{{ csrf_token() }}' );
@@ -127,8 +127,8 @@ $sale_edit = 'sale_edit';
                 },
                 success: function( response ) {
 
-                    $( se + '_customer' ).val( response.customers.encrypted_id );
-                    $( se + '_inventory' ).val( response.inventories.encrypted_id );
+                    $( se + '_customer_id' ).val( response.leads.customers.encrypted_id );
+                    $( se + '_inventory_id' ).val( response.leads.inventories.encrypted_id );
                     $( se + '_remark' ).val( response.remark );
                     $( se + '_quantity' ).val( response.quantity );
 

@@ -514,8 +514,6 @@ class LeadService {
             $totalPrice = $request->quantity * $product->price;
 
             $createSale = Sale::create( [
-                'customer_id' => $lead->customer_id ,
-                'inventory_id' => $lead->inventory_id ,
                 'lead_id' => $lead->id ,
                 'remark' =>  $request->remark,
                 'price' =>  $totalPrice,
@@ -565,12 +563,8 @@ class LeadService {
         
         try {
 
-            $lead = Lead::find( $request->id );
-
             $createComplaint = Comment::create( [
-                'customer_id' => $lead->customer_id ,
-                'inventory_id' => $lead->inventory_id ,
-                'lead_id' => $lead->id ,
+                'lead_id' => $request->id ,
                 'comment' => $request->comment ,
                 'rating' => $request->rating ,
             ] );

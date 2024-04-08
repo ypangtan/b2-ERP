@@ -17,4 +17,6 @@ return [
     'inventory' => 'Inventory',
     'quantity' => 'Quantity',
     'remark' => 'Remark',
+
+    'invalid_lead' => 'This customer is leaded by other',
 ];

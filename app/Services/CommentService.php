@@ -14,6 +14,7 @@ use App\Models\{
     Customer,
     Inventory,
     Comment,
+    Lead,
 };
 
 use Helper;
@@ -46,8 +47,8 @@ class CommentService {
     public static function allComments( $request ) {
 
         $comment = Comment::with(
-            'inventories',
-            'customers',
+            'leads.inventories',
+            'leads.customers',
         )->select( 'comments.*' );
 
         $filterObject = self::filter( $request, $comment );
@@ -135,13 +136,17 @@ class CommentService {
 
         if ( !empty( $request->customer ) ) {
             $customer = Helper::decode( $request->customer );
-            $model->where( 'comments.customer_id', $customer );
+            $model->whereHas('leads', function( $query ) use ( $customer ){
+                $query->where( 'leads.customer_id', $customer );
+            });
             $filter = true;
         }
 
         if ( !empty( $request->inventory ) ) {
             $inventory = Helper::decode( $request->inventory );
-            $model->where( 'comments.inventory_id', $inventory );
+            $model->whereHas('leads', function( $query ) use ( $inventory ){
+                $query->where( 'leads.inventory_id', $inventory );
+            });
             $filter = true;
         }
 
@@ -158,18 +163,18 @@ class CommentService {
         ] );
 
         $comment = comment::with(
-            'inventories',
-            'customers',
+            'leads.inventories',
+            'leads.customers',
         )->find( $request->id );
 
         if ( $comment ) {
             $comment->append( [
                 'encrypted_id',
             ] );
-            $comment->inventories->append( [
+            $comment->leads->inventories->append( [
                 'encrypted_id',
             ] );
-            $comment->customers->append( [
+            $comment->leads->customers->append( [
                 'encrypted_id',
             ] );
         }
@@ -188,7 +193,19 @@ class CommentService {
 
         $validator = Validator::make( $request->all(), [
             'inventory_id' => [ 'required', 'exists:inventories,id' ],
-            'customer_id' => [ 'required', 'exists:customers,id' ],
+            'customer_id' => [ 'required',  'exists:customers,id', function( $attribute, $value, $fail ) use ( $request ){
+                $leadOther = Lead::where( 'customer_id', $request->customer_id )
+                ->where( function( $query ){
+                    $query->orWhere( 'status', 20)
+                        ->orWhere( 'status', 30);
+                } )
+                ->first();
+
+                if( $leadOther ){
+                    $fail( __( 'sale.invalid_lead' ) );
+                }
+                
+            } ],
             'comment' => [ 'required' ],
             'rating' => [ 'required' ],
         ] );
@@ -206,10 +223,28 @@ class CommentService {
         
         try {
 
+            $lead = Lead::where( 'customer_id', $request->customer_id )
+                ->where( 'inventory_id', $request->inventory_id)
+                ->where( 'user_id', auth()->user()->id )
+                ->orderBy('created_at', 'desc')
+                ->first(); 
+
+            if( !$lead ){
+                $lead = Lead::create( [
+                    'customer_id' => $request->customer_id,
+                    'inventory_id' => $request->inventory_id,
+                    'user_id' => auth()->user()->id,
+                    'status' => '30'
+                ] ); 
+                
+                $customer = Customer::lockForUpdate()
+                    ->find( $request->customers_id );
+                $customer->status = 20;
+                $customer->save(); 
+            }
+
             $createComment = Comment::create( [
-                'customer_id' => $request->customer_id ,
-                'inventory_id' => $request->inventory_id ,
-                'lead_id' => 0 ,
+                'lead_id' => $lead->id ,
                 'comment' => $request->comment ,
                 'rating' => $request->rating ,
             ] );
@@ -262,11 +297,12 @@ class CommentService {
         try {
             $updatecomment = comment::lockForUpdate()
                 ->find( $request->id );
-            
-            $updatecomment->inventory_id = $request->inventory_id;
-            $updatecomment->customer_id = $request->customer_id;
+            $lead = Lead::lockForUpdate()
+                ->find( $updatecomment->lead_id );
+            $lead->inventory_id = $request->inventory_id;
             $updatecomment->comment = $request->comment;
             $updatecomment->rating = $request->rating;
+            $lead->save();
             $updatecomment->save();
 
             DB::commit();

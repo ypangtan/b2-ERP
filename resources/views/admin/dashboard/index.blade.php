@@ -2,7 +2,7 @@
     <div class="col">
         <div class="card overflow-hidden radius-10">
             <div class="card-body">
-                <p>{{ __( 'dashboard.all' ) }}</p>
+                <p>{{ __( 'dashboard.total_all' ) }}</p>
                 <h4 class="card-value" id="all">
                     <div class="spinner-border spinner-border-sm" role="status" style="width: 1.5rem; height: 1.5rem; border-width: .05em">
                         <span class="visually-hidden">Loading...</span>
@@ -14,7 +14,7 @@
     <div class="col">
         <div class="card overflow-hidden radius-10">
             <div class="card-body">
-                <p>{{ __( 'dashboard.enquiring' ) }}</p>
+                <p>{{ __( 'dashboard.total_leading' ) }}</p>
                 <h4 class="card-value" id="enquiry">
                     <div class="spinner-border spinner-border-sm" role="status" style="width: 1.5rem; height: 1.5rem; border-width: .05em">
                         <span class="visually-hidden">Loading...</span>
@@ -26,7 +26,7 @@
     <div class="col">
         <div class="card overflow-hidden radius-10">
             <div class="card-body">
-                <p>{{ __( 'dashboard.done' ) }}</p>
+                <p>{{ __( 'dashboard.total_done' ) }}</p>
                 <h4 class="card-value" id="done">
                     <div class="spinner-border spinner-border-sm" role="status" style="width: 1.5rem; height: 1.5rem; border-width: .05em">
                         <span class="visually-hidden">Loading...</span>
@@ -38,7 +38,7 @@
     <div class="col">
         <div class="card overflow-hidden radius-10">
             <div class="card-body">
-                <p>{{ __( 'dashboard.complaint' ) }}</p>
+                <p>{{ __( 'dashboard.total_complaint' ) }}</p>
                 <h4 class="card-value" id="complaint">
                     <div class="spinner-border spinner-border-sm" role="status" style="width: 1.5rem; height: 1.5rem; border-width: .05em">
                         <span class="visually-hidden">Loading...</span>

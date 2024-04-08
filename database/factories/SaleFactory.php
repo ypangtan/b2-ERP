@@ -19,12 +19,8 @@ class SaleFactory extends Factory
      */
     public function definition()
     {
-        $lead = Lead::factory()->create();
-        
         return [
-            'customer_id' => $lead->customer_id,
-            'inventory_id' => $lead->inventory_id,
-            'lead_id' => $lead->id,
+            'lead_id' => Lead::factory()->create()->id,
             'quantity' => $this->faker->numberBetween(1, 100),
             'remark' => $this->faker->sentence,
             'price' => $this->faker->randomFloat(2, 1, 1000),

@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'all' => 'All Customers',
-    'enquiring' => 'Total Customers Enquiring',
-    'done' => 'Total Lead Done',
-    'complaint' => 'Total Customers Complaint',
+    'total_all' => 'All Customers',
+    'total_leading' => 'Total Customers Leading',
+    'total_done' => 'Total Lead Done',
+    'total_complaint' => 'Total Customers Complaint',
     'sales' => 'Sales',
     'complaints' => 'Complaints',
 

@@ -15,8 +15,6 @@ class CreateSalesTable extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->foreignId( 'customer_id' )->constrained('customers')->onUpdate('restrict')->onDelete('cascade');
-            $table->foreignId( 'inventory_id' )->constrained('inventories')->onUpdate('restrict')->onDelete('cascade');
             $table->foreignId( 'lead_id' )->constrained('leads')->onUpdate('restrict')->onDelete('cascade');
             $table->decimal( 'quantity' , 5, 0 );
             $table->string( 'remark' )->nullable();

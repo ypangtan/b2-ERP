@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\{
 use App\Models\{
     Customer,
     Inventory,
+    Lead,
     Sale,
 };
 
@@ -44,8 +45,8 @@ class SaleService {
     public static function allSales( $request ) {
 
         $sale = Sale::with(
-            'inventories',
-            'customers',
+            'leads.inventories',
+            'leads.customers',
         )->select( 'sales.*' );
 
         $filterObject = self::filter( $request, $sale );
@@ -135,13 +136,18 @@ class SaleService {
 
         if ( !empty( $request->customer ) ) {
             $customer = Helper::decode( $request->customer );
-            $model->where( 'sales.customer_id', $customer );
+            $model->whereHas('leads', function( $query ) use ( $customer ){
+                $query->where( 'leads.customer_id', $customer );
+            });
             $filter = true;
         }
 
         if ( !empty( $request->inventory ) ) {
             $inventory = Helper::decode( $request->inventory );
-            $model->where( 'sales.inventory_id', $inventory );
+            $model->whereHas('leads', function( $query ) use ( $inventory ){
+                $query->where( 'leads.inventory_id', $inventory );
+            });
+                
             $filter = true;
         }
 
@@ -158,18 +164,18 @@ class SaleService {
         ] );
 
         $sale = Sale::with(
-            'inventories',
-            'customers',
+            'leads.inventories',
+            'leads.customers',
         )->find( $request->id );
 
         if ( $sale ) {
             $sale->append( [
                 'encrypted_id',
             ] );
-            $sale->inventories->append( [
+            $sale->leads->inventories->append( [
                 'encrypted_id',
             ] );
-            $sale->customers->append( [
+            $sale->leads->customers->append( [
                 'encrypted_id',
             ] );
         }
@@ -188,7 +194,19 @@ class SaleService {
 
         $validator = Validator::make( $request->all(), [
             'inventory_id' => [ 'required',  'exists:inventories,id' ],
-            'customer_id' => [ 'required',  'exists:customers,id' ],
+            'customer_id' => [ 'required',  'exists:customers,id', function( $attribute, $value, $fail ) use ( $request ){
+                $leadOther = Lead::where( 'customer_id', $request->customer_id )
+                ->where( function( $query ){
+                    $query->orWhere( 'status', 20)
+                        ->orWhere( 'status', 30);
+                } )
+                ->first();
+
+                if( $leadOther ){
+                    $fail( __( 'sale.invalid_lead' ) );
+                }
+                
+            } ],
             'remark' => [ 'required' ],
             'quantity' => [ 'required', function( $attribute, $value, $fail ) use ( $request ) {
 
@@ -223,9 +241,28 @@ class SaleService {
 
             $totalPrice = $request->quantity * $product->price;
 
+            $lead = Lead::where( 'customer_id', $request->customer_id )
+                ->where( 'inventory_id', $request->inventory_id)
+                ->where( 'user_id', auth()->user()->id )
+                ->orderBy('created_at', 'desc')
+                ->first(); 
+
+            if( !$lead ){
+                $lead = Lead::create( [
+                    'customer_id' => $request->customer_id,
+                    'inventory_id' => $request->inventory_id,
+                    'user_id' => auth()->user()->id,
+                    'status' => '30'
+                ] ); 
+
+                $customer = Customer::lockForUpdate()
+                    ->find( $request->customers_id );
+                $customer->status = 20;
+                $customer->save(); 
+            }
+
             $createSale = Sale::create( [
-                'customer_id' => $request->customer_id ,
-                'inventory_id' => $request->inventory_id ,
+                'lead_id' => $lead->id ,
                 'price' =>  $totalPrice,
                 'remark' =>  $request->remark,
                 'quantity' => $request->quantity ,
@@ -295,26 +332,29 @@ class SaleService {
         try {
             $updateSale = Sale::lockForUpdate()
                 ->find( $request->id );
-            
+            $lead = Lead::lockForUpdate()
+                ->find( $updateSale->lead_id );
+
             if( $updateSale->inventory_id == $request->inventory_id ){
                 $product = Inventory::find( $request->inventory_id);
                 $product->stock = $product->stock - $request->quantity + $updateSale->quantity;
                 $product->save();
             }else{
-                $product_old = Inventory::find( $updateSale->inventory_id);
+                $product_old = Inventory::find( $lead->inventory_id);
                 $product_old->stock += $updateSale->quantity;
                 $product_old->save();
+
                 $product = Inventory::find( $request->inventory_id);
                 $product->stock -= $request->quantity;
                 $product->save();
-                $updateSale->inventory_id = $request->inventory_id;
+                $lead->inventory_id = $request->inventory_id;
+                $lead->save();
             }
             $updateSale->quantity = $request->quantity;
             $totalPrice = $request->quantity * $product->price;
 
             $updateSale->remark = $request->remark;
             $updateSale->price = $totalPrice;
-            $updateSale->customer_id = $request->customer_id;
             $updateSale->save();
 
             DB::commit();

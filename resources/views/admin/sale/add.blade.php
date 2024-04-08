@@ -8,9 +8,9 @@ $sale_create = 'sale_create';
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3 row">
-                    <label for="{{ $sale_create }}_customer" class="col-sm-5 col-form-label">{{ __( 'sale.customer' ) }}</label>
+                    <label for="{{ $sale_create }}_customer_id" class="col-sm-5 col-form-label">{{ __( 'sale.customer' ) }}</label>
                     <div class="col-sm-7">
-                        <select class="form-select form-select-sm" id="{{ $sale_create }}_customer">
+                        <select class="form-select form-select-sm" id="{{ $sale_create }}_customer_id">
                             <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'sale.customer' ) ] ) }}</option>
                             @foreach( $data['customers'] as $customer )
                             <option value="{{ $customer['value'] }}">{{ $customer['title'] }}</option>
@@ -20,14 +20,21 @@ $sale_create = 'sale_create';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $sale_create }}_inventory" class="col-sm-5 col-form-label">{{ __( 'sale.inventory' ) }}</label>
+                    <label for="{{ $sale_create }}_inventory_id" class="col-sm-5 col-form-label">{{ __( 'sale.inventory' ) }}</label>
                     <div class="col-sm-7">
-                        <select class="form-select form-select-sm" id="{{ $sale_create }}_inventory">
+                        <select class="form-select form-select-sm" id="{{ $sale_create }}_inventory_id">
                             <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'sale.inventory' ) ] ) }}</option>
                             @foreach( $data['inventories'] as $inventory )
                             <option value="{{ $inventory['value'] }}">{{ $inventory['title'] }}</option>
                             @endforeach
                         </select>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="{{ $sale_create }}_remark" class="col-sm-5 col-form-label">{{ __( 'sale.remark' ) }}</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control form-control-sm" id="{{ $sale_create }}_remark">
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
@@ -65,9 +72,10 @@ $sale_create = 'sale_create';
             } );
 
             let formData = new FormData();
-            formData.append( 'customer_id', $( sc + '_customer' ).val() );
-            formData.append( 'inventory_id', $( sc + '_inventory' ).val() );
+            formData.append( 'customer_id', $( sc + '_customer_id' ).val() );
+            formData.append( 'inventory_id', $( sc + '_inventory_id' ).val() );
             formData.append( 'quantity', $( sc + '_quantity' ).val() );
+            formData.append( 'remark', $( sc + '_remark' ).val() );
             formData.append( '_token', '{{ csrf_token() }}' );
 
             $.ajax( {

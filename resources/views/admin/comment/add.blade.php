@@ -8,9 +8,9 @@ $comment_create = 'comment_create';
         <div class="row">
             <div class="col-md-6">
                 <div class="mb-3 row">
-                    <label for="{{ $comment_create }}_customer" class="col-sm-5 col-form-label">{{ __( 'comment.customer' ) }}</label>
+                    <label for="{{ $comment_create }}_customer_id" class="col-sm-5 col-form-label">{{ __( 'comment.customer' ) }}</label>
                     <div class="col-sm-7">
-                        <select class="form-select form-select-sm" id="{{ $comment_create }}_customer">
+                        <select class="form-select form-select-sm" id="{{ $comment_create }}_customer_id">
                             <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'comment.customer' ) ] ) }}</option>
                             @foreach( $data['customers'] as $customer )
                             <option value="{{ $customer['value'] }}">{{ $customer['title'] }}</option>
@@ -20,9 +20,9 @@ $comment_create = 'comment_create';
                     </div>
                 </div>
                 <div class="mb-3 row">
-                    <label for="{{ $comment_create }}_inventory" class="col-sm-5 col-form-label">{{ __( 'comment.inventory' ) }}</label>
+                    <label for="{{ $comment_create }}_inventory_id" class="col-sm-5 col-form-label">{{ __( 'comment.inventory' ) }}</label>
                     <div class="col-sm-7">
-                        <select class="form-select form-select-sm" id="{{ $comment_create }}_inventory">
+                        <select class="form-select form-select-sm" id="{{ $comment_create }}_inventory_id">
                             <option value="">{{ __( 'datatables.select_x', [ 'title' => __( 'comment.inventory' ) ] ) }}</option>
                             @foreach( $data['inventories'] as $inventory )
                             <option value="{{ $inventory['value'] }}">{{ $inventory['title'] }}</option>
@@ -72,8 +72,8 @@ $comment_create = 'comment_create';
             } );
 
             let formData = new FormData();
-            formData.append( 'customer_id', $( cc + '_customer' ).val() );
-            formData.append( 'inventory_id', $( cc + '_inventory' ).val() );
+            formData.append( 'customer_id', $( cc + '_customer_id' ).val() );
+            formData.append( 'inventory_id', $( cc + '_inventory_id' ).val() );
             formData.append( 'comment', $( cc + '_comment' ).val() );
             formData.append( 'rating', $( cc + '_rating' ).val() );
             formData.append( '_token', '{{ csrf_token() }}' );

@@ -17,12 +17,8 @@ class CommentFactory extends Factory
      */
     public function definition()
     {
-        $lead = Lead::factory()->create();
-
         return [
-            'customer_id' => $lead->customer_id,
-            'inventory_id' => $lead->inventory_id,
-            'lead_id' => $lead->id,
+            'lead_id' => Lead::factory()->create()->id,
             'comment' => $this->faker->sentence,
             'rating' => $this->faker->randomElement(['1', '2', '3', '4', '5']),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'), 

@@ -42,7 +42,7 @@ return [
     'sales' => 'Sales',
     'comments' => 'Comments',
     'suppliers' => 'Suppliers',
-    'purchases' => 'Pruchases',
+    'purchases' => 'Purchases',
     'financials' => 'Financials Management',
     'risks' => 'Risk Management',
 

@@ -17,4 +17,7 @@ return [
     'inventory' => '产品',
     'quantity' => '数量',
     'remark' => '备注',
+
+    'invalid_lead' => '这个顾客已经被其他人带领着了',
+
 ];

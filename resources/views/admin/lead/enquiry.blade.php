@@ -9,7 +9,7 @@ $lead_enquiry = 'lead_enquiry';
                 <div class="mb-3 row">
                     <label for="{{ $lead_enquiry }}_customer" class="col-sm-5 col-form-label">{{ __( 'lead.customer' ) }}</label>
                     <div class="col-sm-7">
-                        <input type="text" class="form-control form-control-sm" id="{{ $lead_enquiry }}_customer">
+                        <input type="text" class="form-control form-control-sm" id="{{ $lead_enquiry }}_customer" >
                         <div class="invalid-feedback"></div>
                     </div>
                 </div>
@@ -111,7 +111,6 @@ $lead_enquiry = 'lead_enquiry';
                     '_token': '{{ csrf_token() }}'
                 },
                 success: function( response ) {
-                    console.log(response);
                     $( le + '_customer' ).val( response.name );
                     $( le + '_customer' ).attr('disabled',true);
                     $( 'body' ).loading( 'stop' );
