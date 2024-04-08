@@ -31,30 +31,30 @@ class RoleSeeder extends Seeder
         }
 
         $enterprise = [
-            'create customers', 'edit customers', 'view customers', 'delete customers', 
-            'create leads', 'edit leads', 'view leads', 'delete leads', 'viewDetail leads', 
-            'create inventories', 'edit inventories', 'view inventories', 'delete inventories', 
-            'create sales', 'edit sales', 'view sales', 'delete sales', 
-            'create suppliers', 'edit suppliers', 'view suppliers', 'delete suppliers', 
-            'create purchases', 'edit purchases', 'view purchases', 'delete purchases', 
-            'create comments', 'edit comments', 'view comments', 'delete comments', 
+            'add customers', 'edit customers', 'view customers', 'delete customers', 
+            'add leads', 'edit leads', 'view leads', 'delete leads', 'viewDetail leads', 
+            'add inventories', 'edit inventories', 'view inventories', 'delete inventories', 
+            'add sales', 'edit sales', 'view sales', 'delete sales', 
+            'add suppliers', 'edit suppliers', 'view suppliers', 'delete suppliers', 
+            'add purchases', 'edit purchases', 'view purchases', 'delete purchases', 
+            'add comments', 'edit comments', 'view comments', 'delete comments', 
             'view financials', 'view risks', 
         ];
 
         $business = [
-            'create customers', 'edit customers', 'view customers', 'delete customers', 
-            'create leads', 'edit leads', 'view leads', 'delete leads', 'viewDetail leads', 
-            'create sales', 'edit sales', 'view sales', 'delete sales', 
-            'create comments', 'edit comments', 'view comments', 'delete comments', 
-            'create suppliers', 'edit suppliers', 'view suppliers', 'delete suppliers', 
+            'add customers', 'edit customers', 'view customers', 'delete customers', 
+            'add leads', 'edit leads', 'view leads', 'delete leads', 'viewDetail leads', 
+            'add sales', 'edit sales', 'view sales', 'delete sales', 
+            'add comments', 'edit comments', 'view comments', 'delete comments', 
+            'add suppliers', 'edit suppliers', 'view suppliers', 'delete suppliers', 
             'view financials', 'view risks', 
         ];
 
         $start_up = [
-            'create customers', 'edit customers', 'view customers', 'delete customers', 
-            'create leads', 'edit leads', 'view leads', 'delete leads', 'viewDetail leads', 
-            'create sales', 'edit sales', 'view sales', 'delete sales', 
-            'create comments', 'edit comments', 'view comments', 'delete comments', 
+            'add customers', 'edit customers', 'view customers', 'delete customers', 
+            'add leads', 'edit leads', 'view leads', 'delete leads', 'viewDetail leads', 
+            'add sales', 'edit sales', 'view sales', 'delete sales', 
+            'add comments', 'edit comments', 'view comments', 'delete comments', 
             'view financials', 'view risks', 
         ];
 

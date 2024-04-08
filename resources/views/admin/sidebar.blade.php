@@ -26,7 +26,9 @@
                         <ul>
                             @can( 'view administrators' )
                             <li class="{{ $controller == 'App\Http\Controllers\Admin\AdministratorController' && $action == 'index' ? 'mm-active' : '' }}">
-                                <a class="metismenu-child" href="{{ route( 'admin.module_parent.administrator.index' ) }}"><i class="bi bi-circle"></i>{{ __( 'template.users' ) }}</a>
+                                <a class="metismenu-child" href="{{ route( 'admin.module_parent.administrator.index' ) }}">
+                                    <i class="bi bi-circle"></i>{{ __( 'template.users' ) }}
+                                </a>
                             </li>
                             @endcan
                             @can( 'view roles' )

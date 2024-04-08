@@ -80,8 +80,6 @@
                     parents.splice( index, 1 );
                 } )
             } );
-
-            new PerfectScrollbar(".header-notifications-list")
             
             $( '#_logout' ).click( function() {
                 $.ajax( {

@@ -127,7 +127,11 @@ class LeadService {
         $model->where(function ($query) {
             $query->orWhere( 'status', '10' )
                 ->orWhereHas('leads', function ($subquery) {
-                    $subquery->where('user_id', auth()->user()->id);
+                    $subquery->where( 'created_at', function ( $max_created_query ) {
+                        $max_created_query->select( \DB::raw( 'MAX(created_at)' ) )
+                                    ->from( 'leads as l2' )
+                                    ->whereColumn( 'leads.customer_id', 'l2.customer_id' );
+                    })->where('user_id', auth()->user()->id);
                 });
         });
 
@@ -166,36 +170,28 @@ class LeadService {
 
         if (!empty($request->status)) {
             if( $request->status == 10 ){
-                $model->where(function ($query) {
+                $model->where( function ( $query ) {
                     $query->orWhereDoesntHave( 'leads' )
-                        ->orWhereHas('leads', function ($subquery) {
-                            $subquery->whereExists(function ($innerSubquery) {
-                                $innerSubquery->select(\DB::raw(1))
-                                            ->from('leads as l1')
-                                            ->whereColumn('l1.customer_id', 'customers.id')
-                                            ->where('l1.created_at', function ($created_query) {
-                                                $created_query->select(\DB::raw('MAX(created_at)'))
-                                                            ->from('leads as l2')
-                                                            ->whereColumn('l1.customer_id', 'l2.customer_id');
-                                            })
-                                            ->where('l1.status', 10);
-                            });
-                        });
-                });
+                        ->orWhereHas( 'leads', function ( $subquery ) {
+                            $subquery->where( 'created_at', function ( $max_created_query ) {
+                                $max_created_query->select( \DB::raw( 'MAX(created_at)' ) )
+                                            ->from( 'leads as l2' )
+                                            ->whereColumn( 'leads.customer_id', 'l2.customer_id' );
+                            } )
+                            ->where( 'leads.status', 10);
+                        } );
+                } );
             }else{
-                $model->whereExists(function ($subquery) use ($request) {
-                    $subquery->select(\DB::raw(1))
-                                ->from('leads as l1')
-                                ->whereColumn('l1.customer_id', 'customers.id')
-                                ->where('l1.created_at', function ($innerSubquery) {
-                                    $innerSubquery->select(\DB::raw('MAX(created_at)'))
-                                                ->from('leads as l2')
-                                                ->whereColumn('l1.customer_id', 'l2.customer_id');
-                                })
-                                ->where('l1.status', $request->status);
+                $model->WhereHas( 'leads', function ( $subquery ) use ( $request ) {
+                    $subquery->where( 'created_at', function ( $max_created_query ) {
+                        $max_created_query->select( \DB::raw( 'MAX(created_at)' ) )
+                                    ->from( 'leads as l2' )
+                                    ->whereColumn( 'leads.customer_id', 'l2.customer_id' );
+                    })
+                    ->where( 'leads.status', $request->status );
                 });
-                $filter = true;
             }
+            $filter = true;
         }
         
   
@@ -266,6 +262,10 @@ class LeadService {
     private static function _filter( $request, $model ) {
 
         $filter = false;
+
+        if( Auth()->user()->role != 1){
+            $model->where( 'user_id', Auth()->user()->id );
+        }
 
         if ( !empty( $request->created_at ) ) {
             if ( str_contains( $request->created_at, 'to' ) ) {

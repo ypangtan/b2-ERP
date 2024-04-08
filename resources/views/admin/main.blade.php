@@ -26,7 +26,9 @@
                     $role = [ 
                         '', 
                         __( 'role.super_admin' ), 
-                        __( 'role.admin' ), 
+                        __( 'role.enterprise' ), 
+                        __( 'role.business' ), 
+                        __( 'role.start_up' ), 
                     ];
                     ?>
                     <div class="dropdown dropdown-user-setting">
@@ -105,5 +107,9 @@
         <a class="hidden" href="" id="hidden_new_tab_link" target="_blank" rel="noopener noreferrer">
 
         <?php echo view( 'admin/footer' ); ?>
+
+        <script>
+            
+        </script>
     </body>
 </html>

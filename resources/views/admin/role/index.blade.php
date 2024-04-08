@@ -115,6 +115,14 @@ $contents = [
                 },
                 {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "role_name" ) }}' ),
+                    orderable: false,
+                    render: function( data, type, row, meta ) {
+                        return data;
+                    },
+                },
+                {
+                    targets: parseInt( '{{ Helper::columnIndex( $columns, "guard_name" ) }}' ),
+                    orderable: false,
                     render: function( data, type, row, meta ) {
                         return data;
                     },

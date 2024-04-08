@@ -15,9 +15,23 @@ class DashboardService {
     public static function totalDatas( $request ) {
 
         $customerAll = Customer::where( 'status', '!=', 30 )->count();
-        $enquiry = Customer::where( 'status', 20 )->count();
-        $done = Lead::where( 'status', 40 )->count();
-        $complaint = Comment::where( 'lead_id', '!=', '0' )->count();
+
+        if( Auth()->user()->role != 1 ){
+            $enquiry = Lead::where( function( $query ){
+                $query->orWhere( 'status', 30 )
+                    ->orWhere( 'status', 20 );
+            } )->where( 'user_id', Auth()->user()->id )
+                ->count();
+            $done = Lead::where( 'status', 40 )
+                ->where( 'user_id', Auth()->user()->id )
+                ->count();
+            $complaint = Comment::count();
+        }else{
+            $enquiry = Customer::where( 'status', 20 )->count();
+            $done = Lead::where( 'status', 40 )->count();
+            $complaint = Comment::count();
+        }
+
 
         $month = [ 
             '01' => __( 'dashboard.Jan' ), 

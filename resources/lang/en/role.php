@@ -40,4 +40,8 @@ return [
     'upload' => 'Upload',
     'export' => 'Export',
 
+    'enterprise' => 'Enterprise',
+    'business' => 'Business',
+    'start_up' => 'Start Up',
+
 ];
