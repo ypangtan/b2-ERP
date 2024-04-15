@@ -25,7 +25,7 @@ class DashboardService {
             $done = Lead::where( 'status', 40 )
                 ->where( 'user_id', Auth()->user()->id )
                 ->count();
-            $complaint = Comment::count();
+            $complaint = self::filter( Comment::select( 'comments.*' ) );
         }else{
             $enquiry = Customer::where( 'status', 20 )->count();
             $done = Lead::where( 'status', 40 )->count();
