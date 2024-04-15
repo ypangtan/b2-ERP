@@ -112,18 +112,21 @@ $columns = [
                 },
                 {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "customer" ) }}' ),
+                    orderable: false,
                     render: function( data, type, row, meta ) {   
                         return data ? data.name : '-';
                     },
                 },
                 {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "inventory" ) }}' ),
+                    orderable: false,
                     render: function( data, type, row, meta ) {   
                         return data ? data.name : '-';
                     },
                 },
                 {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "comment" ) }}' ),
+                    orderable: false,
                     render: function( data, type, row, meta ) {   
                         return data ?? '-';
                     },

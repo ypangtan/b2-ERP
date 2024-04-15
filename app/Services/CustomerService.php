@@ -42,10 +42,10 @@ class CustomerService {
                     $customer->orderBy( 'email', $dir );
                     break;
                 case 4:
-                    $customer->orderBy( 'role', $dir );
+                    $customer->orderBy( 'age', $dir );
                     break;
                 case 5:
-                    $customer->orderBy( 'status', $dir );
+                    $customer->orderBy( 'phone_number', $dir );
                     break;
             }
         }

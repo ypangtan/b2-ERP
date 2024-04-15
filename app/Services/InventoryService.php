@@ -57,13 +57,7 @@ class InventoryService {
                     $inventory->orderBy( 'name', $dir );
                     break;
                 case 3:
-                    $inventory->orderBy( 'email', $dir );
-                    break;
-                case 4:
-                    $inventory->orderBy( 'role', $dir );
-                    break;
-                case 5:
-                    $inventory->orderBy( 'status', $dir );
+                    $inventory->orderBy( 'price', $dir );
                     break;
             }
         }

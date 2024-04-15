@@ -59,17 +59,8 @@ class SaleService {
                 case 1:
                     $sale->orderBy( 'created_at', $dir );
                     break;
-                case 2:
-                    $sale->orderBy( 'name', $dir );
-                    break;
-                case 3:
-                    $sale->orderBy( 'email', $dir );
-                    break;
-                case 4:
-                    $sale->orderBy( 'role', $dir );
-                    break;
                 case 5:
-                    $sale->orderBy( 'status', $dir );
+                    $sale->orderBy( 'quantity', $dir );
                     break;
             }
         }

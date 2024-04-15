@@ -138,12 +138,14 @@ $columns = [
                 },
                 {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "category" ) }}' ),
+                    orderable: false,
                     render: function( data, type, row, meta ) {   
                         return data.name ?? '-';
                     },
                 },
                 {
                     targets: parseInt( '{{ Helper::columnIndex( $columns, "type" ) }}' ),
+                    orderable: false,
                     render: function( data, type, row, meta ) {   
                         return data.name ?? '-';
                     },

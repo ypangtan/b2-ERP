@@ -61,17 +61,8 @@ class CommentService {
                 case 1:
                     $comment->orderBy( 'created_at', $dir );
                     break;
-                case 2:
-                    $comment->orderBy( 'name', $dir );
-                    break;
-                case 3:
-                    $comment->orderBy( 'email', $dir );
-                    break;
-                case 4:
-                    $comment->orderBy( 'role', $dir );
-                    break;
                 case 5:
-                    $comment->orderBy( 'status', $dir );
+                    $comment->orderBy( 'rating', $dir );
                     break;
             }
         }
