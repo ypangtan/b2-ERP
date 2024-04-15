@@ -256,7 +256,8 @@ class SaleService {
 
             $totalPrice = $request->quantity * $product->price;
 
-            $lead = Lead::where( 'customer_id', $request->customer_id )
+            $lead = Lead::lockForUpdate()
+                ->where( 'customer_id', $request->customer_id )
                 ->where( 'inventory_id', $request->inventory_id)
                 ->where( 'user_id', auth()->user()->id )
                 ->orderBy('created_at', 'desc')
@@ -275,6 +276,9 @@ class SaleService {
                 $customer->status = 20;
                 $customer->save(); 
             }
+
+            $lead->status = '30';
+            $lead->save();
 
             $createSale = Sale::create( [
                 'lead_id' => $lead->id ,
