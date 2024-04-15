@@ -19,4 +19,5 @@ return [
     'remark' => 'Remark',
 
     'invalid_lead' => 'This customer is leaded by other',
+    'invalid_lead_inventory' => 'This customer is leaded by other inventory',
 ];

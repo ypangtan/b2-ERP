@@ -192,19 +192,34 @@ class CommentService {
         ] );
 
         $validator = Validator::make( $request->all(), [
-            'inventory_id' => [ 'required', 'exists:inventories,id' ],
             'customer_id' => [ 'required',  'exists:customers,id', function( $attribute, $value, $fail ) use ( $request ){
                 $leadOther = Lead::where( 'customer_id', $request->customer_id )
-                ->where( function( $query ){
-                    $query->orWhere( 'status', 20)
-                        ->orWhere( 'status', 30);
-                } )
-                ->first();
+                    ->where( 'user_id', '!=', auth()->user()->id )
+                    ->where( function( $query ){
+                        $query->orWhere( 'status', 20)
+                            ->orWhere( 'status', 30);
+                    } )
+                    ->first();
 
                 if( $leadOther ){
                     $fail( __( 'sale.invalid_lead' ) );
                 }
                 
+            } ],
+            'inventory_id' => [ 'required', 'exists:inventories,id', function ( $attribute, $value, $fail ) use ( $request ){
+                
+                $leadOther = Lead::where( 'customer_id', $request->customer_id )
+                    ->where( 'user_id', auth()->user()->id )
+                    ->where( 'inventory_id', '!=', $request->inventory_id )
+                    ->where( function ( $query ) {
+                        $query->orWhere( 'status', 20)
+                            ->orWhere( 'status', 30);
+                    } )
+                    ->first();
+
+                if( $leadOther ){
+                    $fail( __( 'sale.invalid_lead_inventory' ) );
+                }
             } ],
             'comment' => [ 'required' ],
             'rating' => [ 'required' ],
