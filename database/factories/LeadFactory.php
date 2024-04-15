@@ -19,9 +19,9 @@ class LeadFactory extends Factory
      */
     public function definition()
     {
-        $i = $this->faker->randomElement(['10', '20', '30', '40']);
-        if( $i == '20' || $i == '30' ){
+        $status = $this->faker->randomElement(['10', '20', '30', '40']);
 
+        if( $status == '20' || $status == '30' ){
             $customer = Customer::factory()->create();
             $customer->status = '20';
             $customer->save();
@@ -30,21 +30,17 @@ class LeadFactory extends Factory
                 'inventory_id' => function () {
                     return Inventory::factory()->create()->id;
                 },
-                'user_id' => '1',
-                'status' => $i,
+                'user_id' => $this->faker->randomElement(['1', '2', '3', '4']),
+                'status' => $status,
                 'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'), 
                 'updated_at' => now(),
             ];
         }else{
             return [
-                'customer_id' => function () {
-                    return Customer::factory()->create()->id;
-                },
-                'inventory_id' => function () {
-                    return Inventory::factory()->create()->id;
-                },
-                'user_id' => '1',
-                'status' => $i,
+                'customer_id' => Customer::factory()->create()->id,
+                'inventory_id' => Inventory::factory()->create()->id,
+                'user_id' => $this->faker->randomElement(['1', '2', '3', '4']),
+                'status' => $status,
                 'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'), 
                 'updated_at' => now(),
             ];
