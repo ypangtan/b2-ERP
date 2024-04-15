@@ -52,20 +52,20 @@ class DashboardService {
         $years = [];
 
         for( $i = 1 ; $i <= 12; $i++ ){
-            $currentMonthYear = date( "Y-m" ,strtotime( '-' . 12 - $i . ' months' ) );
+            $currentMonthYear = date( "Y-m", strtotime( '-' . 12 - $i . ' months' ) );
 
-            $startDate = explode( '-', $currentMonthYear );
-            $end = Carbon::create( $startDate[0], $startDate[1], 31, 23, 59, 59 );
-            $start = Carbon::create( $startDate[0], $startDate[1], 1, 0, 0, 0 );
+            $dates = explode( '-', $currentMonthYear );
+            $end = Carbon::create( $dates[0], $dates[1], 31, 23, 59, 59 );
+            $start = Carbon::create( $dates[0], $dates[1], 1, 0, 0, 0 );
 
-            $sale_report[ $month[ $startDate[1] ] ] = Sale::whereBetween( 'sales.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] )
-                ->select( 'Sales.*' );
-            $complaint_report[ $month[ $startDate[1] ] ] = Comment::whereBetween( 'comments.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] )
+            $sale_report[ $month[ $dates[1] ] ] = Sale::whereBetween( 'sales.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] )
+                ->select( 'sales.*' );
+            $complaint_report[ $month[ $dates[1] ] ] = Comment::whereBetween( 'comments.created_at', [ date( 'Y-m-d H:i:s', $start->timestamp ), date( 'Y-m-d H:i:s', $end->timestamp ) ] )
                 ->select( 'comments.*' );
-            $sale_report[ $month[ $startDate[1] ] ] = self::filter( $sale_report[ $month[ $startDate[1] ] ] ) ;
-            $complaint_report[ $month[ $startDate[1] ] ] = self::filter( $complaint_report[ $month[ $startDate[1] ] ] ) ;
+            $sale_report[ $month[ $dates[1] ] ] = self::filter( $sale_report[ $month[ $dates[1] ] ] ) ;
+            $complaint_report[ $month[ $dates[1] ] ] = self::filter( $complaint_report[ $month[ $dates[1] ] ] ) ;
                
-            $years[] = $startDate[0];
+            $years[] = $dates[0];
         }
         
         $data = [
