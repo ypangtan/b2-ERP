@@ -238,7 +238,7 @@ class CommentService {
                 ] ); 
                 
                 $customer = Customer::lockForUpdate()
-                    ->find( $request->customers_id );
+                    ->find( $request->customer_id );
                 $customer->status = 20;
                 $customer->save(); 
             }
